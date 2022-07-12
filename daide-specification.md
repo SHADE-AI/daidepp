@@ -95,7 +95,9 @@ The server will reply with the map definition of the form: **MDF (powers) (provi
 
 (**adjacencies**) is the list of what is next to what. It is of the form **((prov_adj) (prov_adj) ...)**.
 
-**(prov_adj)** is of the form **(province (unit_type adj_prov adj_prov ...) (unit_type adj_prov adj_prov ...) ...)**. unit_type is one of:
+**(prov_adj)** is of the form **(province (unit_type adj_prov adj_prov ...) (unit_type adj_prov adj_prov ...) ...)**.
+
+**unit_type** is one of:
 
 **AMY** - list of provinces an army can move to
 **FLT** - list of provinces a fleet can move to
