@@ -247,7 +247,7 @@ The Server will reply to each order (not each message), in left to right order t
 
 > **THX (order) (note)**
 
-**order** is the order as submitted. note is one of the following:
+**order** is the order as submitted. **note** is one of the following:
 
 | Order   | Message                                                                                              |
 | ------- | ---------------------------------------------------------------------------------------------------- |
