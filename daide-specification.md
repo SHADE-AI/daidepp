@@ -27,8 +27,9 @@ The Diplomacy AI Development Environment Message Syntax is based on the structur
 ## Common terms
 
 There are a number of terms which are used by a lot of commands. They are:
-Power – can be one of **AUS**, **ENG**, **FRA**, **GER**, **ITA**, **RUS**, **TUR**. These may be changed for variants other than Standard - see
-the **MAP** token.
+
+Power – can be one of **AUS**, **ENG**, **FRA**, **GER**, **ITA**, **RUS**, **TUR**. These may be changed for variants other than Standard - see the **MAP** token.
+
 Province – can be one of **ADR**, **AEG**, **ALB**, **ANK**, **APU**, **ARM**, **BAL**, **BAR**, **BEL**, **BER**, **BLA**, **BOH**, **BRE**, **BUD**, **BUL**, **BUR**, **CLY**, **CON**, **DEN**, **EAS**, **ECH**, **EDI**, **FIN**, **GAL**, **GAS**, **GOB**, **GOL**, **GRE**, **HEL**, **HOL**, **ION**, **IRI**, **KIE**, **LON**, **LVN**, **LVP**, **MAO**, **MAR**, **MOS**, **MUN**, **NAF**, **NAO**, **NAP**, **NTH**, **NWG**, **NWY**, **PAR**, **PIC**, **PIE**, **POR**, **PRU**, **ROM**, **RUH**, **RUM**, **SER**, **SEV**, **SIL**, **SKA**, **SMY**, **SPA**, **STP**, **SWE**, **SYR**, **TRI**, **TUN**, **TUS**, **TYR**, **TYS**, **UKR**, **VEN**, **VIE**, **WAL**, **WAR**, **WES**, **YOR**. Alternative abbreviations must not be used. These may be changed for variants other than Standard - see the **MAP** token.
 
 Coast – can be one of **NCS**, **ECS**, **SCS**, **WCS**.
