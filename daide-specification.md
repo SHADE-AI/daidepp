@@ -566,7 +566,9 @@ The message proposal contains a token sequence which is too complicated for this
 
 The above responses should only be sent as a response to a received message. **press_message** should be identical to the received message.
 
-### (vii) Cancelling a proposal press_message = **CCL (press_message)**
+### (vii) Cancelling a proposal
+
+> **press_message = CCL (press_message)**
 
 A press message which proposes an arrangement can be cancelled before the arrangement has been agreed, using a **CCL** message. This can also be used to cancel a **YES** response to a proposed arrangement, before all parties involved in the proposal have replied.
 
