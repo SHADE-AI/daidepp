@@ -7,18 +7,18 @@ The following document defines the language which will be used for communication
 
 The syntax is split into a number of levels. Each level completely includes all previous levels. The levels are:
 
-Level 0 : No Press
-Level 10 : Peace and Alliances
-Level 20 : Order proposals
-Level 30 : Multipart Arrangements
-Level 40 : Sharing out the Supply Centres 50 : Nested Multipart Arrangements 60 : Queries and Insistencies
-Level 70 : Requests for suggestions
-Level 80 : Accusations
-Level 90 : Future discussions
-Level 100 : Conditionals
-Level 110 : Puppets and Favours
-Level 120 : Forwarding Press
-Level 130 : Explanations
+Level 0 : No Press  
+Level 10 : Peace and Alliances  
+Level 20 : Order proposals  
+Level 30 : Multipart Arrangements  
+Level 40 : Sharing out the Supply Centres 50 : Nested Multipart Arrangements 60 : Queries and Insistencies  
+Level 70 : Requests for suggestions  
+Level 80 : Accusations  
+Level 90 : Future discussions  
+Level 100 : Conditionals  
+Level 110 : Puppets and Favours  
+Level 120 : Forwarding Press  
+Level 130 : Explanations  
 
 All Bots must implement the commands in all levels – they should not assume that they will never be playing in a game that is above the level they are designed for. Where a Bot receives a message that is above its intended level, there is a response it can use to indicate this.
 
