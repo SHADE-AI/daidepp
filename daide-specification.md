@@ -11,7 +11,9 @@ Level 0 : No Press
 Level 10 : Peace and Alliances  
 Level 20 : Order proposals  
 Level 30 : Multipart Arrangements  
-Level 40 : Sharing out the Supply Centres 50 : Nested Multipart Arrangements 60 : Queries and Insistencies  
+Level 40 : Sharing out the Supply Centres  
+Level 50 : Nested Multipart Arrangements  
+Level 60 : Queries and Insistencies  
 Level 70 : Requests for suggestions  
 Level 80 : Accusations  
 Level 90 : Future discussions  
