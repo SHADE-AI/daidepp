@@ -102,14 +102,21 @@ The server will reply with the map definition of the form: **MDF (powers) (provi
 
 **unit_type** is one of:
 
-**AMY** - list of provinces an army can move to
-**FLT** - list of provinces a fleet can move to
-**(FLT coast)** - list of provinces a fleet can move to from the given coast.
-**adj_prov** is one of :
-**province** - a province which can be moved to
-**(province coast)** - a coast of a province that can be moved to.
+**AMY** - list of provinces an army can move to  
+**FLT** - list of provinces a fleet can move to  
+**(FLT coast)** - list of provinces a fleet can move to from the given coast.  
+
+**adj_prov** is one of:  
+
+**province** - a province which can be moved to  
+**(province coast)** - a coast of a province that can be moved to.  
+
 The type of a province can be determined from its adjacencies. An inland province only has army adjacencies. A sea province
-only has fleet adjacencies. A coastal province has both. A multi-coastal province has entries for each coast. Note that for a land province surrounded by sea, there will be an **AMY** entrance with no provinces listed. So, the map for Standard would (with some provinces skipped, and carriage returns added for clarity):
+only has fleet adjacencies. A coastal province has both. A multi-coastal province has entries for each coast.  
+
+Note that for a land province surrounded by sea, there will be an **AMY** entrance with no provinces listed.  
+
+So, the map for Standard would (with some provinces skipped, and carriage returns added for clarity):
 
 > **MDF (AUS ENG FRA GER ITA RUS TUR)**
 > **(((AUS TRI BUD VIE) (ENG LON LVP EDI) ... (UNO POR SPA TUN BEL HOL ...)) (ADR AEG ALB APU ...))((ANK (FLT ARM BLA CON) (AMY CON SMY ARM))**
@@ -139,13 +146,13 @@ The Server sends this to each client when the game starts. **power** is the powe
 
 e.g. **HLO (ENG) (1234) ((LVL 20) (MTL 1200))**
 
-This client is England. Its passcode is 1234. This is a level 20 game, with 20 minutes (1200 seconds) per movement turn. variant option can be any of the following:
+This client is England. Its passcode is 1234. This is a level 20 game, with 20 minutes (1200 seconds) per movement turn. variant option can be any of the following:  
 
-**LVL** n – game is of syntax level n. This variant option will always be specified.
-**MTL** seconds – maximum number of seconds available for movement turns. If not specified, there is no time limit.
-**RTL** seconds – maximum number of seconds available for retreat turns. If not specified, there is no time limit.
-**BTL** seconds – maximum number of seconds available for build turns. If not specified, there is no time limit.
-**DSD** - deadline stops on disconnection. If a client disconnects when it has orders due, the deadline timer stops.
+**LVL n** – game is of syntax level n. This variant option will always be specified.  
+**MTL seconds** – maximum number of seconds available for movement turns. If not specified, there is no time limit.  
+**RTL seconds** – maximum number of seconds available for retreat turns. If not specified, there is no time limit.  
+**BTL seconds** – maximum number of seconds available for build turns. If not specified, there is no time limit.  
+**DSD** - deadline stops on disconnection. If a client disconnects when it has orders due, the deadline timer stops.  
 **AOA** – Any orders accepted. Any orders which match the syntax for an order, and are for a unit owned by the client sending the order, will be accepted, whether they are legal or not. If not specified, then only orders which could be valid will be accepted. In an **AOA** game, any token which would normally be given as a **THX** note can instead be used as an **ORD** result.
 
 Further variant options are added in Level 10.
@@ -192,7 +199,7 @@ Any previous turn’s results may be requested by sending an **HST** command to 
 
 ### (iii) Submitting orders
 
-> **SUB (order) (order) ...**
+> **SUB (order) (order) ...**  
 > **SUB (turn) (order) (order) ...**
 
 This is sent from the client to the server, to submit orders for the next turn. The second form will check that the turn stated is the current turn (i.e. the turn sent in the most recent NOW message), and will reply with REJ (SUB (turn) (order) (order) ...) if this is not the case
@@ -235,11 +242,11 @@ through them.
 
 Examples:
 
-> **SUB ((ENG AMY LVP) HLD) ((ENG FLT LON) MTO NTH) ((ENG FLT EDI) SUP (ENG FLT LON) MTO NTH)**
-> **SUB ((ENG FLT BAR) MTO (STP NCS)) ((ENG FLT NWY) SUP (ENG FLT BAR) MTO STP)**
-> **SUB ((ITA AMY TUN) CTO SYR VIA (ION EMS)) ((ITA FLT ION) CVY (ITA AMY TUN) CTO SYR) ((ITA FLT EMS) CVY (ITA AMY TUN) CTO SYR)**
-> **SUB ((ENG AMY YOR) CTO NWY VIA (NTH)) ((ENG FLT NTH) CVY (ENG AMY YOR) CTO NWY) ((ENG FLT NWG) SUP (ENG AMY YOR) MTO NWY)**
-> **SUB ((ITA FLT NAP) BLD)**
+> **SUB ((ENG AMY LVP) HLD) ((ENG FLT LON) MTO NTH) ((ENG FLT EDI) SUP (ENG FLT LON) MTO NTH)**  
+> **SUB ((ENG FLT BAR) MTO (STP NCS)) ((ENG FLT NWY) SUP (ENG FLT BAR) MTO STP)**  
+> **SUB ((ITA AMY TUN) CTO SYR VIA (ION EMS)) ((ITA FLT ION) CVY (ITA AMY TUN) CTO SYR) ((ITA FLT EMS) CVY (ITA AMY TUN) CTO SYR)**  
+> **SUB ((ENG AMY YOR) CTO NWY VIA (NTH)) ((ENG FLT NTH) CVY (ENG AMY YOR) CTO NWY) ((ENG FLT NWG) SUP (ENG AMY YOR) MTO NWY)**  
+> **SUB ((ITA FLT NAP) BLD)**  
 > **SUB ((RUS FLT GOB) REM)**
 
 <!-- End of page 5 -->
@@ -304,12 +311,13 @@ order is an order submitted by a player. One **ORD** message is sent per unit fo
 
 **result** is the result of the order. It can be one of the following:
 
-| Order   | Meaning                                                                                                                                                     |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **SUC** | Order succeeded **(can apply to any order)**.                                                                                                               |
-| **BNC** | Move bounced **(only for **MTO**, **CTO** or **RTO** orders)**.                                                                                             |
-| **CUT** | Support cut **(only for **SUP** orders)**.                                                                                                                  |
-| **DSR** | Move via convoy failed due to dislodged convoying fleet **(only for **CTO** orders). **NSO** No such order (only for **SUP**, **CVY** or **CTO** orders)**. |
+| Order   | Meaning                                                                            |
+| ------- | ---------------------------------------------------------------------------------- |
+| **SUC** | Order succeeded (can apply to any order).                                          |
+| **BNC** | Move bounced (only for **MTO**, **CTO** or **RTO** orders).                        |
+| **CUT** | Support cut (only for **SUP** orders).                                             |
+| **DSR** | Move via convoy failed due to dislodged convoying fleet (only for **CTO** orders). |
+| **NSO** | No such order (only for **SUP**, **CVY** or **CTO** orders).                       |
 
 In addition, a second token may be included :
 
@@ -456,10 +464,10 @@ The client can cancel a partial draw request with **NOT (DRW (power power power.
 
 ### (iii) Sending and Receiving Press
 
-> **SND (power power ...) (press_message)**
-**SND (power power ...) (reply)**
-**SND (turn) (power power ...) (press_message)**
-**SND (turn) (power power ...) (reply)**
+> **SND (power power ...) (press_message)**  
+> **SND (power power ...) (reply)**  
+> **SND (turn) (power power ...) (press_message)**  
+> **SND (turn) (power power ...) (reply)**
 
 These are sent by the client to the server, to send **press_message** to the list of countrys given. The recipient list must not include the sending power.
 
@@ -477,27 +485,27 @@ The server will reply with one of the following:
 **power** has been eliminated from the game. If multiple powers are listed in the **SND** command, and the client receives an **OUT**
 reply, then the message has not been sent to anybody **(including the ones that have not been eliminated)**.
 
-> **HUH (SND (power power ...) (press_message))**
-**HUH (SND (turn) (power power ...) (press_message))**
+> **HUH (SND (power power ...) (press_message))**  
+> **HUH (SND (turn) (power power ...) (press_message))**
 
 <!-- End of page 10 -->
 
 Syntax of the **SND** message is illegal. This may be a genuine syntax error, or it may be because press_message contains a token which is not allowed at the language level of the game. **ERR** is inserted immediately before the first token to cause an error. See **HUH** in Level 0 for details.
 
-> **REJ (SND (power power ...) (press_message))**
-**REJ (SND (turn) (power power ...) (press_message))**
+> **REJ (SND (power power ...) (press_message))**  
+> **REJ (SND (turn) (power power ...) (press_message))**
 
 Either the game has not started, or it is a retreat phase in a **NPR** variant game, or a build phase in a **NPB** variant game, is past the press deadline in a **PTL** variant game, or the sending power has been eliminated or is in the recipients list.
 
-> **YES (SND (power power ...) (press_message))**
-**YES (SND (turn) (power power ...) (press_message))**
+> **YES (SND (power power ...) (press_message))**  
+> **YES (SND (turn) (power power ...) (press_message))**
 
 The message was sent successfully.
 
 When the message is sent successfully, the target powers will receive the message in one of the following forms:
 
-> **FRM (power) (power power ...) (press_message)**
-**FRM (power) (power power ...) (reply)**
+> **FRM (power) (power power ...) (press_message)**  
+> **FRM (power) (power power ...) (reply)**
 
 The first power is the power which sent the message. The power list and the press_message are as in the **SND** command. Note that if the **SND** message contained a turn parameter, this isn't included in the **FRM** message.
 We have now covered every command in the Diplomacy AI Development Environment syntax. The remainder of this document covers the contents of press_message and reply.
@@ -599,8 +607,8 @@ The client does not need to list **TRY** or **HUH** in tokens, and should not se
 
 A client which can not process Press (i.e. it is only designed to work at Level 0) should respond to any **FRM** message with:
 
-> **SND (power) (HUH (ERR press_message))**
-**SND (power) (TRY ())**
+> **SND (power) (HUH (ERR press_message))**  
+> **SND (power) (TRY ())**
 
 Where power is the sending power, and **press_message** is the received message.
 
@@ -616,7 +624,7 @@ This is a arrangement for the given order to be ordered. **order** uses the same
 
 An **XDO** arrangement applies to the next turn in which the order type is valid – so the next movement turn for a **HLD**, **MTO**, **SUP**, **CVY** or **CTO** order, the next retreat turn for a **RTO** or **DSB** order, and the next adjustment turn for a **BLD**, **REM** or **WVE** order.
 
-**arrangement = DMZ (power power ...) (province province ...)**
+> **arrangement = DMZ (power power ...) (province province ...)**
 
 This is an arrangement for the listed powers to remove all units from, and not order to, support to, convoy to, retreat to, or build any units in any of the list of provinces. Eliminated powers must not be included in the power list. The arrangement is continuous (i.e. it isn’t just for the current turn).
 
@@ -688,11 +696,11 @@ The syntax for **QRY** is the same as for **PRP** and **INS**. **QRY** is asking
 
 I think that arrangement is true.
 
-> **reply = THK (NOT (QRY (arrangement)))** 
+> **reply = THK (NOT (QRY (arrangement)))**
 
 I think that arrangement is not true.
 
-> **reply = FCT (QRY (arrangement))** 
+> **reply = FCT (QRY (arrangement))**
 
 **arrangement** is true.
 
@@ -710,7 +718,7 @@ The syntax for **SUG** is the same as for **QRY**. **SUG** is suggesting that so
 
 **THK** and **FCT** can also be used as a message in their own right, to pass information without first being queried for the information. **FCT** has already been introduced in level 10.
 
-> **press_message = THK (arrangement)** 
+> **press_message = THK (arrangement)**
 
 I think arrangement is true.
 
@@ -743,32 +751,32 @@ power.
 
 Level 80 adds the ability to accuse another power of going back on its word.
 
-> **press_message = EXP (turn) (press_message)**
-**press_message = EXP (turn) (reply)**
+> **press_message = EXP (turn) (press_message)**  
+> **press_message = EXP (turn) (reply)**
 
 Explain your moves in turn given press_message that you previously sent.
 
 The standard replies can be used, including:
 
-> **reply = YES (EXP (turn) (press_message))**
-**reply = YES (EXP (turn) (reply))**
+> **reply = YES (EXP (turn) (press_message))**  
+? **reply = YES (EXP (turn) (reply))**
 
 Yes I know (no explanation given)
 
-> **reply = REJ (EXP (turn) (press_message))**
-**reply = REJ (EXP (turn) (reply))**
+> **reply = REJ (EXP (turn) (press_message))**  
+> **reply = REJ (EXP (turn) (reply))**
 
 I didn’t send **press_message**
 
-> **reply = IDK (EXP (turn) (press_message))**
-**reply = IDK (EXP (turn) (reply))**
+> **reply = IDK (EXP (turn) (press_message))**  
+> **reply = IDK (EXP (turn) (reply))**
 
 There is nothing to explain – they don’t conflict
 
 In addition, the following is available.
 
-> **reply = SRY (EXP (turn) (press_message))**
-**reply = SRY (EXP (turn) (reply))**
+> **reply = SRY (EXP (turn) (press_message))**  
+> **reply = SRY (EXP (turn) (reply))**
 
 I’m sorry.
 
@@ -778,8 +786,8 @@ Especially after a **YES** or **BWX** message, it will be common for the next me
 
 Level 90 adds the ability to talk about the future. To do this, one command is added:
 
-> **arrangement = FOR (turn) (arrangement)**
-**arrangement = FOR ((start_turn) (end_turn)) (arrangement)**
+> **arrangement = FOR (turn) (arrangement)**  
+> **arrangement = FOR ((start_turn) (end_turn)) (arrangement)**
 
 For the turn specified, or for all turns from **start_turn** to **end_turn** inclusive, arrangement applies. **turn** is of the form **phase_year**. The timing specified by **FOR** overrides any timing indicated by **arrangement**.
 
@@ -793,8 +801,8 @@ Note that **FOR** and **NOT** must be ordered correctly to get the right meaning
 
 Level 100 adds the ability to make use conditional operators.
 
-> **press_message = IFF (condition) THN (press_message)**
-**press_message = IFF (condition) THN (press_message) ELS (press_message)**
+> **press_message = IFF (condition) THN (press_message)**  
+> **press_message = IFF (condition) THN (press_message) ELS (press_message)**
 
 If the **condition** is met then the **THN** part applies, otherwise the **ELS** part applies.
 
@@ -824,7 +832,7 @@ The control of the listed **units** is given to **power**. If the owner of the u
 
 Level 120 adds the ability to forward press from one power to another. This adds three extra commands to the message syntax:
 
-> **arrangement = SND (power) (power power ...) (press_message)**
+> **arrangement = SND (power) (power power ...) (press_message)**  
 > **arrangement = SND (power) (power power ...) (reply)**
 
 This is a request for the first power to send the message given. Eliminated powers must not be included in any part of the message.
@@ -839,12 +847,12 @@ This is either an arrangement for any messages received from any of the powers i
 
 This is exactly the same as **FWD**, except that the sending and receiving powers are now the first and third parameters. This is an arrangement to forward everything sent, rather than everything received.
 
-> **arrangement = NOT (FWD (power power ...) (power) (power))**
+> **arrangement = NOT (FWD (power power ...) (power) (power))**  
 > **arrangement = NOT (BCC (power) (power power ...) (power))**
 
 This is cancels a previously agreed **FWD** or **BCC** arrangement.
 
-> **press_message = FRM (power) (power power ...) (press_message)**
+> **press_message = FRM (power) (power power ...) (press_message)**  
 > **press_message = FRM (power) (power power ...) (reply)**
 
 This is a message to inform a power of a message that has been sent or received. No response is required. Eliminated powers must not be included in any part of the message. There is of course no guarantee that the forwarded message is genuine.
@@ -854,9 +862,9 @@ Care should be taken to avoid message passing loops. In general, a client should
 ## Level 130: Explanations
 
 Level 130 adds the ability to ask why a power thinks something. In response to a **THK** or **FCT** message, a client can reply with:
-> **reply = WHY (THK (arrangement))**
+> **reply = WHY (THK (arrangement))**  
 > **reply = WHY (FCT (arrangement))**
-> 
+
 This is a request for an explanation as to the reason why sender thinks the arrangement in the **THK** or **FCT** message is true. Available replies are **BWX** if the client don’t want to tell, **REJ** if the client wants to deny knowledge of the **THK** or **FCT** message, or another **THK** or **FCT** message to give further information. Additionally, a client can also give any other message which gives further information (most notably a **FRM** message received from another power). Finally, there is one new response available:
 
 > **reply = POB (WHY (...))**
@@ -874,9 +882,9 @@ Why are you proposing that?
 
 Level 130 also adds some additional uses of **IDK**:
 
-> **reply = IDK (PRP (arrangement))**
+> **reply = IDK (PRP (arrangement))**  
 > **reply = IDK (INS (arrangement))**
-> 
+
 I don't know whether I'll accept that. Throw in something else to make it worthwhile.
 
 **reply = IDK (SUG (arrangement))**
