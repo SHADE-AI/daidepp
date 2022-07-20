@@ -7,20 +7,20 @@ The following document defines the language which will be used for communication
 
 The syntax is split into a number of levels. Each level completely includes all previous levels. The levels are:
 
-Level 0 : No Press  
-Level 10 : Peace and Alliances  
-Level 20 : Order proposals  
-Level 30 : Multipart Arrangements  
-Level 40 : Sharing out the Supply Centres  
-Level 50 : Nested Multipart Arrangements  
-Level 60 : Queries and Insistencies  
-Level 70 : Requests for suggestions  
-Level 80 : Accusations  
-Level 90 : Future discussions  
-Level 100 : Conditionals  
-Level 110 : Puppets and Favours  
-Level 120 : Forwarding Press  
-Level 130 : Explanations  
+[Level 0: No Press](#level-0-no-press)  
+[Level 10: Peace and Alliances](#level-10-peace-and-alliances)  
+[Level 20: Order proposals](#level-20-order-proposals)  
+[Level 30: Multipart Arrangements](#level-30-multipart-arrangements)  
+[Level 40: Sharing out the Supply Centres](#level-40-sharing-out-the-supply-centres)  
+[Level 50: Nested Multipart Arrangements](#level-50-nested-multipart-arrangements)  
+[Level 60: Queries and Insistencies](#level-60-queries-and-insistencies)  
+[Level 70: Requests for Suggestions](#level-70-requests-for-suggestions)  
+[Level 80: Accusations](#level-80-accusations)  
+[Level 90: Future Discussions](#level-90-future-discussions)  
+[Level 100: Conditionals](#level-100-conditionals)  
+[Level 110: Puppets and Favours](#level-110-puppets-and-favours)  
+[Level 120: Forwarding Press](#level-120-forwarding-press)  
+[Level 130: Explanations](#level-130-explanations)  
 
 All Bots must implement the commands in all levels – they should not assume that they will never be playing in a game that is above the level they are designed for. Where a Bot receives a message that is above its intended level, there is a response it can use to indicate this.
 
@@ -420,7 +420,7 @@ This command cancels any **DRW** message which has been sent previously by this 
 
 The message is sent from the server to the client immediately after the **SLO** or **DRW** message, and informs the client as to who was playing each power. centres is the number of centres held by the power at the end of the game. If this is 0 then year_of_elimination is included, and is the year that the power dropped to 0 centres.
 
-## Level 10 : Peace and Allies
+## Level 10: Peace and Alliances
 
 In this level, we add some very basic press between powers.
 
@@ -606,7 +606,7 @@ Where power is the sending power, and **press_message** is the received message.
 
 All tokens which can be processed by the client may be included in games of any level (so that the client can just have a fixed **TRY** message which the client sends if it doesn’t understand something). There is no requirement to remove higher level tokens from the **TRY** message in lower level games. The Server will remove all higher level tokens from the **TRY** message before passing it onto the receiving power, and may also reorder the tokens.
 
-## Level 20 : Order Proposals
+## Level 20: Order Proposals
 
 In level 20, we add two new forms for arrangement.
 
@@ -622,7 +622,7 @@ This is an arrangement for the listed powers to remove all units from, and not o
 
 Both of these are responded to using the responses in level 10.
 
-## Level 30 : Multipart Arrangements
+## Level 30: Multipart Arrangements
 
 Level 30 adds the ability to combine multiple arrangements.
 
@@ -652,7 +652,7 @@ The given supply centre distribution is arranged. This is typically used when an
 
 This is an arrangement for a power to place a particular unit in a particular location. unit is in the same format as for **NOW**. For instance **PRP (OCC (ENG FLT BEL))**. Alternatively, the token **UNT** may be used to represent any unit type. E.g. **PRP (OCC (ENG UNT BEL))**. The offer is a long term plan, it doesn’t necessarily indicate that the unit will be placed there this turn.
 
-## Level 50 : Nested Multipart Arrangements
+## Level 50: Nested Multipart Arrangements
 
 Level 50 allows **AND** and **ORR** to be nested. So the client can do the following:
 
@@ -670,7 +670,7 @@ For example:
 
 Choose two centres from Norway, Denmark and Sweden.
 
-## Level 60 : Queries and Insistences
+## Level 60: Queries and Insistencies
 
 In Level 60, we add the ability to insist on an arrangement, and to ask a question.
 
@@ -718,7 +718,7 @@ No reply is expected to either of these.
 
 Note that **THK (QRY (arrangement))** and **THK (arrangement)** have exactly the same meaning, except that the former is the response to a query where as the latter is volunteered without being asked. The same applies to **FCT (QRY (arrangement))** and **FCT (arrangement)**.
 
-## Level 70 : Requests for suggestions
+## Level 70: Requests for Suggestions
 
 In Level 70, we add the ability to ask for suggestions. Requests for suggestions come in two forms:
 
@@ -739,7 +739,7 @@ How do you think we should attack province. This should be responded to with **P
 How do you think we should attack power. Responses are the same as for **HOW (province)**. power must not be an eliminated
 power.
 
-## Level 80 : Accusations
+## Level 80: Accusations
 
 Level 80 adds the ability to accuse another power of going back on its word.
 
@@ -774,7 +774,7 @@ I’m sorry.
 
 Especially after a **YES** or **BWX** message, it will be common for the next message to be **INS (NOT (PCE (power power ...)))**.
 
-## Level 90 : Future discussions
+## Level 90: Future discussions
 
 Level 90 adds the ability to talk about the future. To do this, one command is added:
 
@@ -851,7 +851,7 @@ This is a message to inform a power of a message that has been sent or received.
 
 Care should be taken to avoid message passing loops. In general, a client should not forward a message that already contains the segment **(FRM (you) (power you are forwarding to) (press_message))**.
 
-## Level 130 : Explanations
+## Level 130: Explanations
 
 Level 130 adds the ability to ask why a power thinks something. In response to a **THK** or **FCT** message, a client can reply with:
 > **reply = WHY (THK (arrangement))**
@@ -883,7 +883,7 @@ I don't know whether I'll accept that. Throw in something else to make it worthw
 
 I don't really know whether I desire that.
 
-## Level 8000 : Free Text Press
+## Level 8000: Free Text Press
 
 This level allows natural language press. Both message and reply can be any string of ASCII characters.
 
