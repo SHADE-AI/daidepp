@@ -759,7 +759,7 @@ Explain your moves in turn given press_message that you previously sent.
 The standard replies can be used, including:
 
 > **reply = YES (EXP (turn) (press_message))**  
-? **reply = YES (EXP (turn) (reply))**
+> **reply = YES (EXP (turn) (reply))**
 
 Yes I know (no explanation given)
 
