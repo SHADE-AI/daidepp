@@ -219,7 +219,7 @@ class DaideVisitor(NodeVisitor):
         for scd_statment in scd_statements:
             _, power, _, supply_center, ws_supply_centers, _ = scd_statment
 
-            sc_list = []
+            sc_list = [supply_center]
             for ws_sc in ws_supply_centers:
                 _, sc = ws_sc
                 sc_list.append(sc)
