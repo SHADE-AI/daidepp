@@ -1,7 +1,12 @@
-# DAIDE Specification
+# DAIDE++
 
-![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white)
+![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?logo=markdown&logoColor=white)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 
-Repo to store universal communication specification
+Repo to store universal communication specification and parser.
 
-The specification document to work off of is [daide-specification.md](daide-specification.md). The original pdf is [daide-syntax.pdf](daide-syntax.pdf).
+- The original DAIDE specification is [here](daide-syntax.pdf)
+- The working markdown document that will included DAIDE enhancements is [here](daide-specification.md)
+- The machine-parsable grammar can be found in [this `.py` file](./daidepp/parser/grammar.py)
+
+In order to make updates, please make sure to update both the `grammar.py` file as well as the `daide-specification.md` file so that changes are both human and machine readable.
