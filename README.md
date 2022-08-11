@@ -1,6 +1,6 @@
 # DAIDE++
 
-[![Python 3.7](https://img.shields.io/badge/Python-3.7-3776AB?logo=python)](https://www.python.org/downloads/release/python-370/)
+[![Python 3.7](https://img.shields.io/badge/Python-3.7-3776AB?logo=python&logoColor=ffdd54)](https://www.python.org/downloads/release/python-370/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 ![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?logo=markdown&logoColor=white)
 
