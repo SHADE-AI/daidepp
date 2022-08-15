@@ -194,7 +194,7 @@ class DaideVisitor(NodeVisitor):
         for par_arr in par_arrangements:
             _, arr, _ = par_arr
             print("arr", arr)
-            output["ORR"].append(arr)
+            arr_list.append(arr)
 
         return ("ORR", arr_list)
 
