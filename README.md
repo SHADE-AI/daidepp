@@ -12,4 +12,10 @@ Repo to store universal communication specification and parser.
 - The working markdown document that will included DAIDE enhancements is [here](daide-specification.md)
 - The machine-parsable grammar can be found in [this `.py` file](./daidepp/parser/grammar.py)
 
-In order to make updates, please make sure to update both the `grammar.py` file as well as the `daide-specification.md` file so that changes are both human and machine readable.
+## Pull Requests
+
+Three files should be updated whenever making a PR:
+
+- [`grammar.py`](./daidepp/parser/grammar.py): the machine-readable grammar
+- [`node_visitor.py`](./daidepp/parser/node_visitor.py): the visitor object to parse a message
+- [The daide markdown specification](./daide-specification.md): the human-readable specification
