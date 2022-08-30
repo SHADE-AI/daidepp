@@ -359,6 +359,14 @@ class DaideVisitor(NodeVisitor):
         return node.text
 
     def visit_province(self, node, visited_children):
+        if isinstance(visited_children[0], str):
+            return node.text
+
+        _, province, _, coast, _ = visited_children[0]
+
+        return province + " " + coast
+
+    def visit_coast(self, node, visited_children):
         return node.text
 
     def visit_prov_coast(self, node, visited_children):
