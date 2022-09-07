@@ -206,7 +206,9 @@ LEVELS: Tuple[GRAMMAR_DICT] = (
 GRAMMAR_DICT = Dict[str, str]
 
 
-def create_daide_grammar(level: DAIDE_LEVEL = 30) -> DAIDEGrammar:
+def create_daide_grammar(
+    level: DAIDE_LEVEL = 30, allow_just_arrangment: bool = False
+) -> DAIDEGrammar:
     """Create a DAIDEGrammar object given a level of DAIDE.
 
     The DAIDEGrammar object inherits from parsimonious.grammar.Grammar,
@@ -214,16 +216,19 @@ def create_daide_grammar(level: DAIDE_LEVEL = 30) -> DAIDEGrammar:
 
     Args:
         level (DAIDE_LEVEL, optional): level of DIADE to create grammar for. Defaults to 30.
+        allow_just_arrangement (bool, optional): if set to True, the parser accepts strings that
+        are only arrangements, in addition to press messages. So, for example, the parser could parse
+        'PCE (GER ITA)'. Normally, this would raise a ParseError.
 
     Returns:
         DAIDEGrammar: Grammar object
     """
-    grammar_str = create_daide_grammar_str(level)
+    grammar_str = _create_daide_grammar_str(level, allow_just_arrangment)
     grammar = DAIDEGrammar(grammar_str)
     return grammar
 
 
-def create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
+def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
     """Combine DAIDE grammar dicts into one dict.
 
     Args:
@@ -242,7 +247,9 @@ def create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
     return grammar
 
 
-def create_daide_grammar_str(level: DAIDE_LEVEL = 30) -> str:
+def _create_daide_grammar_str(
+    level: DAIDE_LEVEL = 30, allow_just_arrangement: bool = False
+) -> str:
     """Create string representing DAIDE grammar in PEG
 
     Args:
@@ -251,19 +258,26 @@ def create_daide_grammar_str(level: DAIDE_LEVEL = 30) -> str:
     Returns:
         str: string representing DAIDE grammar in PEG
     """
-    grammar_dict = create_daide_grammar_dict(level)
-    grammar_str = create_grammar_str_from_dict(grammar_dict)
+    grammar_dict = _create_daide_grammar_dict(level)
+    grammar_str = _create_grammar_str_from_dict(grammar_dict, allow_just_arrangement)
     return grammar_str
 
 
-def create_grammar_str_from_dict(grammar: GRAMMAR_DICT) -> str:
+def _create_grammar_str_from_dict(
+    grammar: GRAMMAR_DICT, allow_just_arrangement: bool = False
+) -> str:
     grammar_str = ""
     for item in grammar.items():
         # message needs to be the first rule in the string, per parsimonious rules:
         # "The first rule is taken to be the default start symbol, but you can override that."
         # https://github.com/erikrose/parsimonious#example-usage
         if item[0] == "message":
-            grammar_str = f"{item[0]} = {item[1]}\n" + grammar_str
+            left = item[0]
+            right = item[1]
+            if allow_just_arrangement:
+                right += " / arrangement"
+            grammar_str = f"{left} = {right}\n" + grammar_str
+
         else:
             grammar_str += f"{item[0]} = {item[1]}\n"
     return grammar_str
