@@ -148,6 +148,9 @@ class DAIDEVisitor(NodeVisitor):
     def visit_arrangement(self, node, visited_children):
         return visited_children[0]
 
+    def visit_sub_arrangement(self, node, visited_children):
+        return visited_children[0]
+
     def visit_pce(self, node, visited_children):
         _, _, power, ws_powers, _ = visited_children
 
@@ -458,6 +461,17 @@ class DAIDEVisitor(NodeVisitor):
 
     def visit_try_tokens(self, node, visited_children):
         return node.text
+
+    def visit_float(self, node, visited_children):
+        return float(visited_children[1].text)
+
+    def visit_ulb(self, node, visited_children):
+        _, _, power, utility, _ = visited_children
+        return ("ULB", power, utility)
+
+    def visit_uub(self, node, visited_children):
+        _, _, power, utility, _ = visited_children
+        return ("UUB", power, utility)
 
     def generic_visit(self, node, visited_children):
         return visited_children or node

@@ -21,11 +21,11 @@ class DAIDEGrammar(Grammar):
         self.try_tokens: List[str] = try_tokens_strings
 
     @staticmethod
-    def from_level(level: DAIDE_LEVEL):
+    def from_level(level: Union[DAIDE_LEVEL,List[DAIDE_LEVEL]]):
         return create_daide_grammar(level)
 
 
-DAIDE_LEVEL = Literal[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+DAIDE_LEVEL = Literal[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140]
 
 TRAIL_TOKEN = "---"  # any value starting with '---' is meant to be a continuation of that key, not a replacement
 
@@ -187,6 +187,14 @@ LEVEL_130: GRAMMAR_DICT = {
     "try_tokens": f'{TRAIL_TOKEN}"IDK" / "WHY" / "POB"',
 }
 
+# Utilities (May move to different level)
+LEVEL_140: GRAMMAR_DICT = {
+    "float": 'ws*~"[-+]?((\d*\.\d+)|(\d+\.?))([Ee][+-]?\d+)?"',
+    "ulb": '"ULB" lpar power float rpar',
+    "uub": '"UUB" lpar power float rpar',
+    "arrangement": f"{TRAIL_TOKEN}ulb / uub",
+}
+
 LEVELS: Tuple[GRAMMAR_DICT] = (
     LEVEL_10,
     LEVEL_20,
@@ -201,13 +209,15 @@ LEVELS: Tuple[GRAMMAR_DICT] = (
     LEVEL_110,
     LEVEL_120,
     LEVEL_130,
+    LEVEL_140,
 )
 
 GRAMMAR_DICT = Dict[str, str]
 
 
 def create_daide_grammar(
-    level: DAIDE_LEVEL = 30, allow_just_arrangment: bool = False
+    level: Union[DAIDE_LEVEL,List[DAIDE_LEVEL]] = 30,
+    allow_just_arrangement: bool = False
 ) -> DAIDEGrammar:
     """Create a DAIDEGrammar object given a level of DAIDE.
 
@@ -223,12 +233,14 @@ def create_daide_grammar(
     Returns:
         DAIDEGrammar: Grammar object
     """
-    grammar_str = _create_daide_grammar_str(level, allow_just_arrangment)
+    grammar_str = _create_daide_grammar_str(level, allow_just_arrangement)
     grammar = DAIDEGrammar(grammar_str)
     return grammar
 
 
-def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
+def _create_daide_grammar_dict(
+    level: Union[DAIDE_LEVEL,List[DAIDE_LEVEL]] = 30
+) -> GRAMMAR_DICT:
     """Combine DAIDE grammar dicts into one dict.
 
     Args:
@@ -238,7 +250,10 @@ def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
         GRAMMAR_DICT: Dictionary representing all rules for passed daide level
     """
 
-    level_idxs = list(range(int((level / 10))))
+    if type(level) is list:
+        level_idxs = [int((i-1)/10) for i in level]
+    else:
+        level_idxs = list(range(int((level / 10))))
     grammar: GRAMMAR_DICT = {}
 
     for level_idx in level_idxs:
@@ -248,7 +263,8 @@ def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
 
 
 def _create_daide_grammar_str(
-    level: DAIDE_LEVEL = 30, allow_just_arrangement: bool = False
+    level: Union[DAIDE_LEVEL,List[DAIDE_LEVEL]] = 30,
+    allow_just_arrangement: bool = False
 ) -> str:
     """Create string representing DAIDE grammar in PEG
 
