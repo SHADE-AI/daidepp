@@ -41,7 +41,7 @@ LEVEL_10: GRAMMAR_DICT = {
     "slo": '"SLO" lpar power rpar',
     "not": '"NOT" lpar arrangement rpar',
     "nar": '"NAR" lpar arrangement rpar',
-    "drw": '"DRW"',  # TODO: may need to update this
+    "drw": '"DRW" (lpar power (ws power)+ rpar)?',
     "yes": '"YES" lpar press_message rpar',
     "rej": '"REJ" lpar press_message rpar',
     "bwx": '"BWX" lpar press_message rpar',
@@ -100,7 +100,7 @@ LEVEL_30: GRAMMAR_DICT = {
 LEVEL_40: GRAMMAR_DICT = {
     "scd": '"SCD" (lpar power ws supply_center (ws supply_center)* rpar)+',
     "occ": '"OCC" (lpar unit rpar)+',
-    "arrangement": f"{TRAIL_TOKEN}scd / orr",
+    "arrangement": f"{TRAIL_TOKEN}scd / occ",
     "try_tokens": f'{TRAIL_TOKEN}"SCD" / "OCC"',
 }
 

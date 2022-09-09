@@ -183,6 +183,8 @@ class DAIDEVisitor(NodeVisitor):
         return ("ALY_VSS", (aly_list, vss_list))
 
     def visit_drw(self, node, visited_children):
+        if len(visited_children) < 1:
+            return ("DRW",)
         _, par_powers = visited_children
 
         if isinstance(par_powers, Node) and not par_powers.text:
