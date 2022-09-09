@@ -1,7 +1,7 @@
 from parsimonious.nodes import Node, NodeVisitor
 
 
-class DaideVisitor(NodeVisitor):
+class DAIDEVisitor(NodeVisitor):
     def visit_message(self, node, visited_children):
         return visited_children[0]
 
@@ -83,7 +83,19 @@ class DaideVisitor(NodeVisitor):
         return output
 
     def visit_frm(self, node, visited_children):
-        _, _, power, _, _, recv_power, ws_recv_powers, _, _, message, _, = visited_children
+        (
+            _,
+            _,
+            power,
+            _,
+            _,
+            recv_power,
+            ws_recv_powers,
+            _,
+            _,
+            message,
+            _,
+        ) = visited_children
 
         recv_power_list = [recv_power]
         for ws_recv_power in ws_recv_powers:
@@ -146,7 +158,18 @@ class DaideVisitor(NodeVisitor):
         return ("PCE", pow_list)
 
     def visit_aly_vss(self, node, visited_children):
-        aly, _, aly_power, ws_aly_powers, _, vss, _, vss_power, ws_vss_powers, _, = visited_children
+        (
+            aly,
+            _,
+            aly_power,
+            ws_aly_powers,
+            _,
+            vss,
+            _,
+            vss_power,
+            ws_vss_powers,
+            _,
+        ) = visited_children
 
         aly_list = [aly_power]
         for ws_aly_power in ws_aly_powers:
@@ -205,7 +228,6 @@ class DaideVisitor(NodeVisitor):
         arr_list = [arrangement]
         for par_arr in par_arrangements:
             _, arr, _ = par_arr
-            print("arr", arr)
             arr_list.append(arr)
 
         return ("ORR", arr_list)
@@ -281,7 +303,19 @@ class DaideVisitor(NodeVisitor):
         return ("YDO", power, unit_list)
 
     def visit_snd(self, node, visited_children):
-        _, _, power, _, _, recv_power, ws_recv_powers, _, _, message, _, = visited_children
+        (
+            _,
+            _,
+            power,
+            _,
+            _,
+            recv_power,
+            ws_recv_powers,
+            _,
+            _,
+            message,
+            _,
+        ) = visited_children
 
         recv_power_list = [recv_power]
         for ws_recv_power in ws_recv_powers:
@@ -333,7 +367,20 @@ class DaideVisitor(NodeVisitor):
         return ("CVY", convoying_unit, convoyed_unit, province)
 
     def visit_move_by_cvy(self, node, visited_children):
-        _, unit, _, _, _, province, _, _, _, prov_sea, ws_prov_seas, _, = visited_children
+        (
+            _,
+            unit,
+            _,
+            _,
+            _,
+            province,
+            _,
+            _,
+            _,
+            prov_sea,
+            ws_prov_seas,
+            _,
+        ) = visited_children
 
         prov_sea_list = [prov_sea]
         for ws_prov_sea in ws_prov_seas:
@@ -412,3 +459,6 @@ class DaideVisitor(NodeVisitor):
 
     def generic_visit(self, node, visited_children):
         return visited_children or node
+
+
+daide_visitor = DAIDEVisitor()
