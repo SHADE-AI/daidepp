@@ -41,7 +41,7 @@ LEVEL_10: GRAMMAR_DICT = {
     "slo": '"SLO" lpar power rpar',
     "not": '"NOT" lpar arrangement rpar',
     "nar": '"NAR" lpar arrangement rpar',
-    "drw": '"DRW"',  # TODO: may need to update this
+    "drw": '"DRW" (lpar power (ws power)+ rpar)?',
     "yes": '"YES" lpar press_message rpar',
     "rej": '"REJ" lpar press_message rpar',
     "bwx": '"BWX" lpar press_message rpar',
@@ -77,7 +77,7 @@ LEVEL_20: GRAMMAR_DICT = {
     "wve": 'power ws "WVE"',
     "unit_type": '"AMY" / "FLT"',
     "unit": "power ws unit_type ws province",
-    "province": "prov_coast / prov_no_coast / prov_sea",
+    "province": "prov_coast / prov_no_coast / prov_sea / (lpar prov_coast ws coast rpar)",
     "coast": '"NCS" / "ECS" / "SCS" / "WCS"',
     "prov_coast": '"ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL"',
     "prov_no_coast": '"BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" ',
@@ -353,15 +353,15 @@ FULL_DAIDE_GRAMMAR_STRING = """
 
     arrangement = pce / aly_vss / drw / slo / not / nar / xdo / dmz / and / orr / scd / occ / cho / for / xoy / ydo / snd / fwd / bcc
     pce = "PCE" lpar power (ws power)* rpar
-    aly_vss = "ALY" lpar power (ws power)* rpar "VSS" lpar power (ws power)* rpar 
-    drw = "DRW"
-    slo = "SLO" lpar power rpar 
-    not = "NOT" lpar arrangement rpar 
-    nar = "NAR" lpar arrangement rpar 
-    xdo = "XDO" lpar order rpar 
-    and = "AND" lpar arrangement rpar (lpar arrangement rpar)+ 
-    orr = "ORR" lpar arrangement rpar (lpar arrangement rpar)+ 
-    dmz = "DMZ" lpar power (ws power)* rpar lpar province (ws province)* rpar 
+    aly_vss = "ALY" lpar power (ws power)* rpar "VSS" lpar power (ws power)* rpar
+    drw = "DRW" (lpar power (ws power)+ rpar)?
+    slo = "SLO" lpar power rpar
+    not = "NOT" lpar arrangement rpar
+    nar = "NAR" lpar arrangement rpar
+    xdo = "XDO" lpar order rpar
+    and = "AND" lpar arrangement rpar (lpar arrangement rpar)+
+    orr = "ORR" lpar arrangement rpar (lpar arrangement rpar)+
+    dmz = "DMZ" lpar power (ws power)* rpar lpar province (ws province)* rpar
     scd = "SCD" (lpar power ws supply_center (ws supply_center)* rpar)+
     occ = "OCC" (lpar unit rpar)+
     cho = "CHO" lpar (~"\d+ \d+") rpar (lpar arrangement rpar)+
@@ -375,7 +375,7 @@ FULL_DAIDE_GRAMMAR_STRING = """
     order = hld / mto / sup / cvy / move_by_cvy / retreat / build
     hld = lpar unit rpar "HLD"
     mto = lpar unit rpar "MTO" ws province
-    sup = lpar unit rpar "SUP" lpar unit rpar ("MTO" ws prov_no_coast)?
+    sup = lpar unit rpar "SUP" lpar unit rpar ("MTO" ws province)?
     cvy = lpar unit rpar "CVY" lpar unit rpar "CTO" ws province
     move_by_cvy = lpar unit rpar "CTO" ws province ws "VIA" lpar prov_sea (ws prov_sea)* rpar
     retreat = rto / dsb
@@ -388,8 +388,9 @@ FULL_DAIDE_GRAMMAR_STRING = """
 
     unit_type = "AMY" / "FLT"
     unit = power ws unit_type ws province
-    power = "AUS" / "ENG" / "FRA" / "GER" / "ITA" / "RUS" / "TUR" 
-    province = prov_coast / prov_no_coast / prov_sea
+    power = "AUS" / "ENG" / "FRA" / "GER" / "ITA" / "RUS" / "TUR"
+    province = prov_coast / prov_no_coast / prov_sea / (lpar prov_coast ws coast rpar)
+    coast = "NCS" / "ECS" / "SCS" / "WCS"
     prov_coast = "ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL" 
     prov_no_coast = "BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" 
     prov_sea = "ADR" / "AEG" / "BAL" / "BAR" / "BLA" / "BOT" / "EAS" / "ENG" / "HEL" / "ION" / "IRI" / "LYO" / "MAO" / "NAO" / "NTH" / "NWG" / "SKA" / "TYS" / "WES"  

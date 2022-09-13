@@ -183,7 +183,19 @@ class DAIDEVisitor(NodeVisitor):
         return ("ALY_VSS", (aly_list, vss_list))
 
     def visit_drw(self, node, visited_children):
-        return node.text
+        _, par_powers = visited_children
+
+        if isinstance(par_powers, Node) and not par_powers.text:
+            return "DRW"
+
+        # For Partial draws are allowed (PDA) variant game
+        _, power, ws_powers, _ = par_powers[0]
+        pow_list = [power]
+        for ws_pow in ws_powers:
+            _, pow = ws_pow
+            pow_list.append(pow)
+
+        return ("DRW", pow_list)
 
     def visit_slo(self, node, visited_children):
         _, _, power, _ = visited_children
@@ -406,6 +418,14 @@ class DAIDEVisitor(NodeVisitor):
         return node.text
 
     def visit_province(self, node, visited_children):
+        if isinstance(visited_children[0], str):
+            return node.text
+
+        _, province, _, coast, _ = visited_children[0]
+
+        return province + " " + coast
+
+    def visit_coast(self, node, visited_children):
         return node.text
 
     def visit_prov_coast(self, node, visited_children):
