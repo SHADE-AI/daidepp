@@ -22,6 +22,8 @@ The syntax is split into a number of levels. Each level completely includes all 
 [Level 120: Forwarding Press](#level-120-forwarding-press)  
 [Level 130: Explanations](#level-130-explanations)  
 
+
+
 All Bots must implement the commands in all levels – they should not assume that they will never be playing in a game that is above the level they are designed for. Where a Bot receives a message that is above its intended level, there is a response it can use to indicate this.
 
 The Diplomacy AI Development Environment Message Syntax is based on the structure and syntax of the **DPP** Language written by Danny Loeb. However, a significant number of changes have been made from the **DPP** Language in order to make it more powerful and more consistent.
