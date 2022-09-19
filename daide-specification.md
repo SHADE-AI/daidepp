@@ -20,9 +20,9 @@ The syntax is split into a number of levels. Each level completely includes all 
 [Level 100: Conditionals](#level-100-conditionals)  
 [Level 110: Puppets and Favours](#level-110-puppets-and-favours)  
 [Level 120: Forwarding Press](#level-120-forwarding-press)  
-[Level 130: Explanations](#level-130-explanations)  
-
-
+[Level 130: Explanations](#level-130-explanations) \
+[Level 140: Sending Emotional State](#level-140-sending-emotional-state) \
+[Level 150: Requesting and Demanding Offer](#level-150-requesting-and-demanding-offer)
 
 All Bots must implement the commands in all levels – they should not assume that they will never be playing in a game that is above the level they are designed for. Where a Bot receives a message that is above its intended level, there is a response it can use to indicate this.
 
@@ -892,6 +892,57 @@ I don't know whether I'll accept that. Throw in something else to make it worthw
 **reply = IDK (SUG (arrangement))**
 
 I don't really know whether I desire that.
+
+## Level 140: Sending Emotional State
+
+In Level 140, we add the ability to respond to a message by expressing the emotional state upon receiving the message. One of following can be sent:
+
+> **reply = UHY(press_message)**
+
+Unhappy with the message
+
+<!-- End of page 15 -->
+
+> **reply = HPY(press_message)**
+
+Happy with the message
+
+> **reply = ANG(press_message)**
+
+Angry with the message
+
+The above responses should only be sent as a response to a received message. **press_message** should be identical to the received message.
+
+## Level 150: Requesting and Demanding Offer
+
+In Level 150, we add the ability to request or demand for an offer.
+
+### (i) Requesting an offer
+
+From Level 10, a power can propose an arrangement with **press_message**
+
+> **press_message = PRP(arrangement)**
+
+To request an offer:
+
+> **arrangement = ROF**
+
+Thus, to send a request for an offer to a power or multiple powers:
+
+> **SND(power power…)(PRP(ROF))**
+
+Here, the list of powers **(power power ...)** who will receive the request.
+
+Example, **SND (GER AUS) (PRP(ROF))** , if any power is requesting Germany and Russia for an offer
+
+
+### (i) Demanding an offer
+
+Follwing level 60, a power can demand or Insist on an offer with **INS** token such as the following:
+
+> **press_message = INS(ROF)**
+
+Example,**SND (GER AUS) (INS(ROF))"** , if any power insisting or demanding Germany and Austria for an offer
 
 ## Level 8000: Free Text Press
 
