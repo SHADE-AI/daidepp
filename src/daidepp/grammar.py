@@ -25,7 +25,7 @@ class DAIDEGrammar(Grammar):
         return create_daide_grammar(level)
 
 
-DAIDE_LEVEL = Literal[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+DAIDE_LEVEL = Literal[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
 
 TRAIL_TOKEN = "---"  # any value starting with '---' is meant to be a continuation of that key, not a replacement
 
@@ -186,7 +186,22 @@ LEVEL_130: GRAMMAR_DICT = {
     "reply": f"{TRAIL_TOKEN}why / pob / idk",
     "try_tokens": f'{TRAIL_TOKEN}"IDK" / "WHY" / "POB"',
 }
-
+    
+# Sending Emotional State
+LEVEL_140: GRAMMER_DICT = {
+    "uhy": '"UHY" lpar press_message rpar',
+    "hpy": '"HPY" lpar press_message rpar',
+    "ANG": '"ang" lpar press_message rpar',
+    "reply": "hpy/uhy/ang",
+}
+    
+# Requesting and Demanding Offer
+LEVEL_150: GRAMMER_DICT = {
+    "rfo":'"RFO"',
+    "arrangement": f"{TRAIL_TOKEN}rfo",
+    "try_tokens": f'{TRAIL_TOKEN}"RFO"',
+}
+    
 LEVELS: Tuple[GRAMMAR_DICT] = (
     LEVEL_10,
     LEVEL_20,
@@ -201,6 +216,8 @@ LEVELS: Tuple[GRAMMAR_DICT] = (
     LEVEL_110,
     LEVEL_120,
     LEVEL_130,
+    LEVEL_140,
+    LEVEL_150
 )
 
 GRAMMAR_DICT = Dict[str, str]
