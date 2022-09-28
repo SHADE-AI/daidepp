@@ -65,7 +65,7 @@ LEVEL_20: GRAMMAR_DICT = {
     "order": "hld / mto / sup / cvy / move_by_cvy / retreat / build",
     "hld": 'lpar unit rpar "HLD"',
     "mto": 'lpar unit rpar "MTO" ws province',
-    "sup": 'lpar unit rpar "SUP" lpar unit rpar ("MTO" ws prov_no_coast)?',
+    "sup": 'lpar unit rpar "SUP" lpar unit rpar ("MTO" ws province)?',
     "cvy": 'lpar unit rpar "CVY" lpar unit rpar "CTO" ws province',
     "move_by_cvy": 'lpar unit rpar "CTO" ws province ws "VIA" lpar prov_sea (ws prov_sea)* rpar',
     "retreat": "rto / dsb",
