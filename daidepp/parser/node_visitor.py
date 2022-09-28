@@ -17,13 +17,13 @@ class DAIDEVisitor(NodeVisitor):
         return ("CCL", press_message)
 
     def visit_fct(self, node, visited_children):
-        _, _, arrangement, *_ = visited_children[0]
+        _, _, arrangement, *_ = visited_children
 
         if isinstance(arrangement, Node) and arrangement.text == "NOT":
-            _, _, _, _, qry, _, _ = visited_children[0]
+            _, _, _, _, qry, _, _ = visited_children
             output = ("FCT", ("NOT", qry))
         else:
-            _, _, msg, _ = visited_children[0]
+            _, _, msg, _ = visited_children
             output = ("FCT", msg)
         return output
 
