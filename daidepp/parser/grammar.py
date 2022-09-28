@@ -77,7 +77,7 @@ LEVEL_20: GRAMMAR_DICT = {
     "wve": 'power ws "WVE"',
     "unit_type": '"AMY" / "FLT"',
     "unit": "power ws unit_type ws province",
-    "province": "prov_coast / prov_no_coast / prov_sea",
+    "province": "prov_coast / prov_no_coast / prov_sea / (lpar prov_coast ws coast rpar)",
     "coast": '"NCS" / "ECS" / "SCS" / "WCS"',
     "prov_coast": '"ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL"',
     "prov_no_coast": '"BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" ',
