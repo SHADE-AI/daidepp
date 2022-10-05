@@ -418,14 +418,6 @@ class DAIDEVisitor(NodeVisitor):
         return node.text
 
     def visit_province(self, node, visited_children):
-        if isinstance(visited_children[0], str):
-            return node.text
-
-        _, province, _, coast, _ = visited_children[0]
-
-        return province + " " + coast
-
-    def visit_coast(self, node, visited_children):
         return node.text
 
     def visit_prov_coast(self, node, visited_children):
@@ -445,6 +437,14 @@ class DAIDEVisitor(NodeVisitor):
         return power, unit_type, province
 
     def visit_unit_type(self, node, visited_children):
+        return node.text
+
+    def visit_province(self, node, visited_children):
+        if isinstance(visited_children[0], str):
+            return node.text
+        return visited_children[0][0].text
+
+    def visit_coast(self, node, visited_children):
         return node.text
 
     def visit_turn(self, node, visited_children):
