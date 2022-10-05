@@ -21,8 +21,8 @@ class DAIDEGrammar(Grammar):
         self.try_tokens: List[str] = try_tokens_strings
 
     @staticmethod
-    def from_level(level: DAIDE_LEVEL):
-        return create_daide_grammar(level)
+    def from_level(level: DAIDE_LEVEL, allow_just_arrangment: bool = False):
+        return create_daide_grammar(level, allow_just_arrangment)
 
 
 DAIDE_LEVEL = Literal[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
@@ -58,6 +58,9 @@ LEVEL_10: GRAMMAR_DICT = {
     "try_tokens": '"PRP" / "PCE" / "ALY" / "VSS" / "DRW" / "SLO" / "NOT" / "YES" / "REJ" / "BWX" / "FCT"',
 }
 
+# prov_no_coast: all province tokens without coasts
+# province: all provinces including coasts
+
 # Order Proposals
 LEVEL_20: GRAMMAR_DICT = {
     "xdo": '"XDO" lpar order rpar',
@@ -77,10 +80,12 @@ LEVEL_20: GRAMMAR_DICT = {
     "wve": 'power ws "WVE"',
     "unit_type": '"AMY" / "FLT"',
     "unit": "power ws unit_type ws province",
-    "province": "prov_coast / prov_no_coast / prov_sea / (lpar prov_coast ws coast rpar)",
+    "prov_no_coast": "prov_land_sea / prov_landlock / prov_sea",
+    "prov_coast": '(lpar "STP" ws "SCS" rpar) / (lpar "STP" ws "SCS" rpar) / (lpar "SPA" ws "NCS" rpar) / (lpar "SPA" ws "SCS" rpar) / (lpar "BUL" ws "ECS" rpar) / (lpar "BUL" ws "SCS" rpar)',
+    "province": "prov_land_sea / prov_landlock / prov_sea / prov_coast",
     "coast": '"NCS" / "ECS" / "SCS" / "WCS"',
-    "prov_coast": '"ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL"',
-    "prov_no_coast": '"BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" ',
+    "prov_land_sea": '"ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL"',
+    "prov_landlock": '"BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" ',
     "prov_sea": '"ADR" / "AEG" / "BAL" / "BAR" / "BLA" / "BOT" / "EAS" / "ENG" / "HEL" / "ION" / "IRI" / "LYO" / "MAO" / "NAO" / "NTH" / "NWG" / "SKA" / "TYS" / "WES"',
     "supply_center": '"ANK" / "BEL" / "BER" / "BRE" / "BUD" / "BUL" / "CON" / "DEN" / "EDI" / "GRE" / "HOL" / "KIE" / "LON" / "LVP" / "MAR" / "MOS" / "MUN" / "NAP" / "NWY" / "PAR" / "POR" / "ROM" / "RUM" / "SER" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "TRI" / "TUN" / "VEN" / "VIE" / "WAR"',
     "arrangement": f"{TRAIL_TOKEN}mto / xdo / dmz",
