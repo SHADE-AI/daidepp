@@ -414,17 +414,3 @@ FULL_DAIDE_GRAMMAR_STRING = """
     qry_wht_prp_ins_sug = qry / wht/ prp / ins / sug
     fct_thk_prp_ins = fct / thk / prp / ins
     """
-
-from daide_visitor import DAIDEVisitor
-
-grammar = create_daide_grammar(level=130)
-# message = "PRP (DRW)"
-# message = 'INS (PCE (AUS ENG GER))'
-# message = 'INS (DRW)'
-# message = 'IDK (QRY (DRW))'
-# message = 'IDK (INS (PCE (AUS ENG GER)))'
-# message = 'IDK (PRP (PCE (AUS ENG GER)))'
-# tree = grammar.parse(message)
-# visitor = DAIDEVisitor()
-# output = visitor.visit(tree)
-# print(output)
