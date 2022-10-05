@@ -128,7 +128,8 @@ class DAIDEVisitor(NodeVisitor):
 
     def visit_idk(self, node, visited_children):
         _, _, message, _ = visited_children
-        return ("IDK", message)
+
+        return ("IDK", message[0]) if isinstance(message, list) else ("IDK", message)
 
     def visit_sry(self, node, visited_children):
         _, _, exp, _ = visited_children
