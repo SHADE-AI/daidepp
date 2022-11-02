@@ -47,7 +47,7 @@ LEVEL_0: GRAMMAR_DICT = {
     "unit_type": '"AMY" / "FLT"',
     "unit": "power ws unit_type ws province",
     "prov_no_coast": "prov_land_sea / prov_landlock / prov_sea",
-    "prov_coast": '(lpar "STP" ws "SCS" rpar) / (lpar "STP" ws "SCS" rpar) / (lpar "SPA" ws "NCS" rpar) / (lpar "SPA" ws "SCS" rpar) / (lpar "BUL" ws "ECS" rpar) / (lpar "BUL" ws "SCS" rpar)',
+    "prov_coast": '(lpar "STP" ws "NCS" rpar) / (lpar "STP" ws "SCS" rpar) / (lpar "SPA" ws "NCS" rpar) / (lpar "SPA" ws "SCS" rpar) / (lpar "BUL" ws "ECS" rpar) / (lpar "BUL" ws "SCS" rpar)',
     "province": "prov_land_sea / prov_landlock / prov_sea / prov_coast",
     "coast": '"NCS" / "ECS" / "SCS" / "WCS"',
     "prov_land_sea": '"ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL"',
