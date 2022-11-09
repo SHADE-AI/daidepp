@@ -15,7 +15,7 @@ DAIDE parser using [parsimonious](https://github.com/erikrose/parsimonious). Par
 
 ## Use
 
-Using the grammar in grammar.py, you can create a parse tree from a DAIDE press message or reply. The nodes of the parse tree can be visited to return something more useful. The visiting rules for each of the nodes of the parse tree are defined in node_visitor.py.
+Using the grammar in `grammar.py`, you can create a parse tree from a DAIDE press message or reply. The nodes of the parse tree can be visited to return something more useful. The visiting rules for each of the nodes of the parse tree are defined in `node_visitor.py`.
 
 Example:
 
@@ -30,6 +30,18 @@ Example:
 ```
 
 If the DAIDE token is not in the grammar or if the message is malformed, the parser will just thrown an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.
+
+
+In addition, DAIDE strings can be constructed using the classes in `keywords.py`. Each class has type hints that indicate the parameters that should be used.
+
+Example:
+
+```python3
+>>> from daidepp import AND, PRP, PCE
+>>> str(AND(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG"))))
+`AND ((PRP (PCE (AUS))) (PRP (PCE (AUS ENG))) (PRP (PCE (AUS ENG FRA))))`
+```
+Each class in `keywords.py` uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout `tests/test_keywords.py`, which provices examples for each class. 
 
 ## Pull Requests
 
