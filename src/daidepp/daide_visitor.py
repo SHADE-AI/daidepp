@@ -1,5 +1,7 @@
 from parsimonious.nodes import Node, NodeVisitor
 
+from daidepp.keywords import *
+
 
 class DAIDEVisitor(NodeVisitor):
     def visit_message(self, node, visited_children):

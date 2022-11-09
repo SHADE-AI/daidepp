@@ -65,7 +65,6 @@ LEVEL_0: GRAMMAR_DICT = {
 LEVEL_10: GRAMMAR_DICT = {
     "pce": '"PCE" lpar power (ws power)* rpar',
     "ccl": '"CCL" lpar press_message rpar',
-    "fct": '"FCT" lpar arrangement rpar',
     "try": '"TRY" lpar try_tokens (ws try_tokens)* rpar',
     "huh": '"HUH" lpar press_message rpar',
     "prp": '"PRP" lpar arrangement rpar',
@@ -187,10 +186,10 @@ LEVEL_120: GRAMMAR_DICT = {
 # Explanations
 LEVEL_130: GRAMMAR_DICT = {
     "fct_thk_prp_ins": "fct / thk / prp / ins",
-    "qry_wht_prp_ins_sug": "qry / wht/ prp / ins / sug",  # added sug because it looks like it's also supported at level 130
+    "qry_exp_wht_prp_ins_sug": "qry / exp / wht / prp / ins / sug",  # added sug because it looks like it's also supported at level 130
     "why": '"WHY" lpar fct_thk_prp_ins rpar',
     "pob": '"POB" lpar why rpar',
-    "idk": '"IDK" lpar qry_wht_prp_ins_sug rpar',
+    "idk": '"IDK" lpar qry_exp_wht_prp_ins_sug rpar',
     "reply": f"{TRAIL_TOKEN}why / pob / idk",
     "try_tokens": f'{TRAIL_TOKEN}"WHY" / "POB"',
 }
