@@ -21,7 +21,7 @@ class HLD:
     unit: Unit
 
     def __str__(self):
-        return f"({self.unit}) HLD"
+        return f"( {self.unit} ) HLD"
 
 
 @dataclass
@@ -30,7 +30,7 @@ class MTO:
     province: PROVINCE
 
     def __str__(self):
-        return f"({self.unit}) MTO {self.province}"
+        return f"( {self.unit} ) MTO {self.province}"
 
 
 @dataclass
@@ -41,9 +41,11 @@ class SUP:
 
     def __str__(self):
         if not self.province_no_coast:
-            return f"({self.unit_1}) SUP ({self.unit_2})"
+            return f"( {self.unit_1} ) SUP ( {self.unit_2} )"
         else:
-            return f"({self.unit_1}) SUP ({self.unit_2}) MTO {self.province_no_coast}"
+            return (
+                f"( {self.unit_1} ) SUP ( {self.unit_2} ) MTO {self.province_no_coast}"
+            )
 
 
 @dataclass
@@ -53,7 +55,7 @@ class CVY:
     province: PROVINCE
 
     def __str__(self):
-        return f"({self.unit_1}) CVY ({self.unit_2}) CTO {self.province}"
+        return f"( {self.unit_1} ) CVY ( {self.unit_2} ) CTO {self.province}"
 
 
 @dataclass
@@ -69,9 +71,9 @@ class MoveByCVY:
 
     def __str__(self):
         return (
-            f"({self.unit}) CTO {self.province} VIA ("
+            f"( {self.unit} ) CTO {self.province} VIA ( "
             + " ".join(self.province_seas)
-            + ")"
+            + " )"
         )
 
 
@@ -81,7 +83,7 @@ class RTO:
     province: PROVINCE
 
     def __str__(self):
-        return f"({self.unit}) RTO {self.province}"
+        return f"( {self.unit} ) RTO {self.province}"
 
 
 @dataclass
@@ -89,7 +91,7 @@ class DSB:
     unit: Unit
 
     def __str__(self):
-        return f"({self.unit}) DSB"
+        return f"( {self.unit} ) DSB"
 
 
 @dataclass
@@ -97,7 +99,7 @@ class BLD:
     unit: Unit
 
     def __str__(self):
-        return f"({self.unit}) BLD"
+        return f"( {self.unit} ) BLD"
 
 
 @dataclass
@@ -105,7 +107,7 @@ class REM:
     unit: Unit
 
     def __str__(self):
-        return f"({self.unit}) REM"
+        return f"( {self.unit} ) REM"
 
 
 @dataclass
@@ -133,7 +135,7 @@ class PCE:
         self.powers = powers
 
     def __str__(self):
-        return "PCE (" + " ".join(self.powers) + ")"
+        return "PCE ( " + " ".join(self.powers) + " )"
 
 
 @dataclass
@@ -141,7 +143,7 @@ class CCL:
     press_message: PRESS_MESSAGE
 
     def __str__(self):
-        return f"CCL ({self.press_message})"
+        return f"CCL ( {self.press_message} )"
 
 
 @dataclass
@@ -152,7 +154,7 @@ class TRY:
         self.try_tokens = try_tokens
 
     def __str__(self):
-        return "TRY (" + " ".join(self.try_tokens) + ")"
+        return "TRY ( " + " ".join(self.try_tokens) + " )"
 
 
 @dataclass
@@ -160,7 +162,7 @@ class HUH:
     press_message: PRESS_MESSAGE
 
     def __str__(self):
-        return f"HUH ({self.press_message})"
+        return f"HUH ( {self.press_message} )"
 
 
 @dataclass
@@ -168,7 +170,7 @@ class PRP:
     arrangement: ARRANGEMENT
 
     def __str__(self):
-        return f"PRP ({self.arrangement})"
+        return f"PRP ( {self.arrangement} )"
 
 
 @dataclass
@@ -178,11 +180,11 @@ class ALYVSS:
 
     def __str__(self):
         return (
-            "ALY ("
+            "ALY ( "
             + " ".join(self.aly_powers)
-            + ") VSS ("
+            + " ) VSS ( "
             + " ".join(self.vss_powers)
-            + ")"
+            + " )"
         )
 
 
@@ -191,7 +193,7 @@ class SLO:
     power: POWER
 
     def __str__(self):
-        return f"SLO ({self.power})"
+        return f"SLO ( {self.power} )"
 
 
 @dataclass
@@ -199,7 +201,7 @@ class NOT:
     arrangement_qry: Union[ARRANGEMENT, QRY]
 
     def __str__(self):
-        return f"NOT ({self.arrangement_qry})"
+        return f"NOT ( {self.arrangement_qry} )"
 
 
 @dataclass
@@ -207,7 +209,7 @@ class NAR:
     arrangement: ARRANGEMENT
 
     def __str__(self):
-        return f"NAR ({self.arrangement})"
+        return f"NAR ( {self.arrangement} )"
 
 
 @dataclass
@@ -219,16 +221,17 @@ class DRW:
 
     def __str__(self):
         if self.powers:
-            return f"DRW (" + " ".join(self.powers) + ")"
+            return f"DRW ( " + " ".join(self.powers) + " )"
         else:
             return f"DRW"
+
 
 @dataclass
 class YES:
     press_message: PRESS_MESSAGE
 
     def __str__(self):
-        return f"YES ({self.press_message})"
+        return f"YES ( {self.press_message} )"
 
 
 @dataclass
@@ -236,7 +239,7 @@ class REJ:
     press_message: PRESS_MESSAGE
 
     def __str__(self):
-        return f"REJ ({self.press_message})"
+        return f"REJ ( {self.press_message} )"
 
 
 @dataclass
@@ -244,7 +247,7 @@ class BWX:
     press_message: PRESS_MESSAGE
 
     def __str__(self):
-        return f"BWX ({self.press_message})"
+        return f"BWX ( {self.press_message} )"
 
 
 @dataclass
@@ -252,7 +255,7 @@ class FCT:
     arrangement_qry_not: Union[ARRANGEMENT, QRY, NOT]
 
     def __str__(self):
-        return f"FCT ({self.arrangement_qry_not})"
+        return f"FCT ( {self.arrangement_qry_not} )"
 
 
 @dataclass
@@ -263,9 +266,9 @@ class FRM:
 
     def __str__(self):
         return (
-            f"FRM ({self.frm_power}) ("
+            f"FRM ( {self.frm_power} ) ( "
             + " ".join(self.to_powers)
-            + f") ({self.message})"
+            + f" ) ( {self.message} )"
         )
 
 
@@ -274,7 +277,7 @@ class XDO:
     order: ORDER
 
     def __str__(self):
-        return f"XDO ({self.order})"
+        return f"XDO ( {self.order} )"
 
 
 @dataclass
@@ -283,7 +286,9 @@ class DMZ:
     provinces: List[PROVINCE]
 
     def __str__(self):
-        return "DMZ (" + " ".join(self.powers) + ") (" + " ".join(self.provinces) + ")"
+        return (
+            "DMZ ( " + " ".join(self.powers) + " ) ( " + " ".join(self.provinces) + " )"
+        )
 
 
 @dataclass
@@ -294,8 +299,8 @@ class AND:
         self.arrangments = arrangements
 
     def __str__(self):
-        arr_str = ["(" + str(arr) + ")" for arr in self.arrangments]
-        return f"AND (" + " ".join(arr_str) + ")"
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
+        return f"AND ( " + " ".join(arr_str) + " )"
 
 
 @dataclass
@@ -306,8 +311,8 @@ class ORR:
         self.arrangments = arrangements
 
     def __str__(self):
-        arr_str = ["(" + str(arr) + ")" for arr in self.arrangments]
-        return f"ORR (" + " ".join(arr_str) + ")"
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
+        return f"ORR ( " + " ".join(arr_str) + " )"
 
 
 @dataclass
@@ -320,7 +325,7 @@ class SCD:
         self.supply_centers = supply_centers
 
     def __str__(self):
-        return f"SCD ({self.power} " + " ".join(self.supply_centers) + ")"
+        return f"SCD ( {self.power} " + " ".join(self.supply_centers) + " )"
 
 
 @dataclass
@@ -331,8 +336,8 @@ class OCC:
         self.units = units
 
     def __str__(self):
-        unit_str = ["(" + str(unit) + ")" for unit in self.units]
-        return f"OCC (" + " ".join(unit_str) + ")"
+        unit_str = ["( " + str(unit) + " )" for unit in self.units]
+        return f"OCC ( " + " ".join(unit_str) + " )"
 
 
 @dataclass
@@ -347,12 +352,9 @@ class CHO:
         self.arrangments = arrangements
 
     def __str__(self):
-        arr_str = ["(" + str(arr) + ")" for arr in self.arrangments]
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
 
-        return (
-            f"CHO ({self.start_year} {self.end_year}) "
-            + " ".join(arr_str)
-        )
+        return f"CHO ( {self.start_year} {self.end_year} ) " + " ".join(arr_str)
 
 
 @dataclass
@@ -360,7 +362,7 @@ class INS:
     arrangment: ARRANGEMENT
 
     def __str__(self):
-        return f"INS ({self.arrangment})"
+        return f"INS ( {self.arrangment} )"
 
 
 @dataclass
@@ -368,7 +370,7 @@ class QRY:
     arrangment: ARRANGEMENT
 
     def __str__(self):
-        return f"QRY ({self.arrangment})"
+        return f"QRY ( {self.arrangment} )"
 
 
 @dataclass
@@ -376,7 +378,7 @@ class THK:
     arrangement_qry_not: Union[ARRANGEMENT, QRY, NOT, None]
 
     def __str__(self):
-        return f"THK ({self.arrangement_qry_not})"
+        return f"THK ( {self.arrangement_qry_not} )"
 
 
 @dataclass
@@ -384,7 +386,7 @@ class IDK:
     qry_exp_wht_prp_ins_sug: Union[QRY, EXP, WHT, PRP, INS, SUG]
 
     def __str__(self):
-        return f"IDK ({self.qry_exp_wht_prp_ins_sug})"
+        return f"IDK ( {self.qry_exp_wht_prp_ins_sug} )"
 
 
 @dataclass
@@ -392,7 +394,7 @@ class SUG:
     arrangement: ARRANGEMENT
 
     def __str__(self):
-        return f"SUG ({self.arrangement})"
+        return f"SUG ( {self.arrangement} )"
 
 
 @dataclass
@@ -400,7 +402,7 @@ class WHT:
     unit: Unit
 
     def __str__(self):
-        return f"WHT ({self.unit})"
+        return f"WHT ( {self.unit} )"
 
 
 @dataclass
@@ -408,7 +410,7 @@ class HOW:
     province_power: Union[PROVINCE, POWER]
 
     def __str__(self):
-        return f"HOW ({self.province_power})"
+        return f"HOW ( {self.province_power} )"
 
 
 @dataclass
@@ -417,7 +419,7 @@ class EXP:
     message: MESSAGE
 
     def __str__(self):
-        return f"EXP ({self.turn}) ({self.message})"
+        return f"EXP ( {self.turn} ) ( {self.message} )"
 
 
 @dataclass
@@ -425,20 +427,20 @@ class SRY:
     exp: EXP
 
     def __str__(self):
-        return f"SRY ({self.exp})"
+        return f"SRY ( {self.exp} )"
 
 
 @dataclass
 class FOR:
     start_turn: Turn
-    end_turn: Optional[Turn] 
+    end_turn: Optional[Turn]
     arrangement: ARRANGEMENT
 
     def __str__(self):
         if not self.end_turn:
-            return f"FOR ({self.start_turn}) ({self.arrangement})"
+            return f"FOR ( {self.start_turn} ) ( {self.arrangement} )"
         else:
-            return f"FOR (({self.start_turn}) ({self.end_turn})) ({self.arrangement})"
+            return f"FOR ( ( {self.start_turn} ) ( {self.end_turn} ) ) ( {self.arrangement} )"
 
 
 @dataclass
@@ -449,9 +451,9 @@ class IFF:
 
     def __str__(self):
         if not self.els_press_message:
-            return f"IFF ({self.arrangement}) THN ({self.press_message})"
+            return f"IFF ( {self.arrangement} ) THN ( {self.press_message} )"
         else:
-            return f"IFF ({self.arrangement}) THN ({self.press_message}) ELS ({self.els_press_message})"
+            return f"IFF ( {self.arrangement} ) THN ( {self.press_message} ) ELS ( {self.els_press_message} )"
 
 
 @dataclass
@@ -460,7 +462,7 @@ class XOY:
     power_2: POWER
 
     def __str__(self):
-        return f"XOY ({self.power_1}) ({self.power_2})"
+        return f"XOY ( {self.power_1} ) ( {self.power_2} )"
 
 
 @dataclass
@@ -473,8 +475,8 @@ class YDO:
         self.units = units
 
     def __str__(self):
-        unit_str = ["(" + str(unit) + ")" for unit in self.units]
-        return f"YDO ({self.power}) " + " ".join(unit_str)
+        unit_str = ["( " + str(unit) + " )" for unit in self.units]
+        return f"YDO ( {self.power} ) " + " ".join(unit_str)
 
 
 @dataclass
@@ -484,7 +486,11 @@ class SND:
     message: MESSAGE
 
     def __str__(self):
-        return f"SND ({self.power}) (" + " ".join(self.powers) + f") ({self.message})"
+        return (
+            f"SND ( {self.power} ) ( "
+            + " ".join(self.powers)
+            + f" ) ( {self.message} )"
+        )
 
 
 @dataclass
@@ -494,7 +500,11 @@ class FWD:
     power_2: POWER
 
     def __str__(self):
-        return f"FWD (" + " ".join(self.powers) + f") ({self.power_1}) ({self.power_2})"
+        return (
+            f"FWD ( "
+            + " ".join(self.powers)
+            + f" ) ( {self.power_1} ) ( {self.power_2} )"
+        )
 
 
 @dataclass
@@ -504,7 +514,11 @@ class BCC:
     power_2: POWER
 
     def __str__(self):
-        return f"BCC ({self.power_1}) (" + " ".join(self.powers) + f") ({self.power_2})"
+        return (
+            f"BCC ( {self.power_1} ) ( "
+            + " ".join(self.powers)
+            + f" ) ( {self.power_2} )"
+        )
 
 
 @dataclass
@@ -512,7 +526,7 @@ class WHY:
     fct_thk_prp_ins: Union[FCT, THK, PRP, INS]
 
     def __str__(self):
-        return f"WHY ({self.fct_thk_prp_ins})"
+        return f"WHY ( {self.fct_thk_prp_ins} )"
 
 
 @dataclass
@@ -520,8 +534,7 @@ class POB:
     why: WHY
 
     def __str__(self):
-        return f"POB ({self.why})"
-
+        return f"POB ( {self.why} )"
 
 
 RETREAT = Union[RTO, DSB]
@@ -537,5 +550,5 @@ REPLY = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, IDK]
 PRESS_MESSAGE = Union[PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF]
 MESSAGE = Union[PRESS_MESSAGE, REPLY]
 ARRANGEMENT = Union[
-    PCE, ALYVSS, DRW, XDO, DMZ, AND, ORR, SCD, ORR, CHO, FOR, XOY, YDO, SND, FWD, BCC
+    PCE, ALYVSS, DRW, XDO, DMZ, AND, ORR, SCD, CHO, FOR, XOY, YDO, SND, FWD, BCC
 ]
