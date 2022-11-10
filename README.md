@@ -39,7 +39,7 @@ Example:
 ```python3
 >>> from daidepp import AND, PRP, PCE
 >>> str(AND(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG"))))
-`AND ( ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) ) )`
+`AND ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) )`
  ```
 Each class in `keywords.py` uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout `tests/test_keywords.py`, which provides examples for each class. 
 
