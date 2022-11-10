@@ -256,23 +256,23 @@ def test_DMZ():
 
 def test_AND():
     and_1 = AND(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG")))
-    assert str(and_1) == "AND ( ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) )"
+    assert str(and_1) == "AND ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) )"
 
     and_2 = AND(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG")), PRP(PCE("AUS", "ENG", "FRA")))
     assert (
         str(and_2)
-        == "AND ( ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) ) )"
+        == "AND ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) )"
     )
 
 
 def test_ORR():
     orr_1 = ORR(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG")))
-    assert str(orr_1) == "ORR ( ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) )"
+    assert str(orr_1) == "ORR ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) )"
 
     orr_2 = ORR(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG")), PRP(PCE("AUS", "ENG", "FRA")))
     assert (
         str(orr_2)
-        == "ORR ( ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) ) )"
+        == "ORR ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) )"
     )
 
 

@@ -300,7 +300,7 @@ class AND:
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
-        return f"AND ( " + " ".join(arr_str) + " )"
+        return f"AND " + " ".join(arr_str)
 
 
 @dataclass
@@ -312,7 +312,7 @@ class ORR:
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
-        return f"ORR ( " + " ".join(arr_str) + " )"
+        return f"ORR " + " ".join(arr_str)
 
 
 @dataclass
