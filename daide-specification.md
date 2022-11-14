@@ -21,6 +21,7 @@ The syntax is split into a number of levels. Each level completely includes all 
 [Level 110: Puppets and Favours](#level-110-puppets-and-favours)  
 [Level 120: Forwarding Press](#level-120-forwarding-press)  
 [Level 130: Explanations](#level-130-explanations)  
+[Level 140: Utility Bounds](#level-140-utility-bounds)  
 
 All Bots must implement the commands in all levels – they should not assume that they will never be playing in a game that is above the level they are designed for. Where a Bot receives a message that is above its intended level, there is a response it can use to indicate this.
 
@@ -890,6 +891,26 @@ I don't know whether I'll accept that. Throw in something else to make it worthw
 **reply = IDK (SUG (arrangement))**
 
 I don't really know whether I desire that.
+
+## Level 140: Utility Bounds
+
+Level 140 adds the ability to specify a utility lower or upper bound for a power. This is intended for use with threats to show how much cooperation benefits the receiver over the threatened punishment.
+
+> **arrangement = ULB (power float)**
+
+Utility lower bound of float for power.
+
+> **arrangement = UUB (power float)**
+
+Utility upper bound of float for power.
+
+Float is a floating point number in a format typically used by programming languages. It is currently parsed with the following regular expression:
+[-+]?((\d*\\.\d+)|(\d+\\.?))([Ee][+-]?\d+)?
+
+Example message sent from England to Germany:
+> IFF (XDO((GER AMY BER) MTO MUN)) THN (PRP (ULB (GER 0.8))) ELS (INS (UUB (GER 0.1)))
+
+This is a threat from England to Germany that says if you move BER to MUN then I will move to give you at least 0.8 utility, but if you do anything else I will move to prevent you from getting more than 0.1 utility.
 
 ## Level 8000: Free Text Press
 
