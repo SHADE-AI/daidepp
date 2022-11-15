@@ -61,8 +61,6 @@ LEVEL_0: GRAMMAR_DICT = {
     "ws": '~"\s+"',
 }
 
-# "not": '("NOT" lpar arrangement rpar) / ("NOT" lpar qry rpar)',
-
 # Peace and Alliances
 LEVEL_10: GRAMMAR_DICT = {
     "pce": '"PCE" lpar power (ws power)+ rpar',
