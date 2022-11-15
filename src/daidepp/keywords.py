@@ -316,7 +316,7 @@ class ORR:
 @dataclass
 class PowerAndSupplyCenters:
     power: POWER
-    supply_centers = List[SUPPLY_CENTER]
+    supply_centers: List[SUPPLY_CENTER]
 
     def __init__(self, power, *supply_centers):
         self.power = power
@@ -328,7 +328,7 @@ class PowerAndSupplyCenters:
 
 @dataclass
 class SCD:
-    power_and_supply_centers = List[PowerAndSupplyCenters]
+    power_and_supply_centers: List[PowerAndSupplyCenters]
 
     def __init__(self, *power_and_supply_centers):
         self.power_and_supply_centers = power_and_supply_centers
