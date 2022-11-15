@@ -9,4 +9,5 @@ def test_basic_visitor(sample_daide_messages: List[str]):
     for message in sample_daide_messages:
         tree = grammar.parse(message)
         daide_visitor.visit(tree)
+
     assert True

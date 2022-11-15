@@ -21,8 +21,8 @@ class DAIDEGrammar(Grammar):
         self.try_tokens: List[str] = try_tokens_strings
 
     @staticmethod
-    def from_level(level: DAIDE_LEVEL, allow_just_arrangment: bool = False):
-        return create_daide_grammar(level, allow_just_arrangment)
+    def from_level(level: DAIDE_LEVEL, allow_just_arrangement: bool = False):
+        return create_daide_grammar(level, allow_just_arrangement)
 
 
 DAIDE_LEVEL = Literal[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
@@ -61,16 +61,18 @@ LEVEL_0: GRAMMAR_DICT = {
     "ws": '~"\s+"',
 }
 
+# "not": '("NOT" lpar arrangement rpar) / ("NOT" lpar qry rpar)',
+
 # Peace and Alliances
 LEVEL_10: GRAMMAR_DICT = {
-    "pce": '"PCE" lpar power (ws power)* rpar',
+    "pce": '"PCE" lpar power (ws power)+ rpar',
     "ccl": '"CCL" lpar press_message rpar',
     "try": '"TRY" lpar try_tokens (ws try_tokens)* rpar',
     "huh": '"HUH" lpar press_message rpar',
     "prp": '"PRP" lpar arrangement rpar',
     "aly_vss": '"ALY" lpar power (ws power)* rpar "VSS" lpar power (ws power)* rpar',
     "slo": '"SLO" lpar power rpar',
-    "not": '"NOT" lpar arrangement rpar',
+    "not": '("NOT" lpar arrangement rpar)',
     "nar": '"NAR" lpar arrangement rpar',
     "drw": '"DRW" (lpar power (ws power)+ rpar)?',
     "yes": '"YES" lpar press_message rpar',
@@ -109,14 +111,14 @@ LEVEL_30: GRAMMAR_DICT = {
 LEVEL_40: GRAMMAR_DICT = {
     "scd": '"SCD" (lpar power ws supply_center (ws supply_center)* rpar)+',
     "occ": '"OCC" (lpar unit rpar)+',
-    "arrangement": f"{TRAIL_TOKEN}scd / orr",
+    "arrangement": f"{TRAIL_TOKEN}scd / occ",
     "try_tokens": f'{TRAIL_TOKEN}"SCD" / "OCC"',
 }
 
 # Nested Multipart Arrangements
 LEVEL_50: GRAMMAR_DICT = {
-    "and": '"AND" lpar arrangement rpar (lpar arrangement rpar)+',
-    "orr": '"ORR" lpar arrangement rpar (lpar arrangement rpar)+',
+    "and": '("AND" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+) / ("AND" lpar arrangement rpar (lpar arrangement rpar)+)',
+    "orr": '("ORR" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+) / ("ORR" lpar arrangement rpar (lpar arrangement rpar)+)',
     "cho": '"CHO" lpar (~"\d+ \d+") rpar (lpar arrangement rpar)+',
     "arrangement": f"{TRAIL_TOKEN}cho",
     "try_tokens": f'{TRAIL_TOKEN}"CHO"',  # This isn't included in the original daide spec but I think they just forgot it.
@@ -126,10 +128,11 @@ LEVEL_50: GRAMMAR_DICT = {
 LEVEL_60: GRAMMAR_DICT = {
     "ins": '"INS" lpar arrangement rpar',
     "qry": '"QRY" lpar arrangement rpar',
-    "thk": '("THK" lpar qry rpar) / ("THK" lpar "NOT" lpar qry rpar rpar) / ("THK" lpar arrangement rpar)',
+    "thk": '("THK" lpar arrangement rpar) / ("THK" lpar qry rpar) /  ("THK" lpar not rpar)',
     "idk": '"IDK" lpar qry rpar',
     "sug": '"SUG" lpar arrangement rpar',
-    "fct": '("FCT" lpar qry rpar) / ("FCT" lpar "NOT" lpar qry rpar rpar) / ("FCT" lpar arrangement rpar)',
+    "fct": '("FCT" lpar arrangement rpar) / ("FCT" lpar qry rpar) / ("FCT" lpar not rpar)',
+    "not": '("NOT" lpar arrangement rpar) / ("NOT" lpar qry rpar)',
     "reply": f"{TRAIL_TOKEN}fct / thk / idk",
     "try_tokens": f'{TRAIL_TOKEN}"INS" / "QRY" / "THK" / "IDK" / "SUG"',
     "press_message": f"{TRAIL_TOKEN}thk / ins / qry / sug",
@@ -215,7 +218,7 @@ GRAMMAR_DICT = Dict[str, str]
 
 
 def create_daide_grammar(
-    level: DAIDE_LEVEL = 30, allow_just_arrangment: bool = False
+    level: DAIDE_LEVEL = 30, allow_just_arrangement: bool = False
 ) -> DAIDEGrammar:
     """Create a DAIDEGrammar object given a level of DAIDE.
 
@@ -231,7 +234,7 @@ def create_daide_grammar(
     Returns:
         DAIDEGrammar: Grammar object
     """
-    grammar_str = _create_daide_grammar_str(level, allow_just_arrangment)
+    grammar_str = _create_daide_grammar_str(level, allow_just_arrangement)
     grammar = DAIDEGrammar(grammar_str)
     return grammar
 

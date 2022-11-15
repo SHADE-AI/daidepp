@@ -35,27 +35,25 @@ class MTO:
 
 @dataclass
 class SUP:
-    unit_1: Unit
-    unit_2: Unit
+    supporting_unit: Unit
+    supported_unit: Unit
     province_no_coast: Optional[PROVINCE_NO_COAST] = None
 
     def __str__(self):
         if not self.province_no_coast:
-            return f"( {self.unit_1} ) SUP ( {self.unit_2} )"
+            return f"( {self.supporting_unit} ) SUP ( {self.supported_unit} )"
         else:
-            return (
-                f"( {self.unit_1} ) SUP ( {self.unit_2} ) MTO {self.province_no_coast}"
-            )
+            return f"( {self.supporting_unit} ) SUP ( {self.supported_unit} ) MTO {self.province_no_coast}"
 
 
 @dataclass
 class CVY:
-    unit_1: Unit
-    unit_2: Unit
+    convoying_unit: Unit
+    convoyed_unit: Unit
     province: PROVINCE
 
     def __str__(self):
-        return f"( {self.unit_1} ) CVY ( {self.unit_2} ) CTO {self.province}"
+        return f"( {self.convoying_unit} ) CVY ( {self.convoyed_unit} ) CTO {self.province}"
 
 
 @dataclass
@@ -261,13 +259,13 @@ class FCT:
 @dataclass
 class FRM:
     frm_power: POWER
-    to_powers: List[POWER]
+    recv_powers: List[POWER]
     message: MESSAGE
 
     def __str__(self):
         return (
             f"FRM ( {self.frm_power} ) ( "
-            + " ".join(self.to_powers)
+            + " ".join(self.recv_powers)
             + f" ) ( {self.message} )"
         )
 
@@ -293,39 +291,51 @@ class DMZ:
 
 @dataclass
 class AND:
-    arrangments: List[ARRANGEMENT]
+    arrangements: List[ARRANGEMENT]
 
     def __init__(self, *arrangements):
-        self.arrangments = arrangements
+        self.arrangements = arrangements
 
     def __str__(self):
-        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
         return f"AND " + " ".join(arr_str)
 
 
 @dataclass
 class ORR:
-    arrangments: List[ARRANGEMENT]
+    arrangements: List[ARRANGEMENT]
 
     def __init__(self, *arrangements):
-        self.arrangments = arrangements
+        self.arrangements = arrangements
 
     def __str__(self):
-        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
         return f"ORR " + " ".join(arr_str)
 
 
 @dataclass
-class SCD:
+class PowerAndSupplyCenters:
     power: POWER
-    supply_centers: List[SUPPLY_CENTER]
+    supply_centers = List[SUPPLY_CENTER]
 
     def __init__(self, power, *supply_centers):
         self.power = power
         self.supply_centers = supply_centers
 
     def __str__(self):
-        return f"SCD ( {self.power} " + " ".join(self.supply_centers) + " )"
+        return f"{self.power} " + " ".join(self.supply_centers)
+
+
+@dataclass
+class SCD:
+    power_and_supply_centers = List[PowerAndSupplyCenters]
+
+    def __init__(self, *power_and_supply_centers):
+        self.power_and_supply_centers = power_and_supply_centers
+
+    def __str__(self):
+        pas_str = ["( " + str(pas) + " )" for pas in self.power_and_supply_centers]
+        return f"SCD " + " ".join(pas_str)
 
 
 @dataclass
@@ -344,33 +354,33 @@ class OCC:
 class CHO:
     start_year: int
     end_year: int
-    arrangments: List[ARRANGEMENT]
+    arrangements: List[ARRANGEMENT]
 
     def __init__(self, start_year, end_year, *arrangements):
         self.start_year = start_year
         self.end_year = end_year
-        self.arrangments = arrangements
+        self.arrangements = arrangements
 
     def __str__(self):
-        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
 
         return f"CHO ( {self.start_year} {self.end_year} ) " + " ".join(arr_str)
 
 
 @dataclass
 class INS:
-    arrangment: ARRANGEMENT
+    arrangement: ARRANGEMENT
 
     def __str__(self):
-        return f"INS ( {self.arrangment} )"
+        return f"INS ( {self.arrangement} )"
 
 
 @dataclass
 class QRY:
-    arrangment: ARRANGEMENT
+    arrangement: ARRANGEMENT
 
     def __str__(self):
-        return f"QRY ( {self.arrangment} )"
+        return f"QRY ( {self.arrangement} )"
 
 
 @dataclass
@@ -458,11 +468,11 @@ class IFF:
 
 @dataclass
 class XOY:
-    power_1: POWER
-    power_2: POWER
+    power_x: POWER
+    power_y: POWER
 
     def __str__(self):
-        return f"XOY ( {self.power_1} ) ( {self.power_2} )"
+        return f"XOY ( {self.power_x} ) ( {self.power_y} )"
 
 
 @dataclass
@@ -482,13 +492,13 @@ class YDO:
 @dataclass
 class SND:
     power: POWER
-    powers: List[POWER]
+    recv_powers: List[POWER]
     message: MESSAGE
 
     def __str__(self):
         return (
             f"SND ( {self.power} ) ( "
-            + " ".join(self.powers)
+            + " ".join(self.recv_powers)
             + f" ) ( {self.message} )"
         )
 
