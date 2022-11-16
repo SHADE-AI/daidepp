@@ -352,19 +352,19 @@ class OCC:
 
 @dataclass
 class CHO:
-    start_year: int
-    end_year: int
+    min_choice: int
+    max_choice: int
     arrangements: List[ARRANGEMENT]
 
     def __init__(self, start_year, end_year, *arrangements):
-        self.start_year = start_year
-        self.end_year = end_year
+        self.min_choice = start_year
+        self.max_choice = end_year
         self.arrangements = arrangements
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
 
-        return f"CHO ( {self.start_year} {self.end_year} ) " + " ".join(arr_str)
+        return f"CHO ( {self.min_choice} {self.max_choice} ) " + " ".join(arr_str)
 
 
 @dataclass

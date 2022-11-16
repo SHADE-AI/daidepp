@@ -264,12 +264,12 @@ class DAIDEVisitor(NodeVisitor):
     def visit_cho(self, node, visited_children):
         _, _, range, _, par_arrangements = visited_children
 
-        start_year, end_year = tuple([int(x) for x in range.text.split()])
+        min_choice, max_choice = tuple([int(x) for x in range.text.split()])
         arrangements = []
         for par_arrangement in par_arrangements:
             _, arrangement, _ = par_arrangement
             arrangements.append(arrangement)
-        return CHO(start_year, end_year, *arrangements)
+        return CHO(min_choice, max_choice, *arrangements)
 
     def visit_for(self, node, visited_children):
         _, _, turn, _, _, arrangement, _ = visited_children[0]
