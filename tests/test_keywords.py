@@ -277,11 +277,11 @@ def test_ORR():
 
 
 def test_SCD():
-    scd_1 = SCD("AUS", "ANK", "BEL", "BER")
-    assert str(scd_1) == "SCD ( AUS ANK BEL BER )"
-
-    scd_2 = SCD("GER", "BRE", "BUD")
-    assert str(scd_2) == "SCD ( GER BRE BUD )"
+    scd_1 = SCD(
+        PowerAndSupplyCenters("AUS", "ANK", "BEL", "BER"),
+        PowerAndSupplyCenters("GER", "BRE", "BUD"),
+    )
+    assert str(scd_1) == "SCD ( AUS ANK BEL BER ) ( GER BRE BUD )"
 
 
 def test_OCC():
@@ -311,6 +311,11 @@ def test_QRY():
 def test_THK():
     thk_1 = THK(PCE("AUS"))
     assert str(thk_1) == "THK ( PCE ( AUS ) )"
+
+
+def test_IDK():
+    idk_1 = IDK(PRP(PCE("AUS")))
+    assert str(idk_1) == "IDK ( PRP ( PCE ( AUS ) ) )"
 
 
 def test_SUG():
