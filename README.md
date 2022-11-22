@@ -24,9 +24,9 @@ Example:
 >>> grammar = create_daide_grammar(level=130)
 >>> message = 'PRP (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS)) (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS))))'
 >>> parse_tree = grammar.parse(message)
->>> output = daide_visitor.visit(parse_tree)
+>>> output = daide_visitor.visit(parse_tree) # object composed of dataclass objects in keywords.py
 >>> print(output)
-('PRP', ('AND', [('SLO', 'ENG'), ('SLO', 'GER'), ('SLO', 'RUS'), ('AND', [('SLO', 'ENG'), ('SLO', 'GER'), ('SLO', 'RUS')])]))
+PRP ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ) )
 ```
 
 If the DAIDE token is not in the grammar or if the message is malformed, the parser will just thrown an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.

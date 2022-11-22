@@ -21,13 +21,28 @@ class _DAIDEObject(ABC):
 
 
 @dataclass
+class Location:
+    province: Union[str, Location]
+    coast: Optional[str] = None
+
+    def __post_init__(self):
+        if isinstance(self.province, Location):
+            self.province = self.province.province
+
+    def __str__(self) -> str:
+        if self.coast:
+            return f"({self.province} {self.coast})"
+        return self.province
+
+
+@dataclass
 class Unit(_DAIDEObject):
     power: POWER
     unit_type: UNIT_TYPE
-    province: PROVINCE
+    location: Location
 
     def __str__(self):
-        return f"{self.power} {self.unit_type} {self.province}"
+        return f"{self.power} {self.unit_type} {self.location}"
 
 
 @dataclass
@@ -41,35 +56,33 @@ class HLD(_DAIDEObject):
 @dataclass
 class MTO(_DAIDEObject):
     unit: Unit
-    province: PROVINCE
+    location: Location
 
     def __str__(self):
-        return f"( {self.unit} ) MTO {self.province}"
+        return f"( {self.unit} ) MTO {self.location}"
 
 
 @dataclass
-class SUP(_DAIDEObject):
-    unit_1: Unit
-    unit_2: Unit
+class SUP:
+    supporting_unit: Unit
+    supported_unit: Unit
     province_no_coast: Optional[PROVINCE_NO_COAST] = None
 
     def __str__(self):
         if not self.province_no_coast:
-            return f"( {self.unit_1} ) SUP ( {self.unit_2} )"
+            return f"( {self.supporting_unit} ) SUP ( {self.supported_unit} )"
         else:
-            return (
-                f"( {self.unit_1} ) SUP ( {self.unit_2} ) MTO {self.province_no_coast}"
-            )
+            return f"( {self.supporting_unit} ) SUP ( {self.supported_unit} ) MTO {self.province_no_coast}"
 
 
 @dataclass
-class CVY(_DAIDEObject):
-    unit_1: Unit
-    unit_2: Unit
-    province: PROVINCE
+class CVY:
+    convoying_unit: Unit
+    convoyed_unit: Unit
+    province: PROVINCE_NO_COAST
 
     def __str__(self):
-        return f"( {self.unit_1} ) CVY ( {self.unit_2} ) CTO {self.province}"
+        return f"( {self.convoying_unit} ) CVY ( {self.convoyed_unit} ) CTO {self.province}"
 
 
 @dataclass
@@ -94,10 +107,10 @@ class MoveByCVY(_DAIDEObject):
 @dataclass
 class RTO(_DAIDEObject):
     unit: Unit
-    province: PROVINCE
+    location: Location
 
     def __str__(self):
-        return f"( {self.unit} ) RTO {self.province}"
+        return f"( {self.unit} ) RTO {self.location}"
 
 
 @dataclass
@@ -275,13 +288,13 @@ class FCT(_DAIDEObject):
 @dataclass
 class FRM(_DAIDEObject):
     frm_power: POWER
-    to_powers: List[POWER]
+    recv_powers: List[POWER]
     message: MESSAGE
 
     def __str__(self):
         return (
             f"FRM ( {self.frm_power} ) ( "
-            + " ".join(self.to_powers)
+            + " ".join(self.recv_powers)
             + f" ) ( {self.message} )"
         )
 
@@ -310,10 +323,10 @@ class AND(_DAIDEObject):
     arrangments: List[ARRANGEMENT]
 
     def __init__(self, *arrangements):
-        self.arrangments = arrangements
+        self.arrangements = arrangements
 
     def __str__(self):
-        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
         return f"AND " + " ".join(arr_str)
 
 
@@ -322,15 +335,15 @@ class ORR(_DAIDEObject):
     arrangments: List[ARRANGEMENT]
 
     def __init__(self, *arrangements):
-        self.arrangments = arrangements
+        self.arrangements = arrangements
 
     def __str__(self):
-        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
         return f"ORR " + " ".join(arr_str)
 
 
 @dataclass
-class SCD(_DAIDEObject):
+class PowerAndSupplyCenters:
     power: POWER
     supply_centers: List[SUPPLY_CENTER]
 
@@ -339,7 +352,19 @@ class SCD(_DAIDEObject):
         self.supply_centers = supply_centers
 
     def __str__(self):
-        return f"SCD ( {self.power} " + " ".join(self.supply_centers) + " )"
+        return f"{self.power} " + " ".join(self.supply_centers)
+
+
+@dataclass
+class SCD(_DAIDEObject):
+    power_and_supply_centers: List[PowerAndSupplyCenters]
+
+    def __init__(self, *power_and_supply_centers):
+        self.power_and_supply_centers = power_and_supply_centers
+
+    def __str__(self):
+        pas_str = ["( " + str(pas) + " )" for pas in self.power_and_supply_centers]
+        return f"SCD " + " ".join(pas_str)
 
 
 @dataclass
@@ -356,19 +381,19 @@ class OCC(_DAIDEObject):
 
 @dataclass
 class CHO(_DAIDEObject):
-    start_year: int
-    end_year: int
+    minimum: int
+    maximum: int
     arrangments: List[ARRANGEMENT]
 
-    def __init__(self, start_year, end_year, *arrangements):
-        self.start_year = start_year
-        self.end_year = end_year
-        self.arrangments = arrangements
+    def __init__(self, minimum, maximum, *arrangements):
+        self.minimum = minimum
+        self.maximum = maximum
+        self.arrangements = arrangements
 
     def __str__(self):
-        arr_str = ["( " + str(arr) + " )" for arr in self.arrangments]
+        arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
 
-        return f"CHO ( {self.start_year} {self.end_year} ) " + " ".join(arr_str)
+        return f"CHO ( {self.minimum} {self.maximum} ) " + " ".join(arr_str)
 
 
 @dataclass
@@ -376,7 +401,7 @@ class INS(_DAIDEObject):
     arrangment: ARRANGEMENT
 
     def __str__(self):
-        return f"INS ( {self.arrangment} )"
+        return f"INS ( {self.arrangement} )"
 
 
 @dataclass
@@ -384,7 +409,7 @@ class QRY(_DAIDEObject):
     arrangment: ARRANGEMENT
 
     def __str__(self):
-        return f"QRY ( {self.arrangment} )"
+        return f"QRY ( {self.arrangement} )"
 
 
 @dataclass
@@ -472,11 +497,11 @@ class IFF(_DAIDEObject):
 
 @dataclass
 class XOY(_DAIDEObject):
-    power_1: POWER
-    power_2: POWER
+    power_x: POWER
+    power_y: POWER
 
     def __str__(self):
-        return f"XOY ( {self.power_1} ) ( {self.power_2} )"
+        return f"XOY ( {self.power_x} ) ( {self.power_y} )"
 
 
 @dataclass
@@ -496,13 +521,13 @@ class YDO(_DAIDEObject):
 @dataclass
 class SND(_DAIDEObject):
     power: POWER
-    powers: List[POWER]
+    recv_powers: List[POWER]
     message: MESSAGE
 
     def __str__(self):
         return (
             f"SND ( {self.power} ) ( "
-            + " ".join(self.powers)
+            + " ".join(self.recv_powers)
             + f" ) ( {self.message} )"
         )
 

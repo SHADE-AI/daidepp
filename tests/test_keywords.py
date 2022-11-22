@@ -1,4 +1,4 @@
-from typing import List
+import pytest
 
 from daidepp.keywords import *
 
@@ -126,8 +126,8 @@ def test_PCE():
 
 
 def test_PRP():
-    arr_1 = PRP(PCE("AUS"))
-    assert str(arr_1) == "PRP ( PCE ( AUS ) )"
+    # arr_1 = PRP(PCE("AUS"))
+    # assert str(arr_1) == "PRP ( PCE ( AUS ) )"
 
     arr_2 = PRP(PCE("AUS", "ENG"))
     assert str(arr_2) == "PRP ( PCE ( AUS ENG ) )"
@@ -137,8 +137,8 @@ def test_PRP():
 
 
 def test_CCL():
-    ccl_1 = CCL(PRP(PCE("AUS")))
-    assert str(ccl_1) == "CCL ( PRP ( PCE ( AUS ) ) )"
+    # ccl_1 = CCL(PRP(PCE("AUS")))
+    # assert str(ccl_1) == "CCL ( PRP ( PCE ( AUS ) ) )"
 
     ccl_2 = CCL(PRP(PCE("AUS", "ENG")))
     assert str(ccl_2) == "CCL ( PRP ( PCE ( AUS ENG ) ) )"
@@ -159,8 +159,8 @@ def test_TRY():
 
 
 def test_HUH():
-    huh_1 = HUH(PRP(PCE("AUS")))
-    assert str(huh_1) == "HUH ( PRP ( PCE ( AUS ) ) )"
+    # huh_1 = HUH(PRP(PCE("AUS")))
+    # assert str(huh_1) == "HUH ( PRP ( PCE ( AUS ) ) )"
 
     huh_2 = HUH(PRP(PCE("AUS", "ENG")))
     assert str(huh_2) == "HUH ( PRP ( PCE ( AUS ENG ) ) )"
@@ -170,6 +170,8 @@ def test_HUH():
 
 
 def test_ALYVSS():
+
+    # This shouldn't work
     alyvss_1 = ALYVSS(["AUS"], ["ENG"])
     assert str(alyvss_1) == "ALY ( AUS ) VSS ( ENG )"
 
@@ -254,7 +256,11 @@ def test_DMZ():
     assert str(dmz_2) == "DMZ ( ITA TUR ) ( CLY ALB )"
 
 
+@pytest.mark.xfail
 def test_AND():
+
+    # Both of these should fail because you can't have peace with only one power
+
     and_1 = AND(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG")))
     assert str(and_1) == "AND ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) )"
 
@@ -265,7 +271,11 @@ def test_AND():
     )
 
 
+@pytest.mark.xfail
 def test_ORR():
+
+    # Both of these should fail because you can't have peace with one power
+
     orr_1 = ORR(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG")))
     assert str(orr_1) == "ORR ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) )"
 
@@ -277,11 +287,11 @@ def test_ORR():
 
 
 def test_SCD():
-    scd_1 = SCD("AUS", "ANK", "BEL", "BER")
-    assert str(scd_1) == "SCD ( AUS ANK BEL BER )"
-
-    scd_2 = SCD("GER", "BRE", "BUD")
-    assert str(scd_2) == "SCD ( GER BRE BUD )"
+    scd_1 = SCD(
+        PowerAndSupplyCenters("AUS", "ANK", "BEL", "BER"),
+        PowerAndSupplyCenters("GER", "BRE", "BUD"),
+    )
+    assert str(scd_1) == "SCD ( AUS ANK BEL BER ) ( GER BRE BUD )"
 
 
 def test_OCC():
@@ -298,21 +308,31 @@ def test_CHO():
     assert str(cho_1) == "CHO ( 1901 1903 ) ( PCE ( AUS ) ) ( PCE ( AUS ENG ) )"
 
 
+@pytest.mark.xfail
 def test_INS():
     ins_1 = INS(PCE("AUS"))
     assert str(ins_1) == "INS ( PCE ( AUS ) )"
 
 
+@pytest.mark.xfail
 def test_QRY():
     qry_1 = QRY(PCE("AUS"))
     assert str(qry_1) == "QRY ( PCE ( AUS ) )"
 
 
+@pytest.mark.xfail
 def test_THK():
     thk_1 = THK(PCE("AUS"))
     assert str(thk_1) == "THK ( PCE ( AUS ) )"
 
 
+@pytest.mark.xfail
+def test_IDK():
+    idk_1 = IDK(PRP(PCE("AUS")))
+    assert str(idk_1) == "IDK ( PRP ( PCE ( AUS ) ) )"
+
+
+@pytest.mark.xfail
 def test_SUG():
     sug_1 = SUG(PCE("AUS"))
     assert str(sug_1) == "SUG ( PCE ( AUS ) )"
@@ -352,6 +372,7 @@ def test_FOR():
     assert str(for_2) == "FOR ( ( SPR 1901 ) ( FAL 1903 ) ) ( PCE ( AUS ENG ) )"
 
 
+@pytest.mark.xfail
 def test_IFF():
     iff_1 = IFF(PCE("AUS", "ENG"), PRP(PCE("AUS")))
     assert str(iff_1) == "IFF ( PCE ( AUS ENG ) ) THN ( PRP ( PCE ( AUS ) ) )"
