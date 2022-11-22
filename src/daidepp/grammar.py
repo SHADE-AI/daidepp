@@ -230,7 +230,7 @@ def create_daide_grammar(
         allow_just_arrangement (bool, optional): if set to True, the parser accepts strings that
         are only arrangements, in addition to press messages. So, for example, the parser could parse
         'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
-        string_tyep (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default), the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized.
+        string_type (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default), the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized.
 
     Returns:
         DAIDEGrammar: Grammar object
