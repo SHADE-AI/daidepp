@@ -1,13 +1,27 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Optional, Union
 
 from daidepp.constants import *
+from daidepp.grammar import create_daide_grammar
+
+_grammar = create_daide_grammar(130, string_type="all")
 
 
 @dataclass
-class Unit:
+class _DAIDEObject(ABC):
+    @abstractmethod
+    def __str__(self) -> str:
+        pass
+
+    def __post_init__(self):
+        _grammar.parse(str(self))
+
+
+@dataclass
+class Unit(_DAIDEObject):
     power: POWER
     unit_type: UNIT_TYPE
     province: PROVINCE
@@ -17,7 +31,7 @@ class Unit:
 
 
 @dataclass
-class HLD:
+class HLD(_DAIDEObject):
     unit: Unit
 
     def __str__(self):
@@ -25,7 +39,7 @@ class HLD:
 
 
 @dataclass
-class MTO:
+class MTO(_DAIDEObject):
     unit: Unit
     province: PROVINCE
 
@@ -34,7 +48,7 @@ class MTO:
 
 
 @dataclass
-class SUP:
+class SUP(_DAIDEObject):
     unit_1: Unit
     unit_2: Unit
     province_no_coast: Optional[PROVINCE_NO_COAST] = None
@@ -49,7 +63,7 @@ class SUP:
 
 
 @dataclass
-class CVY:
+class CVY(_DAIDEObject):
     unit_1: Unit
     unit_2: Unit
     province: PROVINCE
@@ -59,7 +73,7 @@ class CVY:
 
 
 @dataclass
-class MoveByCVY:
+class MoveByCVY(_DAIDEObject):
     unit: Unit
     province: PROVINCE
     province_seas: List[PROVINCE_SEA]
@@ -78,7 +92,7 @@ class MoveByCVY:
 
 
 @dataclass
-class RTO:
+class RTO(_DAIDEObject):
     unit: Unit
     province: PROVINCE
 
@@ -87,7 +101,7 @@ class RTO:
 
 
 @dataclass
-class DSB:
+class DSB(_DAIDEObject):
     unit: Unit
 
     def __str__(self):
@@ -95,7 +109,7 @@ class DSB:
 
 
 @dataclass
-class BLD:
+class BLD(_DAIDEObject):
     unit: Unit
 
     def __str__(self):
@@ -103,7 +117,7 @@ class BLD:
 
 
 @dataclass
-class REM:
+class REM(_DAIDEObject):
     unit: Unit
 
     def __str__(self):
@@ -111,7 +125,7 @@ class REM:
 
 
 @dataclass
-class WVE:
+class WVE(_DAIDEObject):
     power: POWER
 
     def __str__(self):
@@ -119,7 +133,7 @@ class WVE:
 
 
 @dataclass
-class Turn:
+class Turn(_DAIDEObject):
     season: SEASON
     year: int
 
@@ -128,7 +142,7 @@ class Turn:
 
 
 @dataclass
-class PCE:
+class PCE(_DAIDEObject):
     powers: List[POWER]
 
     def __init__(self, *powers):
@@ -139,7 +153,7 @@ class PCE:
 
 
 @dataclass
-class CCL:
+class CCL(_DAIDEObject):
     press_message: PRESS_MESSAGE
 
     def __str__(self):
@@ -147,7 +161,7 @@ class CCL:
 
 
 @dataclass
-class TRY:
+class TRY(_DAIDEObject):
     try_tokens: List[TRY_TOKENS]
 
     def __init__(self, *try_tokens):
@@ -158,7 +172,7 @@ class TRY:
 
 
 @dataclass
-class HUH:
+class HUH(_DAIDEObject):
     press_message: PRESS_MESSAGE
 
     def __str__(self):
@@ -166,7 +180,7 @@ class HUH:
 
 
 @dataclass
-class PRP:
+class PRP(_DAIDEObject):
     arrangement: ARRANGEMENT
 
     def __str__(self):
@@ -174,7 +188,7 @@ class PRP:
 
 
 @dataclass
-class ALYVSS:
+class ALYVSS(_DAIDEObject):
     aly_powers: List[POWER]
     vss_powers: List[POWER]
 
@@ -189,7 +203,7 @@ class ALYVSS:
 
 
 @dataclass
-class SLO:
+class SLO(_DAIDEObject):
     power: POWER
 
     def __str__(self):
@@ -197,7 +211,7 @@ class SLO:
 
 
 @dataclass
-class NOT:
+class NOT(_DAIDEObject):
     arrangement_qry: Union[ARRANGEMENT, QRY]
 
     def __str__(self):
@@ -205,7 +219,7 @@ class NOT:
 
 
 @dataclass
-class NAR:
+class NAR(_DAIDEObject):
     arrangement: ARRANGEMENT
 
     def __str__(self):
@@ -213,7 +227,7 @@ class NAR:
 
 
 @dataclass
-class DRW:
+class DRW(_DAIDEObject):
     powers: Optional[List[POWER]] = None
 
     def __init__(self, *powers):
@@ -227,7 +241,7 @@ class DRW:
 
 
 @dataclass
-class YES:
+class YES(_DAIDEObject):
     press_message: PRESS_MESSAGE
 
     def __str__(self):
@@ -235,7 +249,7 @@ class YES:
 
 
 @dataclass
-class REJ:
+class REJ(_DAIDEObject):
     press_message: PRESS_MESSAGE
 
     def __str__(self):
@@ -243,7 +257,7 @@ class REJ:
 
 
 @dataclass
-class BWX:
+class BWX(_DAIDEObject):
     press_message: PRESS_MESSAGE
 
     def __str__(self):
@@ -251,7 +265,7 @@ class BWX:
 
 
 @dataclass
-class FCT:
+class FCT(_DAIDEObject):
     arrangement_qry_not: Union[ARRANGEMENT, QRY, NOT]
 
     def __str__(self):
@@ -259,7 +273,7 @@ class FCT:
 
 
 @dataclass
-class FRM:
+class FRM(_DAIDEObject):
     frm_power: POWER
     to_powers: List[POWER]
     message: MESSAGE
@@ -273,7 +287,7 @@ class FRM:
 
 
 @dataclass
-class XDO:
+class XDO(_DAIDEObject):
     order: ORDER
 
     def __str__(self):
@@ -281,7 +295,7 @@ class XDO:
 
 
 @dataclass
-class DMZ:
+class DMZ(_DAIDEObject):
     powers: List[POWER]
     provinces: List[PROVINCE]
 
@@ -292,7 +306,7 @@ class DMZ:
 
 
 @dataclass
-class AND:
+class AND(_DAIDEObject):
     arrangments: List[ARRANGEMENT]
 
     def __init__(self, *arrangements):
@@ -304,7 +318,7 @@ class AND:
 
 
 @dataclass
-class ORR:
+class ORR(_DAIDEObject):
     arrangments: List[ARRANGEMENT]
 
     def __init__(self, *arrangements):
@@ -316,7 +330,7 @@ class ORR:
 
 
 @dataclass
-class SCD:
+class SCD(_DAIDEObject):
     power: POWER
     supply_centers: List[SUPPLY_CENTER]
 
@@ -329,7 +343,7 @@ class SCD:
 
 
 @dataclass
-class OCC:
+class OCC(_DAIDEObject):
     units: List[Unit]
 
     def __init__(self, *units):
@@ -341,7 +355,7 @@ class OCC:
 
 
 @dataclass
-class CHO:
+class CHO(_DAIDEObject):
     start_year: int
     end_year: int
     arrangments: List[ARRANGEMENT]
@@ -358,7 +372,7 @@ class CHO:
 
 
 @dataclass
-class INS:
+class INS(_DAIDEObject):
     arrangment: ARRANGEMENT
 
     def __str__(self):
@@ -366,7 +380,7 @@ class INS:
 
 
 @dataclass
-class QRY:
+class QRY(_DAIDEObject):
     arrangment: ARRANGEMENT
 
     def __str__(self):
@@ -374,7 +388,7 @@ class QRY:
 
 
 @dataclass
-class THK:
+class THK(_DAIDEObject):
     arrangement_qry_not: Union[ARRANGEMENT, QRY, NOT, None]
 
     def __str__(self):
@@ -382,7 +396,7 @@ class THK:
 
 
 @dataclass
-class IDK:
+class IDK(_DAIDEObject):
     qry_exp_wht_prp_ins_sug: Union[QRY, EXP, WHT, PRP, INS, SUG]
 
     def __str__(self):
@@ -390,7 +404,7 @@ class IDK:
 
 
 @dataclass
-class SUG:
+class SUG(_DAIDEObject):
     arrangement: ARRANGEMENT
 
     def __str__(self):
@@ -398,7 +412,7 @@ class SUG:
 
 
 @dataclass
-class WHT:
+class WHT(_DAIDEObject):
     unit: Unit
 
     def __str__(self):
@@ -406,7 +420,7 @@ class WHT:
 
 
 @dataclass
-class HOW:
+class HOW(_DAIDEObject):
     province_power: Union[PROVINCE, POWER]
 
     def __str__(self):
@@ -414,7 +428,7 @@ class HOW:
 
 
 @dataclass
-class EXP:
+class EXP(_DAIDEObject):
     turn: Turn
     message: MESSAGE
 
@@ -423,7 +437,7 @@ class EXP:
 
 
 @dataclass
-class SRY:
+class SRY(_DAIDEObject):
     exp: EXP
 
     def __str__(self):
@@ -431,7 +445,7 @@ class SRY:
 
 
 @dataclass
-class FOR:
+class FOR(_DAIDEObject):
     start_turn: Turn
     end_turn: Optional[Turn]
     arrangement: ARRANGEMENT
@@ -444,7 +458,7 @@ class FOR:
 
 
 @dataclass
-class IFF:
+class IFF(_DAIDEObject):
     arrangement: ARRANGEMENT
     press_message: PRESS_MESSAGE
     els_press_message: Optional[PRESS_MESSAGE] = None
@@ -457,7 +471,7 @@ class IFF:
 
 
 @dataclass
-class XOY:
+class XOY(_DAIDEObject):
     power_1: POWER
     power_2: POWER
 
@@ -466,7 +480,7 @@ class XOY:
 
 
 @dataclass
-class YDO:
+class YDO(_DAIDEObject):
     power: POWER
     units: List[Unit]
 
@@ -480,7 +494,7 @@ class YDO:
 
 
 @dataclass
-class SND:
+class SND(_DAIDEObject):
     power: POWER
     powers: List[POWER]
     message: MESSAGE
@@ -494,7 +508,7 @@ class SND:
 
 
 @dataclass
-class FWD:
+class FWD(_DAIDEObject):
     powers: List[POWER]
     power_1: POWER
     power_2: POWER
@@ -508,7 +522,7 @@ class FWD:
 
 
 @dataclass
-class BCC:
+class BCC(_DAIDEObject):
     power_1: POWER
     powers: List[POWER]
     power_2: POWER
@@ -522,7 +536,7 @@ class BCC:
 
 
 @dataclass
-class WHY:
+class WHY(_DAIDEObject):
     fct_thk_prp_ins: Union[FCT, THK, PRP, INS]
 
     def __str__(self):
@@ -530,7 +544,7 @@ class WHY:
 
 
 @dataclass
-class POB:
+class POB(_DAIDEObject):
     why: WHY
 
     def __str__(self):
