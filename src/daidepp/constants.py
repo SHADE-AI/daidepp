@@ -1,9 +1,9 @@
 from typing_extensions import Literal
 
-POWER = Literal["AUS", "ENG", "FRA", "GER", "ITA", "RUS", "TUR"]
-UNIT_TYPE = Literal["AMY", "FLT"]
+Power = Literal["AUS", "ENG", "FRA", "GER", "ITA", "RUS", "TUR"]
+UnitType = Literal["AMY", "FLT"]
 
-PROVINCE_LAND_SEA = Literal[
+ProvinceLandSea = Literal[
     "ALB",
     "ANK",
     "APU",
@@ -47,7 +47,7 @@ PROVINCE_LAND_SEA = Literal[
     "YOR",
     "WAL",
 ]
-PROVINCE_LANDLOCK = Literal[
+ProvinceLandlock = Literal[
     "BOH",
     "BUD",
     "BUR",
@@ -63,7 +63,7 @@ PROVINCE_LANDLOCK = Literal[
     "VIE",
     "WAR",
 ]
-PROVINCE_SEA = Literal[
+ProvinceSea = Literal[
     "ADR",
     "AEG",
     "BAL",
@@ -84,15 +84,15 @@ PROVINCE_SEA = Literal[
     "TYS",
     "WES",
 ]
-PROVINCE_COAST = Literal[
+ProvinceCoast = Literal[
     "STP NCS", "STP SCS", "SPA NCS", "SPA SCS", "BUL ECS", "BUL SCS"
 ]
-PROVINCE = Literal[PROVINCE_LAND_SEA, PROVINCE_LANDLOCK, PROVINCE_SEA, PROVINCE_COAST]
-PROVINCE_NO_COAST = Literal[PROVINCE_LAND_SEA, PROVINCE_LANDLOCK, PROVINCE_SEA]
+Province = Literal[ProvinceLandSea, ProvinceLandlock, ProvinceSea, ProvinceCoast]
+ProvinceNoCoast = Literal[ProvinceLandSea, ProvinceLandlock, ProvinceSea]
 
-SEASON = Literal["SPR", "SUM", "FAL", "AUT", "WIN"]
+Season = Literal["SPR", "SUM", "FAL", "AUT", "WIN"]
 
-TRY_TOKENS = Literal[
+TryTokens = Literal[
     "PRP",
     "PCE",
     "ALY",
@@ -132,7 +132,7 @@ TRY_TOKENS = Literal[
     "POB",
 ]
 
-SUPPLY_CENTER = Literal[
+SupplyCenter = Literal[
     "ANK",
     "BEL",
     "BER",
