@@ -37,8 +37,8 @@ class Location:
 
 @dataclass
 class Unit(_DAIDEObject):
-    power: POWER
-    unit_type: UNIT_TYPE
+    power: Power
+    unit_type: UnitType
     location: Location
 
     def __str__(self):
@@ -66,7 +66,7 @@ class MTO(_DAIDEObject):
 class SUP:
     supporting_unit: Unit
     supported_unit: Unit
-    province_no_coast: Optional[PROVINCE_NO_COAST] = None
+    province_no_coast: Optional[ProvinceNoCoast] = None
 
     def __str__(self):
         if not self.province_no_coast:
@@ -79,7 +79,7 @@ class SUP:
 class CVY:
     convoying_unit: Unit
     convoyed_unit: Unit
-    province: PROVINCE_NO_COAST
+    province: ProvinceNoCoast
 
     def __str__(self):
         return f"( {self.convoying_unit} ) CVY ( {self.convoyed_unit} ) CTO {self.province}"
@@ -88,7 +88,7 @@ class CVY:
 @dataclass
 class MoveByCVY(_DAIDEObject):
     unit: Unit
-    province: PROVINCE
+    province: Province
     province_seas: List[Location]
 
     def __init__(self, unit, province, *province_seas):
@@ -139,7 +139,7 @@ class REM(_DAIDEObject):
 
 @dataclass
 class WVE(_DAIDEObject):
-    power: POWER
+    power: Power
 
     def __str__(self):
         return f"{self.power} WVE"
@@ -147,7 +147,7 @@ class WVE(_DAIDEObject):
 
 @dataclass
 class Turn(_DAIDEObject):
-    season: SEASON
+    season: Season
     year: int
 
     def __str__(self):
@@ -156,7 +156,7 @@ class Turn(_DAIDEObject):
 
 @dataclass
 class PCE(_DAIDEObject):
-    powers: List[POWER]
+    powers: List[Power]
 
     def __init__(self, *powers):
         self.powers = powers
@@ -176,7 +176,7 @@ class CCL(_DAIDEObject):
 
 @dataclass
 class TRY(_DAIDEObject):
-    try_tokens: List[TRY_TOKENS]
+    try_tokens: List[TryTokens]
 
     def __init__(self, *try_tokens):
         self.try_tokens = try_tokens
@@ -204,8 +204,8 @@ class PRP(_DAIDEObject):
 
 @dataclass
 class ALYVSS(_DAIDEObject):
-    aly_powers: List[POWER]
-    vss_powers: List[POWER]
+    aly_powers: List[Power]
+    vss_powers: List[Power]
 
     def __str__(self):
         return (
@@ -219,7 +219,7 @@ class ALYVSS(_DAIDEObject):
 
 @dataclass
 class SLO(_DAIDEObject):
-    power: POWER
+    power: Power
 
     def __str__(self):
         return f"SLO ( {self.power} )"
@@ -243,7 +243,7 @@ class NAR(_DAIDEObject):
 
 @dataclass
 class DRW(_DAIDEObject):
-    powers: Optional[List[POWER]] = None
+    powers: Optional[List[Power]] = None
 
     def __init__(self, *powers):
         self.powers = powers
@@ -290,8 +290,8 @@ class FCT(_DAIDEObject):
 
 @dataclass
 class FRM(_DAIDEObject):
-    frm_power: POWER
-    recv_powers: List[POWER]
+    frm_power: Power
+    recv_powers: List[Power]
     message: Message
 
     def __str__(self):
@@ -312,7 +312,7 @@ class XDO(_DAIDEObject):
 
 @dataclass
 class DMZ(_DAIDEObject):
-    powers: List[POWER]
+    powers: List[Power]
     provinces: List[Location]
 
     def __str__(self):
@@ -353,7 +353,7 @@ class ORR(_DAIDEObject):
 
 @dataclass
 class PowerAndSupplyCenters:
-    power: POWER
+    power: Power
     supply_centers: List[Location]  # Supply centers
 
     def __init__(self, power, *supply_centers):
@@ -458,7 +458,7 @@ class WHT(_DAIDEObject):
 
 @dataclass
 class HOW(_DAIDEObject):
-    province_power: Union[Location, POWER]
+    province_power: Union[Location, Power]
 
     def __str__(self):
         return f"HOW ( {self.province_power} )"
@@ -509,8 +509,8 @@ class IFF(_DAIDEObject):
 
 @dataclass
 class XOY(_DAIDEObject):
-    power_x: POWER
-    power_y: POWER
+    power_x: Power
+    power_y: Power
 
     def __str__(self):
         return f"XOY ( {self.power_x} ) ( {self.power_y} )"
@@ -518,7 +518,7 @@ class XOY(_DAIDEObject):
 
 @dataclass
 class YDO(_DAIDEObject):
-    power: POWER
+    power: Power
     units: List[Unit]
 
     def __init__(self, power, *units):
@@ -533,8 +533,8 @@ class YDO(_DAIDEObject):
 
 @dataclass
 class SND(_DAIDEObject):
-    power: POWER
-    recv_powers: List[POWER]
+    power: Power
+    recv_powers: List[Power]
     message: Message
 
     def __str__(self):
@@ -547,9 +547,9 @@ class SND(_DAIDEObject):
 
 @dataclass
 class FWD(_DAIDEObject):
-    powers: List[POWER]
-    power_1: POWER
-    power_2: POWER
+    powers: List[Power]
+    power_1: Power
+    power_2: Power
 
     def __str__(self):
         return (
@@ -561,9 +561,9 @@ class FWD(_DAIDEObject):
 
 @dataclass
 class BCC(_DAIDEObject):
-    power_1: POWER
-    powers: List[POWER]
-    power_2: POWER
+    power_1: Power
+    powers: List[Power]
+    power_2: Power
 
     def __str__(self):
         return (
