@@ -421,7 +421,6 @@ class DAIDEVisitor(NodeVisitor):
 
     def visit_prov_no_coast(self, node, visited_children):
         return Location(province=node.text)
-        return node.text
 
     def visit_prov_sea(self, node, visited_children):
         return node.text
@@ -437,22 +436,17 @@ class DAIDEVisitor(NodeVisitor):
         return node.text
 
     def visit_province(self, node, visited_children) -> Location:
-        # if isinstance(visited_children, str):
-        #     return node.text
         return visited_children[0]
 
     def visit_prov_landlock(self, node, visited_children):
         return Location(province=node.text)
-        return node.text
 
     def visit_prov_land_sea(self, node, visited_children):
         return Location(province=node.text)
-        return node.text
 
     def visit_prov_coast(self, node, visited_children):
         _, province, _, coast, _ = visited_children[0]
         return Location(province=province.text, coast=coast.text)
-        return province.text + " " + coast.text
 
     def visit_coast(self, node, visited_children):
         return node.text
