@@ -285,6 +285,7 @@ def _sort_grammar_keys(keys: List[str]) -> Tuple:
     keys.remove("lpar")
     keys.remove("rpar")
     keys.remove("ws")
+    keys.remove("try_tokens")
 
     # turn goes in front of season
     if "turn" in keys:

@@ -89,7 +89,7 @@ class CVY:
 class MoveByCVY(_DAIDEObject):
     unit: Unit
     province: PROVINCE
-    province_seas: List[PROVINCE_SEA]
+    province_seas: List[Location]
 
     def __init__(self, unit, province, *province_seas):
         self.unit = unit
@@ -99,7 +99,7 @@ class MoveByCVY(_DAIDEObject):
     def __str__(self):
         return (
             f"( {self.unit} ) CTO {self.province} VIA ( "
-            + " ".join(self.province_seas)
+            + " ".join(map(lambda x: str(x), self.province_seas))
             + " )"
         )
 
@@ -160,6 +160,7 @@ class PCE(_DAIDEObject):
 
     def __init__(self, *powers):
         self.powers = powers
+        self.__post_init__()
 
     def __str__(self):
         return "PCE ( " + " ".join(self.powers) + " )"
@@ -167,7 +168,7 @@ class PCE(_DAIDEObject):
 
 @dataclass
 class CCL(_DAIDEObject):
-    press_message: PRESS_MESSAGE
+    press_message: PressMessage
 
     def __str__(self):
         return f"CCL ( {self.press_message} )"
@@ -179,6 +180,7 @@ class TRY(_DAIDEObject):
 
     def __init__(self, *try_tokens):
         self.try_tokens = try_tokens
+        self.__post_init__()
 
     def __str__(self):
         return "TRY ( " + " ".join(self.try_tokens) + " )"
@@ -186,7 +188,7 @@ class TRY(_DAIDEObject):
 
 @dataclass
 class HUH(_DAIDEObject):
-    press_message: PRESS_MESSAGE
+    press_message: PressMessage
 
     def __str__(self):
         return f"HUH ( {self.press_message} )"
@@ -194,7 +196,7 @@ class HUH(_DAIDEObject):
 
 @dataclass
 class PRP(_DAIDEObject):
-    arrangement: ARRANGEMENT
+    arrangement: Arrangement
 
     def __str__(self):
         return f"PRP ( {self.arrangement} )"
@@ -225,7 +227,7 @@ class SLO(_DAIDEObject):
 
 @dataclass
 class NOT(_DAIDEObject):
-    arrangement_qry: Union[ARRANGEMENT, QRY]
+    arrangement_qry: Union[Arrangement, QRY]
 
     def __str__(self):
         return f"NOT ( {self.arrangement_qry} )"
@@ -233,7 +235,7 @@ class NOT(_DAIDEObject):
 
 @dataclass
 class NAR(_DAIDEObject):
-    arrangement: ARRANGEMENT
+    arrangement: Arrangement
 
     def __str__(self):
         return f"NAR ( {self.arrangement} )"
@@ -245,6 +247,7 @@ class DRW(_DAIDEObject):
 
     def __init__(self, *powers):
         self.powers = powers
+        self.__post_init__()
 
     def __str__(self):
         if self.powers:
@@ -255,7 +258,7 @@ class DRW(_DAIDEObject):
 
 @dataclass
 class YES(_DAIDEObject):
-    press_message: PRESS_MESSAGE
+    press_message: PressMessage
 
     def __str__(self):
         return f"YES ( {self.press_message} )"
@@ -263,7 +266,7 @@ class YES(_DAIDEObject):
 
 @dataclass
 class REJ(_DAIDEObject):
-    press_message: PRESS_MESSAGE
+    press_message: PressMessage
 
     def __str__(self):
         return f"REJ ( {self.press_message} )"
@@ -271,7 +274,7 @@ class REJ(_DAIDEObject):
 
 @dataclass
 class BWX(_DAIDEObject):
-    press_message: PRESS_MESSAGE
+    press_message: PressMessage
 
     def __str__(self):
         return f"BWX ( {self.press_message} )"
@@ -279,7 +282,7 @@ class BWX(_DAIDEObject):
 
 @dataclass
 class FCT(_DAIDEObject):
-    arrangement_qry_not: Union[ARRANGEMENT, QRY, NOT]
+    arrangement_qry_not: Union[Arrangement, QRY, NOT]
 
     def __str__(self):
         return f"FCT ( {self.arrangement_qry_not} )"
@@ -289,7 +292,7 @@ class FCT(_DAIDEObject):
 class FRM(_DAIDEObject):
     frm_power: POWER
     recv_powers: List[POWER]
-    message: MESSAGE
+    message: Message
 
     def __str__(self):
         return (
@@ -301,7 +304,7 @@ class FRM(_DAIDEObject):
 
 @dataclass
 class XDO(_DAIDEObject):
-    order: ORDER
+    order: Order
 
     def __str__(self):
         return f"XDO ( {self.order} )"
@@ -310,20 +313,25 @@ class XDO(_DAIDEObject):
 @dataclass
 class DMZ(_DAIDEObject):
     powers: List[POWER]
-    provinces: List[PROVINCE]
+    provinces: List[Location]
 
     def __str__(self):
         return (
-            "DMZ ( " + " ".join(self.powers) + " ) ( " + " ".join(self.provinces) + " )"
+            "DMZ ( "
+            + " ".join(self.powers)
+            + " ) ( "
+            + " ".join(map(lambda x: str(x), self.provinces))
+            + " )"
         )
 
 
 @dataclass
 class AND(_DAIDEObject):
-    arrangments: List[ARRANGEMENT]
+    arrangments: List[Arrangement]
 
     def __init__(self, *arrangements):
         self.arrangements = arrangements
+        self.__post_init__()
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
@@ -332,10 +340,11 @@ class AND(_DAIDEObject):
 
 @dataclass
 class ORR(_DAIDEObject):
-    arrangments: List[ARRANGEMENT]
+    arrangments: List[Arrangement]
 
     def __init__(self, *arrangements):
         self.arrangements = arrangements
+        self.__post_init__()
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
@@ -345,14 +354,14 @@ class ORR(_DAIDEObject):
 @dataclass
 class PowerAndSupplyCenters:
     power: POWER
-    supply_centers: List[SUPPLY_CENTER]
+    supply_centers: List[Location]  # Supply centers
 
     def __init__(self, power, *supply_centers):
         self.power = power
         self.supply_centers = supply_centers
 
     def __str__(self):
-        return f"{self.power} " + " ".join(self.supply_centers)
+        return f"{self.power} " + " ".join(map(lambda x: str(x), self.supply_centers))
 
 
 @dataclass
@@ -361,6 +370,7 @@ class SCD(_DAIDEObject):
 
     def __init__(self, *power_and_supply_centers):
         self.power_and_supply_centers = power_and_supply_centers
+        self.__post_init__()
 
     def __str__(self):
         pas_str = ["( " + str(pas) + " )" for pas in self.power_and_supply_centers]
@@ -373,22 +383,24 @@ class OCC(_DAIDEObject):
 
     def __init__(self, *units):
         self.units = units
+        self.__post_init__()
 
     def __str__(self):
         unit_str = ["( " + str(unit) + " )" for unit in self.units]
-        return f"OCC ( " + " ".join(unit_str) + " )"
+        return f"OCC " + " ".join(unit_str)
 
 
 @dataclass
 class CHO(_DAIDEObject):
     minimum: int
     maximum: int
-    arrangments: List[ARRANGEMENT]
+    arrangments: List[Arrangement]
 
     def __init__(self, minimum, maximum, *arrangements):
         self.minimum = minimum
         self.maximum = maximum
         self.arrangements = arrangements
+        self.__post_init__()
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
@@ -398,7 +410,7 @@ class CHO(_DAIDEObject):
 
 @dataclass
 class INS(_DAIDEObject):
-    arrangment: ARRANGEMENT
+    arrangment: Arrangement
 
     def __str__(self):
         return f"INS ( {self.arrangement} )"
@@ -406,7 +418,7 @@ class INS(_DAIDEObject):
 
 @dataclass
 class QRY(_DAIDEObject):
-    arrangment: ARRANGEMENT
+    arrangment: Arrangement
 
     def __str__(self):
         return f"QRY ( {self.arrangement} )"
@@ -414,7 +426,7 @@ class QRY(_DAIDEObject):
 
 @dataclass
 class THK(_DAIDEObject):
-    arrangement_qry_not: Union[ARRANGEMENT, QRY, NOT, None]
+    arrangement_qry_not: Union[Arrangement, QRY, NOT, None]
 
     def __str__(self):
         return f"THK ( {self.arrangement_qry_not} )"
@@ -430,7 +442,7 @@ class IDK(_DAIDEObject):
 
 @dataclass
 class SUG(_DAIDEObject):
-    arrangement: ARRANGEMENT
+    arrangement: Arrangement
 
     def __str__(self):
         return f"SUG ( {self.arrangement} )"
@@ -446,7 +458,7 @@ class WHT(_DAIDEObject):
 
 @dataclass
 class HOW(_DAIDEObject):
-    province_power: Union[PROVINCE, POWER]
+    province_power: Union[Location, POWER]
 
     def __str__(self):
         return f"HOW ( {self.province_power} )"
@@ -455,7 +467,7 @@ class HOW(_DAIDEObject):
 @dataclass
 class EXP(_DAIDEObject):
     turn: Turn
-    message: MESSAGE
+    message: Message
 
     def __str__(self):
         return f"EXP ( {self.turn} ) ( {self.message} )"
@@ -473,7 +485,7 @@ class SRY(_DAIDEObject):
 class FOR(_DAIDEObject):
     start_turn: Turn
     end_turn: Optional[Turn]
-    arrangement: ARRANGEMENT
+    arrangement: Arrangement
 
     def __str__(self):
         if not self.end_turn:
@@ -484,9 +496,9 @@ class FOR(_DAIDEObject):
 
 @dataclass
 class IFF(_DAIDEObject):
-    arrangement: ARRANGEMENT
-    press_message: PRESS_MESSAGE
-    els_press_message: Optional[PRESS_MESSAGE] = None
+    arrangement: Arrangement
+    press_message: PressMessage
+    els_press_message: Optional[PressMessage] = None
 
     def __str__(self):
         if not self.els_press_message:
@@ -512,6 +524,7 @@ class YDO(_DAIDEObject):
     def __init__(self, power, *units):
         self.power = power
         self.units = units
+        self.__post_init__()
 
     def __str__(self):
         unit_str = ["( " + str(unit) + " )" for unit in self.units]
@@ -522,7 +535,7 @@ class YDO(_DAIDEObject):
 class SND(_DAIDEObject):
     power: POWER
     recv_powers: List[POWER]
-    message: MESSAGE
+    message: Message
 
     def __str__(self):
         return (
@@ -576,18 +589,69 @@ class POB(_DAIDEObject):
         return f"POB ( {self.why} )"
 
 
-RETREAT = Union[RTO, DSB]
-BUILD = Union[BLD, REM, WVE]
-ORDER = Union[
+Retreat = Union[RTO, DSB]
+Build = Union[BLD, REM, WVE]
+Order = Union[
     HLD,
     MTO,
     SUP,
     CVY,
     MoveByCVY,
 ]
-REPLY = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, IDK]
-PRESS_MESSAGE = Union[PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF]
-MESSAGE = Union[PRESS_MESSAGE, REPLY]
-ARRANGEMENT = Union[
+Reply = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, IDK]
+PressMessage = Union[PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF]
+Message = Union[PressMessage, Reply]
+Arrangement = Union[
     PCE, ALYVSS, DRW, XDO, DMZ, AND, ORR, SCD, CHO, FOR, XOY, YDO, SND, FWD, BCC
+]
+
+AnyDAIDEToken = Union[
+    RTO,
+    DSB,
+    BLD,
+    REM,
+    WVE,
+    HLD,
+    MTO,
+    SUP,
+    CVY,
+    MoveByCVY,
+    YES,
+    REJ,
+    BWX,
+    HUH,
+    FCT,
+    THK,
+    IDK,
+    WHY,
+    POB,
+    IDK,
+    PRP,
+    CCL,
+    FCT,
+    TRY,
+    FRM,
+    THK,
+    INS,
+    QRY,
+    SUG,
+    HOW,
+    WHT,
+    EXP,
+    IFF,
+    PCE,
+    ALYVSS,
+    DRW,
+    XDO,
+    DMZ,
+    AND,
+    ORR,
+    SCD,
+    CHO,
+    FOR,
+    XOY,
+    YDO,
+    SND,
+    FWD,
+    BCC,
 ]

@@ -470,5 +470,8 @@ class DAIDEVisitor(NodeVisitor):
     def generic_visit(self, node, visited_children):
         return visited_children or node
 
+    def visit_daide_string(self, node, visited_children):
+        return visited_children[0]
+
 
 daide_visitor = DAIDEVisitor()
