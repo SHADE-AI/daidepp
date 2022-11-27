@@ -21,15 +21,15 @@ class DAIDEGrammar(Grammar):
         self.try_tokens: List[str] = try_tokens_strings
 
     @staticmethod
-    def from_level(level: DAIDE_LEVEL, allow_just_arrangement: bool = False):
+    def from_level(level: DAIDELevel, allow_just_arrangement: bool = False):
         return create_daide_grammar(level, allow_just_arrangement)
 
 
-DAIDE_LEVEL = Literal[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+DAIDELevel = Literal[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
 
 TRAIL_TOKEN = "---"  # any value starting with '---' is meant to be a continuation of that key, not a replacement
 
-LEVEL_0: GRAMMAR_DICT = {
+LEVEL_0: GrammarDict = {
     "power": '"AUS" / "ENG" / "FRA" / "GER" / "ITA" / "RUS" / "TUR"',
     "order": "hld / mto / sup / cvy / move_by_cvy / retreat / build",
     "hld": 'lpar unit rpar "HLD"',
@@ -62,7 +62,7 @@ LEVEL_0: GRAMMAR_DICT = {
 }
 
 # Peace and Alliances
-LEVEL_10: GRAMMAR_DICT = {
+LEVEL_10: GrammarDict = {
     "pce": '"PCE" lpar power (ws power)+ rpar',
     "ccl": '"CCL" lpar press_message rpar',
     "try": '"TRY" lpar try_tokens (ws try_tokens)* rpar',
@@ -89,7 +89,7 @@ LEVEL_10: GRAMMAR_DICT = {
 # province: all provinces including coasts
 
 # Order Proposals
-LEVEL_20: GRAMMAR_DICT = {
+LEVEL_20: GrammarDict = {
     "xdo": '"XDO" lpar order rpar',
     "dmz": '"DMZ" lpar power (ws power)* rpar lpar province (ws province)* rpar',
     "arrangement": f"{TRAIL_TOKEN}xdo / dmz",
@@ -97,7 +97,7 @@ LEVEL_20: GRAMMAR_DICT = {
 }
 
 # Multipart Arrangements
-LEVEL_30: GRAMMAR_DICT = {
+LEVEL_30: GrammarDict = {
     "and": '"AND" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+',
     "orr": '"ORR" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+',
     "sub_arrangement": "pce / aly_vss / drw / slo / not / nar / mto / xdo / dmz",
@@ -106,7 +106,7 @@ LEVEL_30: GRAMMAR_DICT = {
 }
 
 # Sharing out Supply Centers
-LEVEL_40: GRAMMAR_DICT = {
+LEVEL_40: GrammarDict = {
     "scd": '"SCD" (lpar power ws supply_center (ws supply_center)* rpar)+',
     "occ": '"OCC" (lpar unit rpar)+',
     "arrangement": f"{TRAIL_TOKEN}scd / occ",
@@ -114,7 +114,7 @@ LEVEL_40: GRAMMAR_DICT = {
 }
 
 # Nested Multipart Arrangements
-LEVEL_50: GRAMMAR_DICT = {
+LEVEL_50: GrammarDict = {
     "and": '("AND" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+) / ("AND" lpar arrangement rpar (lpar arrangement rpar)+)',
     "orr": '("ORR" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+) / ("ORR" lpar arrangement rpar (lpar arrangement rpar)+)',
     "cho": '"CHO" lpar (~"\d+ \d+") rpar (lpar arrangement rpar)+',
@@ -123,7 +123,7 @@ LEVEL_50: GRAMMAR_DICT = {
 }
 
 # Queries and Insistencies
-LEVEL_60: GRAMMAR_DICT = {
+LEVEL_60: GrammarDict = {
     "ins": '"INS" lpar arrangement rpar',
     "qry": '"QRY" lpar arrangement rpar',
     "thk": '("THK" lpar arrangement rpar) / ("THK" lpar qry rpar) /  ("THK" lpar not rpar)',
@@ -137,7 +137,7 @@ LEVEL_60: GRAMMAR_DICT = {
 }
 
 # Requests for Suggestion
-LEVEL_70: GRAMMAR_DICT = {
+LEVEL_70: GrammarDict = {
     "wht": '"WHT" lpar unit rpar',
     "how": '("HOW" lpar province rpar) / ("HOW" lpar power rpar)',
     "try_tokens": f'{TRAIL_TOKEN}"HOW" / "WHT"',
@@ -145,7 +145,7 @@ LEVEL_70: GRAMMAR_DICT = {
 }
 
 # Accusations
-LEVEL_80: GRAMMAR_DICT = {
+LEVEL_80: GrammarDict = {
     "exp": '"EXP" lpar turn rpar lpar message rpar',
     "idk": '("IDK" lpar exp rpar) / ("IDK" lpar qry rpar)',
     "sry": '"SRY" lpar exp rpar',
@@ -154,21 +154,21 @@ LEVEL_80: GRAMMAR_DICT = {
 }
 
 # Future Discussions
-LEVEL_90: GRAMMAR_DICT = {
+LEVEL_90: GrammarDict = {
     "for": '("FOR" lpar turn rpar lpar arrangement rpar) / ("FOR" lpar (lpar turn rpar lpar turn rpar) rpar lpar arrangement rpar)',
     "arrangement": f"{TRAIL_TOKEN}for",
     "try_tokens": f'{TRAIL_TOKEN}"FOR"',
 }
 
 # Conditionals
-LEVEL_100: GRAMMAR_DICT = {
+LEVEL_100: GrammarDict = {
     "iff": '"IFF" lpar arrangement rpar "THN" lpar press_message rpar ("ELS" lpar press_message rpar)?',
     "press_message": f"{TRAIL_TOKEN}iff",
     "try_tokens": f'{TRAIL_TOKEN}"IFF"',
 }
 
 # Puppets and Favors
-LEVEL_110: GRAMMAR_DICT = {
+LEVEL_110: GrammarDict = {
     "xoy": '"XOY" lpar power rpar lpar power rpar',
     "ydo": '"YDO" lpar power rpar (lpar unit rpar)+',
     "arrangement": f"{TRAIL_TOKEN}xoy / ydo",
@@ -176,7 +176,7 @@ LEVEL_110: GRAMMAR_DICT = {
 }
 
 # Forwarding Press
-LEVEL_120: GRAMMAR_DICT = {
+LEVEL_120: GrammarDict = {
     "snd": '"SND" lpar power rpar lpar power (ws power)* rpar lpar message rpar',
     "fwd": '"FWD" lpar power (ws power)* rpar lpar power rpar lpar power rpar',
     "bcc": '"BCC" lpar power rpar lpar power (ws power)* rpar lpar power rpar',
@@ -185,7 +185,7 @@ LEVEL_120: GRAMMAR_DICT = {
 }
 
 # Explanations
-LEVEL_130: GRAMMAR_DICT = {
+LEVEL_130: GrammarDict = {
     "fct_thk_prp_ins": "fct / thk / prp / ins",
     "qry_exp_wht_prp_ins_sug": "qry / exp / wht / prp / ins / sug",  # added sug because it looks like it's also supported at level 130
     "why": '"WHY" lpar fct_thk_prp_ins rpar',
@@ -195,7 +195,7 @@ LEVEL_130: GRAMMAR_DICT = {
     "try_tokens": f'{TRAIL_TOKEN}"WHY" / "POB"',
 }
 
-LEVELS: Tuple[GRAMMAR_DICT] = (
+LEVELS: Tuple[GrammarDict] = (
     LEVEL_0,
     LEVEL_10,
     LEVEL_20,
@@ -212,11 +212,11 @@ LEVELS: Tuple[GRAMMAR_DICT] = (
     LEVEL_130,
 )
 
-GRAMMAR_DICT = Dict[str, str]
+GrammarDict = Dict[str, str]
 
 
 def create_daide_grammar(
-    level: DAIDE_LEVEL = 30,
+    level: DAIDELevel = 30,
     allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> DAIDEGrammar:
@@ -240,7 +240,7 @@ def create_daide_grammar(
     return grammar
 
 
-def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
+def _create_daide_grammar_dict(level: DAIDELevel = 30) -> GrammarDict:
     """Combine DAIDE grammar dicts into one dict.
 
     Args:
@@ -251,7 +251,7 @@ def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
     """
 
     level_idxs = list(range(int((level / 10) + 1)))
-    grammar: GRAMMAR_DICT = {}
+    grammar: GrammarDict = {}
 
     for level_idx in level_idxs:
         new_grammar = LEVELS[level_idx]
@@ -260,7 +260,7 @@ def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
 
 
 def _create_daide_grammar_str(
-    level: DAIDE_LEVEL = 30,
+    level: DAIDELevel = 30,
     allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
@@ -312,7 +312,7 @@ def _sort_grammar_keys(keys: List[str]) -> Tuple:
 
 
 def _create_grammar_str_from_dict(
-    grammar: GRAMMAR_DICT,
+    grammar: GrammarDict,
     allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
@@ -341,9 +341,7 @@ def _create_grammar_str_from_dict(
     return grammar_str
 
 
-def _merge_grammars(
-    old_grammar: GRAMMAR_DICT, new_grammar: GRAMMAR_DICT
-) -> GRAMMAR_DICT:
+def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> GrammarDict:
     old_keys = set(old_grammar.keys())
     new_keys = set(new_grammar.keys())
 
@@ -351,7 +349,7 @@ def _merge_grammars(
     new_unique = new_keys.difference(old_keys)
     shared_keys = new_keys.intersection(old_keys)
 
-    merged_grammar: GRAMMAR_DICT = {}
+    merged_grammar: GrammarDict = {}
     for key in old_unique:
         merged_grammar[key] = old_grammar[key]
     for key in new_unique:
@@ -362,8 +360,8 @@ def _merge_grammars(
 
 
 def _merge_shared_key_values(
-    old_grammar: GRAMMAR_DICT, new_grammar: GRAMMAR_DICT, shared_keys: Set[str]
-) -> GRAMMAR_DICT:
+    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_keys: Set[str]
+) -> GrammarDict:
     merged_grammar = {}
     for key in shared_keys:
         merged_grammar[key] = _merge_shared_key_value(old_grammar, new_grammar, key)
@@ -371,7 +369,7 @@ def _merge_shared_key_values(
 
 
 def _merge_shared_key_value(
-    old_grammar: GRAMMAR_DICT, new_grammar: GRAMMAR_DICT, shared_key: str
+    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_key: str
 ) -> str:
 
     if new_grammar[shared_key][:3] == TRAIL_TOKEN:
