@@ -598,6 +598,8 @@ Order = Union[
     CVY,
     MoveByCVY,
 ]
+Command = Union[Order, Retreat, Build]
+
 Reply = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, IDK]
 PressMessage = Union[PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF]
 Message = Union[PressMessage, Reply]
