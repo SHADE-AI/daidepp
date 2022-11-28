@@ -1,24 +1,30 @@
+import logging
+from typing import Any
+
 from parsimonious.nodes import Node, NodeVisitor
 
 from daidepp.keywords import *
 
+logger = logging.getLogger(__file__)
+logger.addHandler(logging.StreamHandler())
+
 
 class DAIDEVisitor(NodeVisitor):
-    def visit_message(self, node, visited_children):
+    def visit_message(self, node, visited_children) -> Message:
         return visited_children[0]
 
-    def visit_press_message(self, node, visited_children):
+    def visit_press_message(self, node, visited_children) -> PressMessage:
         return visited_children[0]
 
-    def visit_prp(self, node, visited_children):
+    def visit_prp(self, node, visited_children) -> PRP:
         _, _, arrangement, _ = visited_children
         return PRP(arrangement)
 
-    def visit_ccl(self, node, visited_children):
+    def visit_ccl(self, node, visited_children) -> CCL:
         _, _, press_message, _ = visited_children
         return CCL(press_message)
 
-    def visit_fct(self, node, visited_children):
+    def visit_fct(self, node, visited_children) -> FCT:
         _, _, arrangement_qry_not, _ = visited_children[0]
         return FCT(arrangement_qry_not)
 
@@ -26,7 +32,7 @@ class DAIDEVisitor(NodeVisitor):
         _, _, arrangement_qry_not, _ = visited_children[0]
         return THK(arrangement_qry_not)
 
-    def visit_try(self, node, visited_children):
+    def visit_try(self, node, visited_children) -> TRY:
         _, _, try_token, ws_try_tokens, _ = visited_children
 
         try_tokens = [try_token]
@@ -35,31 +41,31 @@ class DAIDEVisitor(NodeVisitor):
             try_tokens.append(try_token)
         return TRY(*try_tokens)
 
-    def visit_ins(self, node, visited_children):
+    def visit_ins(self, node, visited_children) -> INS:
         _, _, arrangement, _ = visited_children
         return INS(arrangement)
 
-    def visit_qry(self, node, visited_children):
+    def visit_qry(self, node, visited_children) -> QRY:
         _, _, arrangement, _ = visited_children
         return QRY(arrangement)
 
-    def visit_sug(self, node, visited_children):
+    def visit_sug(self, node, visited_children) -> SUG:
         _, _, arrangement, _ = visited_children
         return SUG(arrangement)
 
-    def visit_wht(self, node, visited_children):
+    def visit_wht(self, node, visited_children) -> WHT:
         _, _, unit, _ = visited_children
         return WHT(unit)
 
-    def visit_how(self, node, visited_children):
+    def visit_how(self, node, visited_children) -> HOW:
         _, _, province_power, _ = visited_children
         return HOW(province_power)
 
-    def visit_exp(self, node, visited_children):
+    def visit_exp(self, node, visited_children) -> EXP:
         _, _, turn, _, _, message, _ = visited_children
         return EXP(turn, message)
 
-    def visit_iff(self, node, visited_children):
+    def visit_iff(self, node, visited_children) -> IFF:
         _, _, arrangement, _, _, _, press_message, _, els = visited_children
 
         if isinstance(els, Node) and not els.text:
@@ -69,7 +75,7 @@ class DAIDEVisitor(NodeVisitor):
             _, _, els_press_message, _ = els[0]
             return IFF(arrangement, press_message, els_press_message)
 
-    def visit_frm(self, node, visited_children):
+    def visit_frm(self, node, visited_children) -> FRM:
         (
             _,
             _,
@@ -90,29 +96,31 @@ class DAIDEVisitor(NodeVisitor):
             recv_powers.append(recv_power)
         return FRM(frm_power, recv_powers, message)
 
-    def visit_reply(self, node, visited_children):
+    def visit_reply(self, node, visited_children) -> Reply:
         return visited_children[0]
 
-    def visit_yes(self, node, visited_children):
+    def visit_yes(self, node, visited_children) -> YES:
         _, _, press_message, _ = visited_children
         return YES(press_message)
 
-    def visit_rej(self, node, visited_children):
+    def visit_rej(self, node, visited_children) -> REJ:
         _, _, press_message, _ = visited_children
         return REJ(press_message)
 
-    def visit_bwx(self, node, visited_children):
+    def visit_bwx(self, node, visited_children) -> BWX:
         _, _, press_message, _ = visited_children
         return BWX(press_message)
 
-    def visit_huh(self, node, visited_children):
+    def visit_huh(self, node, visited_children) -> HUH:
         _, _, press_message, _ = visited_children
         return HUH(press_message)
 
-    def visit_qry_wht_prp_ins(self, node, visited_children):
+    def visit_qry_wht_prp_ins(
+        self, node, visited_children
+    ) -> Union[QRY, WHT, PRP, INS]:
         return visited_children[0]
 
-    def visit_idk(self, node, visited_children):
+    def visit_idk(self, node, visited_children) -> IDK:
         _, _, qry_exp_wht_prp_ins_sug, _ = visited_children
 
         return (
@@ -121,25 +129,27 @@ class DAIDEVisitor(NodeVisitor):
             else IDK(qry_exp_wht_prp_ins_sug)
         )
 
-    def visit_sry(self, node, visited_children):
+    def visit_sry(self, node, visited_children) -> SRY:
         _, _, exp, _ = visited_children
         return SRY(exp)
 
-    def visit_fct_thk_prp_ins(self, node, visited_children):
+    def visit_fct_thk_prp_ins(
+        self, node, visited_children
+    ) -> Union[FCT, THK, PRP, INS]:
         return visited_children[0]
 
-    def visit_why(self, node, visited_children):
+    def visit_why(self, node, visited_children) -> WHY:
         _, _, fct_thk_prp_ins, _ = visited_children
         return WHY(fct_thk_prp_ins)
 
-    def visit_pob(self, node, visited_children):
+    def visit_pob(self, node, visited_children) -> POB:
         _, _, why, _ = visited_children
         return POB(why)
 
-    def visit_arrangement(self, node, visited_children):
+    def visit_arrangement(self, node, visited_children) -> Arrangement:
         return visited_children[0]
 
-    def visit_pce(self, node, visited_children):
+    def visit_pce(self, node, visited_children) -> PCE:
         _, _, power, ws_powers, _ = visited_children
 
         powers = [power]
@@ -148,7 +158,7 @@ class DAIDEVisitor(NodeVisitor):
             powers.append(pow)
         return PCE(*powers)
 
-    def visit_aly_vss(self, node, visited_children):
+    def visit_aly_vss(self, node, visited_children) -> ALYVSS:
         (
             aly,
             _,
@@ -173,7 +183,7 @@ class DAIDEVisitor(NodeVisitor):
             vss_powers.append(vss_power)
         return ALYVSS(aly_powers, vss_powers)
 
-    def visit_drw(self, node, visited_children):
+    def visit_drw(self, node, visited_children) -> DRW:
         _, par_powers = visited_children
 
         if isinstance(par_powers, Node) and not par_powers.text:
@@ -188,23 +198,23 @@ class DAIDEVisitor(NodeVisitor):
 
         return DRW(*powers)
 
-    def visit_slo(self, node, visited_children):
+    def visit_slo(self, node, visited_children) -> SLO:
         _, _, power, _ = visited_children
         return SLO(power)
 
-    def visit_not(self, node, visited_children):
+    def visit_not(self, node, visited_children) -> NOT:
         _, _, arrangement_qry, _ = visited_children[0]
         return NOT(arrangement_qry)
 
-    def visit_nar(self, node, visited_children):
+    def visit_nar(self, node, visited_children) -> NAR:
         _, _, arrangement, _ = visited_children
         return NAR(arrangement)
 
-    def visit_xdo(self, node, visited_children):
+    def visit_xdo(self, node, visited_children) -> XDO:
         _, _, order, _ = visited_children
         return XDO(order)
 
-    def visit_and(self, node, visited_children):
+    def visit_and(self, node, visited_children) -> AND:
         _, _, arrangement, _, par_arrangements = visited_children[0]
 
         arrangements = [arrangement]
@@ -213,7 +223,7 @@ class DAIDEVisitor(NodeVisitor):
             arrangements.append(arr)
         return AND(*arrangements)
 
-    def visit_orr(self, node, visited_children):
+    def visit_orr(self, node, visited_children) -> ORR:
         _, _, arrangement, _, par_arrangements = visited_children[0]
 
         arrangements = [arrangement]
@@ -222,7 +232,7 @@ class DAIDEVisitor(NodeVisitor):
             arrangements.append(arr)
         return ORR(arrangements)
 
-    def visit_dmz(self, node, visited_children):
+    def visit_dmz(self, node, visited_children) -> DMZ:
         _, _, power, ws_powers, _, _, province, ws_provinces, _ = visited_children
 
         powers = [power]
@@ -236,7 +246,7 @@ class DAIDEVisitor(NodeVisitor):
             provinces.append(prov)
         return DMZ(powers, provinces)
 
-    def visit_scd(self, node, visited_children):
+    def visit_scd(self, node, visited_children) -> SCD:
         _, scd_statements = visited_children
 
         power_and_supply_centers = []
@@ -252,7 +262,7 @@ class DAIDEVisitor(NodeVisitor):
             )
         return SCD(*power_and_supply_centers)
 
-    def visit_occ(self, node, visited_children):
+    def visit_occ(self, node, visited_children) -> OCC:
         _, par_units = visited_children
 
         units = []
@@ -261,7 +271,7 @@ class DAIDEVisitor(NodeVisitor):
             units.append(unit)
         return OCC(*units)
 
-    def visit_cho(self, node, visited_children):
+    def visit_cho(self, node, visited_children) -> CHO:
         _, _, range, _, par_arrangements = visited_children
 
         minimum, maximum = tuple([int(x) for x in range.text.split()])
@@ -271,7 +281,7 @@ class DAIDEVisitor(NodeVisitor):
             arrangements.append(arrangement)
         return CHO(minimum, maximum, *arrangements)
 
-    def visit_for(self, node, visited_children):
+    def visit_for(self, node, visited_children) -> FOR:
         _, _, turn, _, _, arrangement, _ = visited_children[0]
 
         if isinstance(turn, list):
@@ -280,11 +290,11 @@ class DAIDEVisitor(NodeVisitor):
         else:
             return FOR(start_turn, None, arrangement)
 
-    def visit_xoy(self, node, visited_children):
+    def visit_xoy(self, node, visited_children) -> XOY:
         _, _, power_x, _, _, power_y, _ = visited_children
         return XOY(power_x, power_y)
 
-    def visit_ydo(self, node, visited_children):
+    def visit_ydo(self, node, visited_children) -> YDO:
         _, _, power, _, par_units = visited_children
 
         units = []
@@ -293,7 +303,7 @@ class DAIDEVisitor(NodeVisitor):
             units.append(unit)
         return YDO(power, *units)
 
-    def visit_snd(self, node, visited_children):
+    def visit_snd(self, node, visited_children) -> SND:
         (
             _,
             _,
@@ -314,7 +324,7 @@ class DAIDEVisitor(NodeVisitor):
             recv_power.append(recv_power)
         return SND(power, recv_power, message)
 
-    def visit_fwd(self, node, visited_children):
+    def visit_fwd(self, node, visited_children) -> FWD:
         _, _, power, ws_powers, _, _, power_1, _, _, power_2, _ = visited_children
 
         powers = [power]
@@ -323,7 +333,7 @@ class DAIDEVisitor(NodeVisitor):
             powers.append(power)
         return FWD(powers, power_1, power_2)
 
-    def visit_bcc(self, node, visited_children):
+    def visit_bcc(self, node, visited_children) -> BCC:
         _, _, power_1, _, _, power, ws_powers, _, _, power_2, _ = visited_children
 
         powers = [power]
@@ -332,18 +342,18 @@ class DAIDEVisitor(NodeVisitor):
             powers.append(power)
         return BCC(power_1, powers, power_2)
 
-    def visit_order(self, node, visited_children):
+    def visit_order(self, node, visited_children) -> Order:
         return visited_children[0]
 
-    def visit_hld(self, node, visited_children):
+    def visit_hld(self, node, visited_children) -> HLD:
         _, unit, _, _ = visited_children
         return HLD(unit)
 
-    def visit_mto(self, node, visited_children):
+    def visit_mto(self, node, visited_children) -> MTO:
         _, unit, _, _, _, province = visited_children
         return MTO(unit, province)
 
-    def visit_sup(self, node, visited_children):
+    def visit_sup(self, node, visited_children) -> SUP:
         (
             _,
             supporting_unit,
@@ -361,11 +371,11 @@ class DAIDEVisitor(NodeVisitor):
             _, _, province_no_coast = ws_mto_prov = ws_province_no_coast[0]
             return SUP(supporting_unit, supported_unit, province_no_coast)
 
-    def visit_cvy(self, node, visited_children):
+    def visit_cvy(self, node, visited_children) -> CVY:
         _, convoying_unit, _, _, _, convoyed_unit, _, _, _, province = visited_children
         return CVY(convoying_unit, convoyed_unit, province)
 
-    def visit_move_by_cvy(self, node, visited_children):
+    def visit_move_by_cvy(self, node, visited_children) -> MoveByCVY:
         (
             _,
             unit,
@@ -387,84 +397,98 @@ class DAIDEVisitor(NodeVisitor):
             province_seas.append(province_sea)
         return MoveByCVY(unit, province, *province_seas)
 
-    def visit_retreat(self, node, visited_children):
+    def visit_retreat(self, node, visited_children) -> Retreat:
         return visited_children[0]
 
-    def visit_rto(self, node, visited_children):
+    def visit_rto(self, node, visited_children) -> RTO:
         _, unit, _, _, _, province = visited_children
         return RTO(unit, province)
 
-    def visit_dsb(self, node, visited_children):
+    def visit_dsb(self, node, visited_children) -> DSB:
         _, unit, _, _ = visited_children
         return DSB(unit)
 
-    def visit_build(self, node, visited_children):
+    def visit_build(self, node, visited_children) -> Build:
         return visited_children[0]
 
-    def visit_bld(self, node, visited_children):
+    def visit_bld(self, node, visited_children) -> BLD:
         _, unit, _, _ = visited_children
         return BLD(unit)
 
-    def visit_rem(self, node, visited_children):
+    def visit_rem(self, node, visited_children) -> REM:
         _, unit, _, _ = visited_children
         return REM(unit)
 
-    def visit_wve(self, node, visited_children):
+    def visit_wve(self, node, visited_children) -> WVE:
         power, _, _ = visited_children
         return WVE(power)
 
-    def visit_power(self, node, visited_children):
+    def visit_power(self, node, visited_children) -> Power:
         return node.text
 
-    def visit_prov_coast(self, node, visited_children):
+    def visit_prov_coast(self, node, visited_children) -> ProvinceCoast:
         return node.text
 
-    def visit_prov_no_coast(self, node, visited_children):
+    def visit_prov_no_coast(self, node, visited_children) -> ProvinceNoCoast:
+        return Location(province=node.text)
+
+    def visit_prov_sea(self, node, visited_children) -> ProvinceSea:
         return node.text
 
-    def visit_prov_sea(self, node, visited_children):
+    def visit_supply_center(self, node, visited_children) -> SupplyCenter:
         return node.text
 
-    def visit_supply_center(self, node, visited_children):
+    def visit_unit(self, node, visited_children) -> Unit:
+        power, _, unit_type, _, location = visited_children
+        return Unit(power, unit_type, location=location)
+
+    def visit_unit_type(self, node, visited_children) -> UnitType:
         return node.text
 
-    def visit_unit(self, node, visited_children):
-        power, _, unit_type, _, province = visited_children
-        return Unit(power, unit_type, province)
-
-    def visit_unit_type(self, node, visited_children):
-        return node.text
-
-    def visit_province(self, node, visited_children):
-        if isinstance(visited_children, str):
-            return node.text
+    def visit_province(self, node, visited_children) -> Location:
         return visited_children[0]
 
-    def visit_prov_landlock(self, node, visited_children):
-        return node.text
+    def visit_prov_landlock(self, node, visited_children) -> Location:
+        return Location(province=node.text)
 
-    def visit_prov_land_sea(self, node, visited_children):
-        return node.text
+    def visit_prov_land_sea(self, node, visited_children) -> Location:
+        return Location(province=node.text)
 
-    def visit_prov_coast(self, node, visited_children):
+    def visit_prov_coast(self, node, visited_children) -> Location:
         _, province, _, coast, _ = visited_children[0]
-        return province.text + " " + coast.text
+        return Location(province=province.text, coast=coast.text)
 
-    def visit_coast(self, node, visited_children):
+    def visit_coast(self, node, visited_children) -> ProvinceCoast:
         return node.text
 
-    def visit_turn(self, node, visited_children):
+    def visit_turn(self, node, visited_children) -> Turn:
         season, _, year = visited_children
         return Turn(season, int(year.text))
 
-    def visit_season(self, node, visited_children):
+    def visit_season(self, node, visited_children) -> Season:
         return node.text
 
-    def visit_try_tokens(self, node, visited_children):
+    def visit_try_tokens(self, node, visited_children) -> TryTokens:
         return node.text
 
-    def generic_visit(self, node, visited_children):
+    def visit_sub_arrangement(self, node, visited_children) -> Arrangement:
+        return visited_children[0]
+
+    def generic_visit(self, node, visited_children) -> Any:
+        # if len(visited_children) == 1:
+        #     return visited_children[0]
         return visited_children or node
+
+    def visit_daide_string(self, node, visited_children) -> Any:
+        return visited_children[0]
+
+    # def visit(self, node: Node) -> Any:
+    #     result = super().visit(node)
+    #     if isinstance(result, list):
+    #         logger.warn(f"Visitor returned a list: {result}")
+    #         return result[0]
+    #     else:
+    #         return result
 
 
 daide_visitor = DAIDEVisitor()

@@ -1,6 +1,6 @@
 import pytest
 
-from daidepp.grammar import create_daide_grammar, DAIDE_LEVEL
+from daidepp.grammar import DAIDELevel, create_daide_grammar
 
 
 @pytest.fixture(scope="session")

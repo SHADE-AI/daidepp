@@ -21,15 +21,15 @@ class DAIDEGrammar(Grammar):
         self.try_tokens: List[str] = try_tokens_strings
 
     @staticmethod
-    def from_level(level: DAIDE_LEVEL, allow_just_arrangement: bool = False):
+    def from_level(level: DAIDELevel, allow_just_arrangement: bool = False):
         return create_daide_grammar(level, allow_just_arrangement)
 
 
-DAIDE_LEVEL = Literal[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+DAIDELevel = Literal[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
 
 TRAIL_TOKEN = "---"  # any value starting with '---' is meant to be a continuation of that key, not a replacement
 
-LEVEL_0: GRAMMAR_DICT = {
+LEVEL_0: GrammarDict = {
     "power": '"AUS" / "ENG" / "FRA" / "GER" / "ITA" / "RUS" / "TUR"',
     "order": "hld / mto / sup / cvy / move_by_cvy / retreat / build",
     "hld": 'lpar unit rpar "HLD"',
@@ -48,11 +48,11 @@ LEVEL_0: GRAMMAR_DICT = {
     "unit": "power ws unit_type ws province",
     "prov_no_coast": "prov_land_sea / prov_landlock / prov_sea",
     "prov_coast": '(lpar "STP" ws "NCS" rpar) / (lpar "STP" ws "SCS" rpar) / (lpar "SPA" ws "NCS" rpar) / (lpar "SPA" ws "SCS" rpar) / (lpar "BUL" ws "ECS" rpar) / (lpar "BUL" ws "SCS" rpar)',
-    "province": "prov_land_sea / prov_landlock / prov_sea / prov_coast",
+    "province": "prov_coast / prov_land_sea / prov_landlock / prov_sea",
     "coast": '"NCS" / "ECS" / "SCS" / "WCS"',
     "prov_land_sea": '"ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL"',
     "prov_landlock": '"BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" ',
-    "prov_sea": '"ADR" / "AEG" / "BAL" / "BAR" / "BLA" / "BOT" / "EAS" / "ENG" / "HEL" / "ION" / "IRI" / "LYO" / "MAO" / "NAO" / "NTH" / "NWG" / "SKA" / "TYS" / "WES"',
+    "prov_sea": '"ADR" / "AEG" / "BAL" / "BAR" / "BLA" / "BOT" / "EAS" / "ECH" / "HEL" / "ION" / "IRI" / "LYO" / "MAO" / "NAO" / "NTH" / "NWG" / "SKA" / "TYS" / "WES"',
     "supply_center": '"ANK" / "BEL" / "BER" / "BRE" / "BUD" / "BUL" / "CON" / "DEN" / "EDI" / "GRE" / "HOL" / "KIE" / "LON" / "LVP" / "MAR" / "MOS" / "MUN" / "NAP" / "NWY" / "PAR" / "POR" / "ROM" / "RUM" / "SER" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "TRI" / "TUN" / "VEN" / "VIE" / "WAR"',
     "turn": 'season ws ~"\d{4}"',
     "season": '"SPR" / "SUM" / "FAL" / "AUT" / "WIN"',
@@ -62,7 +62,7 @@ LEVEL_0: GRAMMAR_DICT = {
 }
 
 # Peace and Alliances
-LEVEL_10: GRAMMAR_DICT = {
+LEVEL_10: GrammarDict = {
     "pce": '"PCE" lpar power (ws power)+ rpar',
     "ccl": '"CCL" lpar press_message rpar',
     "try": '"TRY" lpar try_tokens (ws try_tokens)* rpar',
@@ -89,7 +89,7 @@ LEVEL_10: GRAMMAR_DICT = {
 # province: all provinces including coasts
 
 # Order Proposals
-LEVEL_20: GRAMMAR_DICT = {
+LEVEL_20: GrammarDict = {
     "xdo": '"XDO" lpar order rpar',
     "dmz": '"DMZ" lpar power (ws power)* rpar lpar province (ws province)* rpar',
     "arrangement": f"{TRAIL_TOKEN}xdo / dmz",
@@ -97,7 +97,7 @@ LEVEL_20: GRAMMAR_DICT = {
 }
 
 # Multipart Arrangements
-LEVEL_30: GRAMMAR_DICT = {
+LEVEL_30: GrammarDict = {
     "and": '"AND" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+',
     "orr": '"ORR" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+',
     "sub_arrangement": "pce / aly_vss / drw / slo / not / nar / mto / xdo / dmz",
@@ -106,7 +106,7 @@ LEVEL_30: GRAMMAR_DICT = {
 }
 
 # Sharing out Supply Centers
-LEVEL_40: GRAMMAR_DICT = {
+LEVEL_40: GrammarDict = {
     "scd": '"SCD" (lpar power ws supply_center (ws supply_center)* rpar)+',
     "occ": '"OCC" (lpar unit rpar)+',
     "arrangement": f"{TRAIL_TOKEN}scd / occ",
@@ -114,7 +114,7 @@ LEVEL_40: GRAMMAR_DICT = {
 }
 
 # Nested Multipart Arrangements
-LEVEL_50: GRAMMAR_DICT = {
+LEVEL_50: GrammarDict = {
     "and": '("AND" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+) / ("AND" lpar arrangement rpar (lpar arrangement rpar)+)',
     "orr": '("ORR" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+) / ("ORR" lpar arrangement rpar (lpar arrangement rpar)+)',
     "cho": '"CHO" lpar (~"\d+ \d+") rpar (lpar arrangement rpar)+',
@@ -123,7 +123,7 @@ LEVEL_50: GRAMMAR_DICT = {
 }
 
 # Queries and Insistencies
-LEVEL_60: GRAMMAR_DICT = {
+LEVEL_60: GrammarDict = {
     "ins": '"INS" lpar arrangement rpar',
     "qry": '"QRY" lpar arrangement rpar',
     "thk": '("THK" lpar arrangement rpar) / ("THK" lpar qry rpar) /  ("THK" lpar not rpar)',
@@ -137,7 +137,7 @@ LEVEL_60: GRAMMAR_DICT = {
 }
 
 # Requests for Suggestion
-LEVEL_70: GRAMMAR_DICT = {
+LEVEL_70: GrammarDict = {
     "wht": '"WHT" lpar unit rpar',
     "how": '("HOW" lpar province rpar) / ("HOW" lpar power rpar)',
     "try_tokens": f'{TRAIL_TOKEN}"HOW" / "WHT"',
@@ -145,7 +145,7 @@ LEVEL_70: GRAMMAR_DICT = {
 }
 
 # Accusations
-LEVEL_80: GRAMMAR_DICT = {
+LEVEL_80: GrammarDict = {
     "exp": '"EXP" lpar turn rpar lpar message rpar',
     "idk": '("IDK" lpar exp rpar) / ("IDK" lpar qry rpar)',
     "sry": '"SRY" lpar exp rpar',
@@ -154,21 +154,21 @@ LEVEL_80: GRAMMAR_DICT = {
 }
 
 # Future Discussions
-LEVEL_90: GRAMMAR_DICT = {
+LEVEL_90: GrammarDict = {
     "for": '("FOR" lpar turn rpar lpar arrangement rpar) / ("FOR" lpar (lpar turn rpar lpar turn rpar) rpar lpar arrangement rpar)',
     "arrangement": f"{TRAIL_TOKEN}for",
     "try_tokens": f'{TRAIL_TOKEN}"FOR"',
 }
 
 # Conditionals
-LEVEL_100: GRAMMAR_DICT = {
+LEVEL_100: GrammarDict = {
     "iff": '"IFF" lpar arrangement rpar "THN" lpar press_message rpar ("ELS" lpar press_message rpar)?',
     "press_message": f"{TRAIL_TOKEN}iff",
     "try_tokens": f'{TRAIL_TOKEN}"IFF"',
 }
 
 # Puppets and Favors
-LEVEL_110: GRAMMAR_DICT = {
+LEVEL_110: GrammarDict = {
     "xoy": '"XOY" lpar power rpar lpar power rpar',
     "ydo": '"YDO" lpar power rpar (lpar unit rpar)+',
     "arrangement": f"{TRAIL_TOKEN}xoy / ydo",
@@ -176,7 +176,7 @@ LEVEL_110: GRAMMAR_DICT = {
 }
 
 # Forwarding Press
-LEVEL_120: GRAMMAR_DICT = {
+LEVEL_120: GrammarDict = {
     "snd": '"SND" lpar power rpar lpar power (ws power)* rpar lpar message rpar',
     "fwd": '"FWD" lpar power (ws power)* rpar lpar power rpar lpar power rpar',
     "bcc": '"BCC" lpar power rpar lpar power (ws power)* rpar lpar power rpar',
@@ -185,7 +185,7 @@ LEVEL_120: GRAMMAR_DICT = {
 }
 
 # Explanations
-LEVEL_130: GRAMMAR_DICT = {
+LEVEL_130: GrammarDict = {
     "fct_thk_prp_ins": "fct / thk / prp / ins",
     "qry_exp_wht_prp_ins_sug": "qry / exp / wht / prp / ins / sug",  # added sug because it looks like it's also supported at level 130
     "why": '"WHY" lpar fct_thk_prp_ins rpar',
@@ -195,7 +195,7 @@ LEVEL_130: GRAMMAR_DICT = {
     "try_tokens": f'{TRAIL_TOKEN}"WHY" / "POB"',
 }
 
-LEVELS: Tuple[GRAMMAR_DICT] = (
+LEVELS: Tuple[GrammarDict] = (
     LEVEL_0,
     LEVEL_10,
     LEVEL_20,
@@ -212,11 +212,13 @@ LEVELS: Tuple[GRAMMAR_DICT] = (
     LEVEL_130,
 )
 
-GRAMMAR_DICT = Dict[str, str]
+GrammarDict = Dict[str, str]
 
 
 def create_daide_grammar(
-    level: DAIDE_LEVEL = 30, allow_just_arrangement: bool = False
+    level: DAIDELevel = 30,
+    allow_just_arrangement: bool = False,
+    string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> DAIDEGrammar:
     """Create a DAIDEGrammar object given a level of DAIDE.
 
@@ -227,17 +229,18 @@ def create_daide_grammar(
         level (DAIDE_LEVEL, optional): level of DIADE to create grammar for. Defaults to 30.
         allow_just_arrangement (bool, optional): if set to True, the parser accepts strings that
         are only arrangements, in addition to press messages. So, for example, the parser could parse
-        'PCE (GER ITA)'. Normally, this would raise a ParseError.
+        'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
+        string_type (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default), the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized.
 
     Returns:
         DAIDEGrammar: Grammar object
     """
-    grammar_str = _create_daide_grammar_str(level, allow_just_arrangement)
+    grammar_str = _create_daide_grammar_str(level, allow_just_arrangement, string_type)
     grammar = DAIDEGrammar(grammar_str)
     return grammar
 
 
-def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
+def _create_daide_grammar_dict(level: DAIDELevel = 30) -> GrammarDict:
     """Combine DAIDE grammar dicts into one dict.
 
     Args:
@@ -248,7 +251,7 @@ def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
     """
 
     level_idxs = list(range(int((level / 10) + 1)))
-    grammar: GRAMMAR_DICT = {}
+    grammar: GrammarDict = {}
 
     for level_idx in level_idxs:
         new_grammar = LEVELS[level_idx]
@@ -257,7 +260,9 @@ def _create_daide_grammar_dict(level: DAIDE_LEVEL = 30) -> GRAMMAR_DICT:
 
 
 def _create_daide_grammar_str(
-    level: DAIDE_LEVEL = 30, allow_just_arrangement: bool = False
+    level: DAIDELevel = 30,
+    allow_just_arrangement: bool = False,
+    string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
     """Create string representing DAIDE grammar in PEG
 
@@ -268,22 +273,66 @@ def _create_daide_grammar_str(
         str: string representing DAIDE grammar in PEG
     """
     grammar_dict = _create_daide_grammar_dict(level)
-    grammar_str = _create_grammar_str_from_dict(grammar_dict, allow_just_arrangement)
+    grammar_str = _create_grammar_str_from_dict(
+        grammar_dict, allow_just_arrangement, string_type
+    )
     return grammar_str
 
 
+def _sort_grammar_keys(keys: List[str]) -> Tuple:
+    keys_list = []
+
+    keys.remove("lpar")
+    keys.remove("rpar")
+    keys.remove("ws")
+    keys.remove("try_tokens")
+
+    # turn goes in front of season
+    if "turn" in keys:
+        keys_list.append("turn")
+        keys.remove("turn")
+
+    # wve goes in front of power
+    if "wve" in keys:
+        keys_list.append("wve")
+        keys.remove("wve")
+
+    # unit must be in front of power
+    if "unit" in keys:
+        keys_list.append("unit")
+        keys.remove("unit")
+
+    # province must be in front of all other province patterns
+    if "province" in keys:
+        keys_list.append("province")
+        keys.remove("province")
+
+    keys_list += keys
+    return keys_list
+
+
 def _create_grammar_str_from_dict(
-    grammar: GRAMMAR_DICT, allow_just_arrangement: bool = False
+    grammar: GrammarDict,
+    allow_just_arrangement: bool = False,
+    string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
     grammar_str = ""
+    if string_type == "all":
+        left = "daide_string"
+        grammar_keys = list(grammar.keys())
+        sorted_keys = _sort_grammar_keys(grammar_keys)
+        right = " / ".join(sorted_keys)
+        grammar_str = f"{left} = {right}\n"
     for item in grammar.items():
         # message needs to be the first rule in the string, per parsimonious rules:
         # "The first rule is taken to be the default start symbol, but you can override that."
         # https://github.com/erikrose/parsimonious#example-usage
-        if item[0] == "message":
+        if item[0] == "message" and string_type == "message":
             left = item[0]
             right = item[1]
-            if allow_just_arrangement:
+            if (
+                allow_just_arrangement or string_type == "arrangement"
+            ) and string_type != "all":
                 right += " / arrangement"
             grammar_str = f"{left} = {right}\n" + grammar_str
 
@@ -292,9 +341,7 @@ def _create_grammar_str_from_dict(
     return grammar_str
 
 
-def _merge_grammars(
-    old_grammar: GRAMMAR_DICT, new_grammar: GRAMMAR_DICT
-) -> GRAMMAR_DICT:
+def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> GrammarDict:
     old_keys = set(old_grammar.keys())
     new_keys = set(new_grammar.keys())
 
@@ -302,7 +349,7 @@ def _merge_grammars(
     new_unique = new_keys.difference(old_keys)
     shared_keys = new_keys.intersection(old_keys)
 
-    merged_grammar: GRAMMAR_DICT = {}
+    merged_grammar: GrammarDict = {}
     for key in old_unique:
         merged_grammar[key] = old_grammar[key]
     for key in new_unique:
@@ -313,8 +360,8 @@ def _merge_grammars(
 
 
 def _merge_shared_key_values(
-    old_grammar: GRAMMAR_DICT, new_grammar: GRAMMAR_DICT, shared_keys: Set[str]
-) -> GRAMMAR_DICT:
+    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_keys: Set[str]
+) -> GrammarDict:
     merged_grammar = {}
     for key in shared_keys:
         merged_grammar[key] = _merge_shared_key_value(old_grammar, new_grammar, key)
@@ -322,7 +369,7 @@ def _merge_shared_key_values(
 
 
 def _merge_shared_key_value(
-    old_grammar: GRAMMAR_DICT, new_grammar: GRAMMAR_DICT, shared_key: str
+    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_key: str
 ) -> str:
 
     if new_grammar[shared_key][:3] == TRAIL_TOKEN:
@@ -330,87 +377,3 @@ def _merge_shared_key_value(
     else:
         new_value = new_grammar[shared_key]
     return new_value
-
-
-# TODO: we need a test to confirm that this string == create_daide_grammar(130)
-FULL_DAIDE_GRAMMAR_STRING = """
-    message = press_message / reply 
-    press_message = prp / ccl / fct / thk / try / ins / qry / sug / wht / how / exp / iff / frm 
-    prp = "PRP" lpar arrangement rpar 
-    ins = "INS" lpar arrangement rpar
-    qry = "QRY" lpar arrangement rpar
-    sug = "SUG" lpar arrangement rpar
-    ccl = "CCL" lpar press_message rpar 
-    fct = ("FCT" lpar qry rpar) / ("FCT" lpar "NOT" lpar qry rpar rpar) / ("FCT" lpar arrangement rpar) 
-    thk = ("THK" lpar qry rpar) / ("THK" lpar "NOT" lpar qry rpar rpar) / ("THK" lpar arrangement rpar)
-    try = "TRY" lpar try_tokens (ws try_tokens)* rpar 
-    wht = "WHT" lpar unit rpar
-    how = ("HOW" lpar province rpar) / ("HOW" lpar power rpar)
-    exp = "EXP" lpar turn rpar lpar message rpar
-    iff = "IFF" lpar arrangement rpar "THN" lpar press_message rpar ("ELS" lpar press_message rpar)?
-    frm = "FRM" lpar power rpar lpar power (ws power)* rpar lpar message rpar
-
-    reply = yes / rej / bwx / huh / fct / thk / idk / sry / why / pob 
-    yes = "YES" lpar press_message rpar 
-    rej = "REJ" lpar press_message rpar 
-    bwx = "BWX" lpar press_message rpar 
-    huh = "HUH" lpar press_message rpar
-    idk = "IDK" lpar qry_wht_prp_ins rpar
-    sry = "SRY" lpar exp rpar
-    why = "WHY" lpar fct_thk_prp_ins rpar
-    pob = "POB" lpar why rpar
-
-    arrangement = pce / aly_vss / drw / slo / not / nar / xdo / dmz / and / orr / scd / occ / cho / for / xoy / ydo / snd / fwd / bcc
-    pce = "PCE" lpar power (ws power)* rpar
-    aly_vss = "ALY" lpar power (ws power)* rpar "VSS" lpar power (ws power)* rpar
-    drw = "DRW" (lpar power (ws power)+ rpar)?
-    slo = "SLO" lpar power rpar
-    not = "NOT" lpar arrangement rpar
-    nar = "NAR" lpar arrangement rpar
-    xdo = "XDO" lpar order rpar
-    and = "AND" lpar arrangement rpar (lpar arrangement rpar)+
-    orr = "ORR" lpar arrangement rpar (lpar arrangement rpar)+
-    dmz = "DMZ" lpar power (ws power)* rpar lpar province (ws province)* rpar
-    scd = "SCD" (lpar power ws supply_center (ws supply_center)* rpar)+
-    occ = "OCC" (lpar unit rpar)+
-    cho = "CHO" lpar (~"\d+ \d+") rpar (lpar arrangement rpar)+
-    for = ("FOR" lpar turn rpar lpar arrangement rpar) / ("FOR" lpar (lpar turn rpar lpar turn rpar) rpar lpar arrangement rpar)
-    xoy = "XOY" lpar power rpar lpar power rpar
-    ydo = "YDO" lpar power rpar (lpar unit rpar)+
-    snd = "SND" lpar power rpar lpar power (ws power)* rpar lpar message rpar
-    fwd = "FWD" lpar power (ws power)* rpar lpar power rpar lpar power rpar
-    bcc = "BCC" lpar power rpar lpar power (ws power)* rpar lpar power rpar
-    
-    order = hld / mto / sup / cvy / move_by_cvy / retreat / build
-    hld = lpar unit rpar "HLD"
-    mto = lpar unit rpar "MTO" ws province
-    sup = lpar unit rpar "SUP" lpar unit rpar ("MTO" ws province)?
-    cvy = lpar unit rpar "CVY" lpar unit rpar "CTO" ws province
-    move_by_cvy = lpar unit rpar "CTO" ws province ws "VIA" lpar prov_sea (ws prov_sea)* rpar
-    retreat = rto / dsb
-    rto = lpar unit rpar "RTO" ws province
-    dsb = lpar unit rpar "DSB"
-    build = bld / rem / wve
-    bld = lpar unit rpar "BLD"
-    rem = lpar unit rpar "REM"
-    wve = power ws "WVE"
-
-    unit_type = "AMY" / "FLT"
-    unit = power ws unit_type ws province
-    power = "AUS" / "ENG" / "FRA" / "GER" / "ITA" / "RUS" / "TUR"
-    province = prov_coast / prov_no_coast / prov_sea / (lpar prov_coast ws coast rpar)
-    coast = "NCS" / "ECS" / "SCS" / "WCS"
-    prov_coast = "ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL" 
-    prov_no_coast = "BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" 
-    prov_sea = "ADR" / "AEG" / "BAL" / "BAR" / "BLA" / "BOT" / "EAS" / "ENG" / "HEL" / "ION" / "IRI" / "LYO" / "MAO" / "NAO" / "NTH" / "NWG" / "SKA" / "TYS" / "WES"  
-    supply_center = "ANK" / "BEL" / "BER" / "BRE" / "BUD" / "BUL" / "CON" / "DEN" / "EDI" / "GRE" / "HOL" / "KIE" / "LON" / "LVP" / "MAR" / "MOS" / "MUN" / "NAP" / "NWY" / "PAR" / "POR" / "ROM" / "RUM" / "SER" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "TRI" / "TUN" / "VEN" / "VIE" / "WAR"
-    turn = season ws ~"\d{4}"
-    season = "SPR" / "SUM" / "FAL" / "AUT" / "WIN"
-    try_tokens = "PRP" / "PCE" / "ALY" / "VSS" / "DRW" / "SLO" / "NOT" / "NAR" / "YES" / "REJ" / "BWX" / "XDO" / "DMZ" / "AND" / "ORR" / "SCD" / "OCC" / "INS" / "QRY" / "THK" / "FCT" / "IDK" / "SUG" / "WHT" / "HOW" / "EXP" / "SRY" / "FOR" / "IFF" / "THN" / "ELS" / "XOY" / "YDO" / "FRM" / "FWD" / "SND"
-
-    lpar = ~"\s*\(\s*"
-    rpar = ~"\s*\)\s*"
-    ws = ~"\s+"
-    qry_wht_prp_ins_sug = qry / wht/ prp / ins / sug
-    fct_thk_prp_ins = fct / thk / prp / ins
-    """
