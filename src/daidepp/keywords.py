@@ -17,7 +17,10 @@ class _DAIDEObject(ABC):
         pass
 
     def __post_init__(self):
-        _grammar.parse(str(self))
+        try:
+            _grammar.parse(str(self))
+        except Exception as e:
+            raise Exception("Incorrect values passed, object is not valid DAIDE")
 
 
 @dataclass
@@ -88,7 +91,7 @@ class CVY:
 @dataclass
 class MoveByCVY(_DAIDEObject):
     unit: Unit
-    province: Province
+    province: Location
     province_seas: List[Location]
 
     def __init__(self, unit, province, *province_seas):
@@ -327,7 +330,7 @@ class DMZ(_DAIDEObject):
 
 @dataclass
 class AND(_DAIDEObject):
-    arrangments: List[Arrangement]
+    arrangements: List[Arrangement]
 
     def __init__(self, *arrangements):
         self.arrangements = arrangements
@@ -340,7 +343,7 @@ class AND(_DAIDEObject):
 
 @dataclass
 class ORR(_DAIDEObject):
-    arrangments: List[Arrangement]
+    arrangements: List[Arrangement]
 
     def __init__(self, *arrangements):
         self.arrangements = arrangements
@@ -394,7 +397,7 @@ class OCC(_DAIDEObject):
 class CHO(_DAIDEObject):
     minimum: int
     maximum: int
-    arrangments: List[Arrangement]
+    arrangements: List[Arrangement]
 
     def __init__(self, minimum, maximum, *arrangements):
         self.minimum = minimum
@@ -410,7 +413,7 @@ class CHO(_DAIDEObject):
 
 @dataclass
 class INS(_DAIDEObject):
-    arrangment: Arrangement
+    arrangement: Arrangement
 
     def __str__(self):
         return f"INS ( {self.arrangement} )"
@@ -418,7 +421,7 @@ class INS(_DAIDEObject):
 
 @dataclass
 class QRY(_DAIDEObject):
-    arrangment: Arrangement
+    arrangement: Arrangement
 
     def __str__(self):
         return f"QRY ( {self.arrangement} )"
