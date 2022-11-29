@@ -34,7 +34,7 @@ class Location:
 
     def __str__(self) -> str:
         if self.coast:
-            return f"({self.province} {self.coast})"
+            return f"( {self.province} {self.coast} )"
         return self.province
 
 
