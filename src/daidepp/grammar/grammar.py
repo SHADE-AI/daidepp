@@ -4,26 +4,9 @@ For now this grammar assumes NO PDA games
 
 from __future__ import annotations
 
-from typing import Dict, List, Set, Tuple
+from typing import Dict, Tuple
 
-from parsimonious.grammar import Grammar
 from typing_extensions import Literal
-
-
-class DAIDEGrammar(Grammar):
-    def __init__(self, rules: str = "", **more_rules) -> None:
-        super().__init__(rules, **more_rules)
-        self._set_try_tokens()
-
-    def _set_try_tokens(self):
-        try_tokens = self.get("try_tokens")
-        try_tokens_strings = list(map(lambda x: x.literal, try_tokens.members))
-        self.try_tokens: List[str] = try_tokens_strings
-
-    @staticmethod
-    def from_level(level: DAIDELevel, allow_just_arrangement: bool = False):
-        return create_daide_grammar(level, allow_just_arrangement)
-
 
 DAIDELevel = Literal[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
 
@@ -68,7 +51,7 @@ LEVEL_10: GrammarDict = {
     "try": '"TRY" lpar try_tokens (ws try_tokens)* rpar',
     "huh": '"HUH" lpar press_message rpar',
     "prp": '"PRP" lpar arrangement rpar',
-    "aly_vss": '"ALY" lpar power (ws power)* rpar "VSS" lpar power (ws power)* rpar',
+    "aly_vss": '"ALY" lpar power (ws power)+ rpar "VSS" lpar power (ws power)+ rpar',
     "slo": '"SLO" lpar power rpar',
     "not": '("NOT" lpar arrangement rpar)',
     "nar": '"NAR" lpar arrangement rpar',
@@ -186,11 +169,11 @@ LEVEL_120: GrammarDict = {
 
 # Explanations
 LEVEL_130: GrammarDict = {
-    "fct_thk_prp_ins": "fct / thk / prp / ins",
-    "qry_exp_wht_prp_ins_sug": "qry / exp / wht / prp / ins / sug",  # added sug because it looks like it's also supported at level 130
-    "why": '"WHY" lpar fct_thk_prp_ins rpar',
+    "why_param": "fct / thk / prp / ins",
+    "idk_param": "qry / exp / wht / prp / ins / sug",  # added sug because it looks like it's also supported at level 130
+    "why": '"WHY" lpar why_param rpar',
     "pob": '"POB" lpar why rpar',
-    "idk": '"IDK" lpar qry_exp_wht_prp_ins_sug rpar',
+    "idk": '"IDK" lpar idk_param rpar',
     "reply": f"{TRAIL_TOKEN}why / pob / idk",
     "try_tokens": f'{TRAIL_TOKEN}"WHY" / "POB"',
 }
@@ -213,167 +196,3 @@ LEVELS: Tuple[GrammarDict] = (
 )
 
 GrammarDict = Dict[str, str]
-
-
-def create_daide_grammar(
-    level: DAIDELevel = 30,
-    allow_just_arrangement: bool = False,
-    string_type: Literal["message", "arrangement", "all"] = "message",
-) -> DAIDEGrammar:
-    """Create a DAIDEGrammar object given a level of DAIDE.
-
-    The DAIDEGrammar object inherits from parsimonious.grammar.Grammar,
-    see https://github.com/erikrose/parsimonious for more information.
-
-    Args:
-        level (DAIDE_LEVEL, optional): level of DIADE to create grammar for. Defaults to 30.
-        allow_just_arrangement (bool, optional): if set to True, the parser accepts strings that
-        are only arrangements, in addition to press messages. So, for example, the parser could parse
-        'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
-        string_type (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default), the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized.
-
-    Returns:
-        DAIDEGrammar: Grammar object
-    """
-    grammar_str = _create_daide_grammar_str(level, allow_just_arrangement, string_type)
-    grammar = DAIDEGrammar(grammar_str)
-    return grammar
-
-
-def _create_daide_grammar_dict(level: DAIDELevel = 30) -> GrammarDict:
-    """Combine DAIDE grammar dicts into one dict.
-
-    Args:
-        level (DAIDE_LEVEL, optional): The level of DAIDE to make grammar for. Defaults to 30.
-
-    Returns:
-        GRAMMAR_DICT: Dictionary representing all rules for passed daide level
-    """
-
-    level_idxs = list(range(int((level / 10) + 1)))
-    grammar: GrammarDict = {}
-
-    for level_idx in level_idxs:
-        new_grammar = LEVELS[level_idx]
-        grammar = _merge_grammars(grammar, new_grammar)
-    return grammar
-
-
-def _create_daide_grammar_str(
-    level: DAIDELevel = 30,
-    allow_just_arrangement: bool = False,
-    string_type: Literal["message", "arrangement", "all"] = "message",
-) -> str:
-    """Create string representing DAIDE grammar in PEG
-
-    Args:
-        level (DAIDE_LEVEL, optional): _description_. Defaults to 30.
-
-    Returns:
-        str: string representing DAIDE grammar in PEG
-    """
-    grammar_dict = _create_daide_grammar_dict(level)
-    grammar_str = _create_grammar_str_from_dict(
-        grammar_dict, allow_just_arrangement, string_type
-    )
-    return grammar_str
-
-
-def _sort_grammar_keys(keys: List[str]) -> Tuple:
-    keys_list = []
-
-    keys.remove("lpar")
-    keys.remove("rpar")
-    keys.remove("ws")
-    keys.remove("try_tokens")
-
-    # turn goes in front of season
-    if "turn" in keys:
-        keys_list.append("turn")
-        keys.remove("turn")
-
-    # wve goes in front of power
-    if "wve" in keys:
-        keys_list.append("wve")
-        keys.remove("wve")
-
-    # unit must be in front of power
-    if "unit" in keys:
-        keys_list.append("unit")
-        keys.remove("unit")
-
-    # province must be in front of all other province patterns
-    if "province" in keys:
-        keys_list.append("province")
-        keys.remove("province")
-
-    keys_list += keys
-    return keys_list
-
-
-def _create_grammar_str_from_dict(
-    grammar: GrammarDict,
-    allow_just_arrangement: bool = False,
-    string_type: Literal["message", "arrangement", "all"] = "message",
-) -> str:
-    grammar_str = ""
-    if string_type == "all":
-        left = "daide_string"
-        grammar_keys = list(grammar.keys())
-        sorted_keys = _sort_grammar_keys(grammar_keys)
-        right = " / ".join(sorted_keys)
-        grammar_str = f"{left} = {right}\n"
-    for item in grammar.items():
-        # message needs to be the first rule in the string, per parsimonious rules:
-        # "The first rule is taken to be the default start symbol, but you can override that."
-        # https://github.com/erikrose/parsimonious#example-usage
-        if item[0] == "message" and string_type == "message":
-            left = item[0]
-            right = item[1]
-            if (
-                allow_just_arrangement or string_type == "arrangement"
-            ) and string_type != "all":
-                right += " / arrangement"
-            grammar_str = f"{left} = {right}\n" + grammar_str
-
-        else:
-            grammar_str += f"{item[0]} = {item[1]}\n"
-    return grammar_str
-
-
-def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> GrammarDict:
-    old_keys = set(old_grammar.keys())
-    new_keys = set(new_grammar.keys())
-
-    old_unique = old_keys.difference(new_keys)
-    new_unique = new_keys.difference(old_keys)
-    shared_keys = new_keys.intersection(old_keys)
-
-    merged_grammar: GrammarDict = {}
-    for key in old_unique:
-        merged_grammar[key] = old_grammar[key]
-    for key in new_unique:
-        merged_grammar[key] = new_grammar[key]
-    for key in shared_keys:
-        merged_grammar[key] = _merge_shared_key_value(old_grammar, new_grammar, key)
-    return merged_grammar
-
-
-def _merge_shared_key_values(
-    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_keys: Set[str]
-) -> GrammarDict:
-    merged_grammar = {}
-    for key in shared_keys:
-        merged_grammar[key] = _merge_shared_key_value(old_grammar, new_grammar, key)
-    return merged_grammar
-
-
-def _merge_shared_key_value(
-    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_key: str
-) -> str:
-
-    if new_grammar[shared_key][:3] == TRAIL_TOKEN:
-        new_value = old_grammar[shared_key] + " / " + new_grammar[shared_key][3:]
-    else:
-        new_value = new_grammar[shared_key]
-    return new_value

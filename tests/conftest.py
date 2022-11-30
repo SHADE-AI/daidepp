@@ -1,6 +1,6 @@
 import pytest
 
-from daidepp.grammar import DAIDELevel, create_daide_grammar
+from daidepp.grammar import create_daide_grammar
 
 
 @pytest.fixture(scope="session")
@@ -71,6 +71,7 @@ def level_20_messages():
 @pytest.fixture
 def level_30_messages():
     return [
+        "AND (PCE (AUS GER)) (PCE (AUS ENG))",
         "AND (PCE (AUS GER)) (PCE (AUS FRA))",
         "AND (ALY (ITA TUR) VSS (ENG RUS)) (ALY (ITA TUR) VSS (ENG GER))",
         "AND (DRW) (DRW (ENG FRA))",
