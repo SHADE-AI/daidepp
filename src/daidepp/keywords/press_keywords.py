@@ -102,7 +102,7 @@ class NAR(_DAIDEObject):
 
 @dataclass
 class DRW(_DAIDEObject):
-    powers: Optional[List[Power]] = None
+    powers: Optional[List[Power]] = ()
 
     def __init__(self, *powers):
         self.powers = powers

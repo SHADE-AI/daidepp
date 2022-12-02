@@ -172,8 +172,7 @@ SupplyCenter = Literal[
 PressKeywords = Literal[
     "PRP",
     "PCE",
-    "ALY",
-    "VSS",
+    "ALY_VSS",
     "DRW",
     "SLO",
     "NOT",

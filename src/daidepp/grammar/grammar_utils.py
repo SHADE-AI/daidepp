@@ -1,5 +1,6 @@
-from typing import List, Set, Tuple, Union
+from typing import List, Set, Tuple
 
+import parsimonious
 from parsimonious.grammar import Grammar
 from typing_extensions import Literal
 
@@ -20,8 +21,15 @@ class DAIDEGrammar(Grammar):
 
     def _set_try_tokens(self):
         try_tokens = self.get("try_tokens")
-        try_tokens_strings = list(map(lambda x: x.literal, try_tokens.members))
-        self.try_tokens: List[str] = try_tokens_strings
+
+        if try_tokens == None:
+            self.try_tokens = None
+        else:
+            if try_tokens.name == "try_tokens" and hasattr(try_tokens, "members"):
+                try_tokens_strings = list(map(lambda x: x.literal, try_tokens.members))
+            else:  # condition when there is a single try token. parsimonious replaces token with actual rule.
+                try_tokens_strings = try_tokens.name.upper()
+            self.try_tokens: List[str] = try_tokens_strings
 
     @staticmethod
     def from_level(level: DAIDELevel, allow_just_arrangement: bool = False):
@@ -43,7 +51,9 @@ def create_daide_grammar(
         allow_just_arrangement (bool, optional): if set to True, the parser accepts strings that
         are only arrangements, in addition to press messages. So, for example, the parser could parse
         'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
-        string_type (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default), the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized.
+        string_type (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default),
+        the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize
+        messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized.
 
     Returns:
         DAIDEGrammar: Grammar object
@@ -198,23 +208,29 @@ def create_grammar_from_press_keywords(
     string_type: Literal["message", "arrangement", "all"] = "message",
     include_level_0: bool = True,
 ) -> DAIDEGrammar:
-    """_summary_
+    """Construct new DAIDE grammar from a list of keywords.
 
     Parameters
     ----------
     keywords : List[PressKeywords]
-        _description_
+        List of press keywords. This can be a list of string literals or DAIDEObjects.
     allow_just_arrangement : bool, optional
-        _description_, by default False
+         if set to True, the parser accepts strings that are only arrangements, in
+         addition to press messages. So, for example, the parser could parse, by default False
     string_type : Literal['message', 'arrangement', 'all'], optional
-        _description_, by default "message"
+        if set to True, the parser accepts strings that
+        are only arrangements, in addition to press messages. So, for example, the parser could parse
+        'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
+        string_type (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default),
+        the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize
+        messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized, by default "message"
     include_level_0 : bool, optional
-        _description_, by default True
+        arg to include level_0 DAIDE keywords, by default True
 
     Returns
     -------
     DAIDEGrammar
-        _description_
+        DAIDEGrammar composed from the list of keywords.
     """
 
     grammar = create_daide_grammar(
@@ -229,106 +245,98 @@ def create_grammar_from_press_keywords(
 
     grammar_dict = _create_daide_grammar_dict(level=DAIDELevel.__args__[-1])
 
-    if "press_message" in keywords_dependencies:
-        members_in_dependencies = _get_original_members_in_dependencies(
-            "press_message", keywords_dependencies, grammar
-        )
+    _construct_grammar_dict_value_based_on_dependencies(
+        grammar, grammar_dict, "arrangement", keywords_dependencies
+    )
+    _construct_grammar_dict_value_based_on_dependencies(
+        grammar, grammar_dict, "sub_arrangement", keywords_dependencies
+    )
+    _construct_grammar_dict_value_based_on_dependencies(
+        grammar, grammar_dict, "reply", keywords_dependencies
+    )
+    _construct_grammar_dict_value_based_on_dependencies(
+        grammar, grammar_dict, "press_message", keywords_dependencies
+    )
+    _construct_grammar_dict_value_based_on_dependencies(
+        grammar, grammar_dict, "message", keywords_dependencies
+    )
+    _construct_grammar_dict_value_based_on_dependencies(
+        grammar, grammar_dict, "try_tokens", keywords_dependencies
+    )
 
-        if not members_in_dependencies:
-            raise ValueError(
-                f"New grammar depends on `press_message`, but the given keywords "
-                f"do not depend on the 'press_message' members. Such as: {[member.name for member in grammar['press_message'].members]}"
-            )
-
-        grammar_dict["press_message"] = " / ".join(members_in_dependencies)
-
-    if "reply" in keywords_dependencies:
-        members_in_dependencies = _get_original_members_in_dependencies(
-            "reply", keywords_dependencies, grammar
-        )
-
-        if not members_in_dependencies:
-            raise ValueError(
-                f"New grammar depends on `reply`, but the given keywords do not "
-                f"depend on the 'reply' members. Such as: {[member.name for member in grammar['reply'].members]}"
-            )
-
-        grammar_dict["reply"] = " / ".join(members_in_dependencies)
-
-    if "message" in keywords_dependencies:
-        possible_message_dependencies = []
-
-        if "press_message" in keywords_dependencies:
-            possible_message_dependencies.append("press_message")
-        if "reply" in keywords_dependencies:
-            possible_message_dependencies.append("reply")
-
-        if not possible_message_dependencies:
-            raise ValueError(
-                f"New grammar depends on `message`, but the given keywords do "
-                f"not depend on the 'message' members. Such as: {[member.name for member in grammar['message'].members]}"
-            )
-
-        grammar_dict["message"] = " / ".join(possible_message_dependencies)
-
-    if "arrangement" in keywords_dependencies:
-        members_in_dependencies = _get_original_members_in_dependencies(
-            "arrangement", keywords_dependencies, grammar
-        )
-
-        if not members_in_dependencies:
-            raise ValueError(
-                f"New grammar depends on `arrangement`, but the given keywords "
-                f"do not depend on the 'arrangment' members. Such as: {[member.name for member in grammar['arrangement'].members]}"
-            )
-
-        grammar_dict["arrangement"] = " / ".join(members_in_dependencies)
-
-    if "sub_arrangement" in keywords_dependencies:
-        members_in_dependencies = _get_original_members_in_dependencies(
-            "sub_arrangement", keywords_dependencies, grammar
-        )
-
-        if not members_in_dependencies:
-            raise ValueError(
-                f"New grammar depends on `sub_arrangement`, but the given keywords "
-                f"do not depend on the 'sub_arrangment' members. Such as: {[member.name for member in grammar['sub_arrangement'].members]}"
-            )
-
-        grammar_dict["sub_arrangement"] = " / ".join(members_in_dependencies)
-
-    # set try_tokens
-    if not "try_tokens" in keywords_dependencies:
-        keywords_dependencies.append("try_tokens")
-    try_tokens_members = [member.literal for member in grammar["try_tokens"].members]
-    members_in_dependencies = [
-        '"' + keyword.upper() + '"'
-        for keyword in keywords_dependencies
-        if keyword.upper() in try_tokens_members
+    grammar_key_priority = [
+        "message",
+        "press_message",
+        "reply",
+        "arrangement",
+        "sub_arrangement",
     ]
-    grammar_dict["try_tokens"] = " / ".join(members_in_dependencies)
-    if not members_in_dependencies:
-        raise ValueError(
-            f"New grammar depends on `try_tokens`, but the given keywords "
-            f"do not depend on the 'try_tokens' members. Such as: {try_tokens_members}"
-        )
+    for key in grammar_key_priority[::-1]:
+        if key in keywords_dependencies:
+            keywords_dependencies.insert(
+                0, keywords_dependencies.pop(keywords_dependencies.index(key))
+            )
 
     new_grammar_dict = {
         keyword: grammar_dict[keyword] for keyword in keywords_dependencies
     }
 
+    if allow_just_arrangement and not "arrangement" in new_grammar_dict.keys():
+        raise ValueError(
+            "Passed 'allow_just_arrangement=True' but 'arrangement' keywords are not part of the new grammar."
+        )
+
     new_grammar_str = _create_grammar_str_from_dict(
         new_grammar_dict, allow_just_arrangement, string_type
     )
+
     new_grammar = DAIDEGrammar(new_grammar_str)
 
     return new_grammar
 
 
-def _get_original_members_in_dependencies(
-    keyword: str, keywords_dependencies: List[str], grammar: DAIDEGrammar
+def _construct_grammar_dict_value_based_on_dependencies(
+    grammar: DAIDEGrammar,
+    grammar_dict: GrammarDict,
+    grammar_key: str,
+    keywords_dependencies: List[str],
+):
+    members_in_dependencies = _get_overlapping_members_from_original_grammar(
+        grammar, grammar_key, keywords_dependencies
+    )
+
+    # try tokens should be all caps with surrounded by quotes
+    if grammar_key == "try_tokens":
+        members_in_dependencies = [
+            '"' + key.upper() + '"' for key in members_in_dependencies
+        ]
+
+        if "aly_vss" in keywords_dependencies:
+            members_in_dependencies.extend(["'ALY'", "'VSS'"])
+
+    if members_in_dependencies:
+        grammar_dict[grammar_key] = " / ".join(members_in_dependencies)
+
+        keywords_dependencies.append(grammar_key)
+
+    elif grammar_key in keywords_dependencies:
+        raise ValueError(
+            f"New grammar depends on '{grammar_key}', but the given keywords "
+            f"do not depend on the '{grammar_key}' members. Such as: {[member.name for member in grammar[grammar_key].members]}"
+        )
+
+
+def _get_overlapping_members_from_original_grammar(
+    grammar: DAIDEGrammar, grammar_key: str, keywords_dependencies: List[str]
 ) -> List[str]:
-    original_members: List[str] = [member.name for member in grammar[keyword].members]
+    if grammar_key == "try_tokens":
+        original_members: List[str] = [
+            member.literal.lower() for member in grammar[grammar_key].members
+        ]
+    else:
+        original_members: List[str] = [
+            member.name for member in grammar[grammar_key].members
+        ]
     original_members_in_dependencies: List[str] = [
         keyword for keyword in keywords_dependencies if keyword in original_members
     ]
@@ -388,37 +396,40 @@ def _find_grammar_key_dependencies_helper(
     elif grammar_key in recursion_terminators:
         accumulator.append(grammar_key)
 
-    else:
+    elif grammar_key in grammar.keys():
         accumulator.append(grammar_key)
         for member in grammar[grammar_key].members:
             if member.name != "":
                 _find_grammar_key_dependencies_helper(member.name, grammar, accumulator)
 
-            elif hasattr(member, "members"):
-                for member_member in member.members:
-                    if member_member.name != "":
-                        _find_grammar_key_dependencies_helper(
-                            member_member.name, grammar, accumulator
-                        )
+            else:
+                grammar_keys = _search_nested_members_for_keys(member, grammar)
+
+                for key in grammar_keys:
+                    _find_grammar_key_dependencies_helper(key, grammar, accumulator)
 
 
-# create_grammar_from_press_keywords(["POB", "WHY", "YES", "FRM", "IDK", "TRY"])
-# create_grammar_from_press_keywords(["POB", "WHY", "YES", "FRM", "IDK", "TRY"], include_level_0=False)
-# create_grammar_from_press_keywords(["POB", "WHY", "YES", "FRM", "IDK"], include_level_0=False)
-# create_grammar_from_press_keywords(["POB"])
-# create_grammar_from_press_keywords(["POB"], include_level_0=False)
-# create_grammar_from_press_keywords(["PRP", "YES", "CCL", "XDO"], include_level_0=False)
-# create_grammar_from_press_keywords(["PRP", "YES", "CCL"], include_level_0=False)
-# create_grammar_from_press_keywords(["SND"], include_level_0=False)
-# create_grammar_from_press_keywords(["FRM"], include_level_0=False)
-# from daidepp.keywords import POB
-# create_grammar_from_press_keywords(["POB", "WHY", "YES", "FRM", "IDK"], include_level_0=False)
-# create_grammar_from_press_keywords(["IDK"])
-# create_grammar_from_press_keywords(["IDK"], include_level_0=False)
-# create_grammar_from_press_keywords(["WHT"], include_level_0=False)
-# create_grammar_from_press_keywords(["PRP"], include_level_0=False)
-# create_grammar_from_press_keywords(["INS"], include_level_0=False)
-# create_grammar_from_press_keywords(["POB", "WHY", "YES", "FRM", "QRY", "WHT"], include_level_0=False)
-# create_grammar_from_press_keywords(["AND"], include_level_0=False)
-# create_grammar_from_press_keywords(["FCT"], include_level_0=False)
-# create_grammar_from_press_keywords(["NOT"], include_level_0=False)
+def _search_nested_members_for_keys(
+    member: parsimonious.expressions, grammar: DAIDEGrammar
+) -> List[str]:
+    keys = []
+
+    recursion_terminators = [
+        "message",
+        "reply",
+        "press_message",
+        "arrangement",
+        "sub_arrangement",
+        "lpar",
+        "rpar",
+        "ws",
+    ]
+
+    if member.name != "" and member.name in grammar.keys():
+        keys.append(member.name)
+
+    elif not member.name in recursion_terminators and hasattr(member, "members"):
+        for member_member in member.members:
+            keys.extend(_search_nested_members_for_keys(member_member, grammar))
+
+    return keys

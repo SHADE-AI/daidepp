@@ -18,6 +18,7 @@ def test_basic_visitor(sample_daide_messages: List[str]):
 
 
 @pytest.mark.parametrize(
+    # fmt: off
     ["daide_message", "expected_type"],
     [
         ("PCE(AUS GER)", PCE),
@@ -37,6 +38,7 @@ def test_basic_visitor(sample_daide_messages: List[str]):
         ("REJ ( PRP (PCE (ENG FRA ) ) )", REJ),
         ("BWX ( PRP (PCE ( ENG FRA ) ) )", BWX),
     ],
+    # fmt: on
 )
 def test_visitor_objects(daide_message: str, expected_type: AnyDAIDEToken):
     tree = grammar.parse(daide_message)

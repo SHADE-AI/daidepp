@@ -1,112 +1,177 @@
+import pytest
+
 from daidepp.keywords.base_keywords import *
 
 
-def test_Unit():
-    unit_1 = Unit("AUS", "FLT", "ALB")
-    assert str(unit_1) == "AUS FLT ALB"
-
-    unit_2 = Unit("ENG", "AMY", "ANK")
-    assert str(unit_2) == "ENG AMY ANK"
-
-    unit_3 = Unit("FRA", "FLT", "APU")
-    assert str(unit_3) == "FRA FLT APU"
-
-    unit_4 = Unit("GER", "AMY", "ARM")
-    assert str(unit_4) == "GER AMY ARM"
-
-    unit_5 = Unit("ITA", "FLT", "BEL")
-    assert str(unit_5) == "ITA FLT BEL"
-
-    unit_6 = Unit("RUS", "AMY", "BER")
-    assert str(unit_6) == "RUS AMY BER"
-
-    unit_7 = Unit("TUR", "FLT", "BRE")
-    assert str(unit_7) == "TUR FLT BRE"
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"], 
+    [
+        (("AUS", "FLT", "ALB"), "AUS FLT ALB"),
+        (("ENG", "AMY", "ANK"), "ENG AMY ANK"),
+        (("FRA", "FLT", "APU"), "FRA FLT APU"),
+        (("GER", "AMY", "ARM"), "GER AMY ARM"),
+        (("ITA", "FLT", "BEL"), "ITA FLT BEL"),
+        (("RUS", "AMY", "BER"), "RUS AMY BER"),
+        (("TUR", "FLT", "BRE"), "TUR FLT BRE"),
+    ],
+    # fmt: on
+)
+def test_Unit(input, expected_output):
+    print(input)
+    unit = Unit(*input)
+    assert str(unit) == expected_output
 
 
-def test_HLD():
-    hld_1 = HLD(Unit("AUS", "FLT", "ALB"))
-    assert str(hld_1) == "( AUS FLT ALB ) HLD"
-
-    hld_2 = HLD(Unit("ENG", "AMY", "ANK"))
-    assert str(hld_2) == "( ENG AMY ANK ) HLD"
-
-
-def test_MTO():
-    mto_1 = MTO(Unit("AUS", "FLT", "ALB"), "BUL")
-    assert str(mto_1) == "( AUS FLT ALB ) MTO BUL"
-
-    mto_2 = MTO(Unit("ENG", "AMY", "ANK"), "CLY")
-    assert str(mto_2) == "( ENG AMY ANK ) MTO CLY"
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"], 
+    [
+        ((Unit("AUS", "FLT", "ALB"),), "( AUS FLT ALB ) HLD"),
+        ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) HLD")
+    ],
+    # fmt: on
+)
+def test_HLD(input, expected_output):
+    hld = HLD(*input)
+    assert str(hld) == expected_output
 
 
-def test_SUP():
-    sup_1 = SUP(Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL")
-    assert str(sup_1) == "( AUS FLT ALB ) SUP ( ENG AMY ANK ) MTO BUL"
-
-    sup_2 = SUP(Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY")
-    assert str(sup_2) == "( FRA FLT APU ) SUP ( GER AMY ARM ) MTO CLY"
-
-
-def test_CVY():
-    cvy_1 = CVY(Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL")
-    assert str(cvy_1) == "( AUS FLT ALB ) CVY ( ENG AMY ANK ) CTO BUL"
-
-    cvy_2 = CVY(Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY")
-    assert str(cvy_2) == "( FRA FLT APU ) CVY ( GER AMY ARM ) CTO CLY"
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"], 
+    [
+        ((Unit("AUS", "FLT", "ALB"), "BUL"), "( AUS FLT ALB ) MTO BUL"),
+        ((Unit("ENG", "AMY", "ANK"), "CLY"), "( ENG AMY ANK ) MTO CLY")
+    ],
+    # fmt: on
+)
+def test_MTO(input, expected_output):
+    mto = MTO(*input)
+    assert str(mto) == expected_output
 
 
-def test_MoveByCVY():
-    mvc_1 = MoveByCVY(Unit("AUS", "FLT", "ALB"), "BUL", "ADR")
-    assert str(mvc_1) == "( AUS FLT ALB ) CTO BUL VIA ( ADR )"
-
-    mvc_2 = MoveByCVY(Unit("ENG", "AMY", "ANK"), "CLY", "ADR", "AEG")
-    assert str(mvc_2) == "( ENG AMY ANK ) CTO CLY VIA ( ADR AEG )"
-
-    mvc_3 = MoveByCVY(Unit("FRA", "FLT", "APU"), "CON", "ADR", "AEG", "BAL")
-    assert str(mvc_3) == "( FRA FLT APU ) CTO CON VIA ( ADR AEG BAL )"
-
-
-def test_RTO():
-    rto_1 = RTO(Unit("AUS", "FLT", "ALB"), "BUL")
-    assert str(rto_1) == "( AUS FLT ALB ) RTO BUL"
-
-    rto_2 = RTO(Unit("ENG", "AMY", "ANK"), "CLY")
-    assert str(rto_2) == "( ENG AMY ANK ) RTO CLY"
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL"), "( AUS FLT ALB ) SUP ( ENG AMY ANK ) MTO BUL"),
+        ((Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY"), "( FRA FLT APU ) SUP ( GER AMY ARM ) MTO CLY"),
+    ],
+    # fmt: on
+)
+def test_SUP(input, expected_output):
+    sup = SUP(*input)
+    assert str(sup) == expected_output
 
 
-def test_DSB():
-    dsb_1 = DSB(Unit("AUS", "FLT", "ALB"))
-    assert str(dsb_1) == "( AUS FLT ALB ) DSB"
-
-    dsb_2 = DSB(Unit("ENG", "AMY", "ANK"))
-    assert str(dsb_2) == "( ENG AMY ANK ) DSB"
-
-
-def test_BLD():
-    bld_1 = BLD(Unit("AUS", "FLT", "ALB"))
-    assert str(bld_1) == "( AUS FLT ALB ) BLD"
-
-    bld_2 = BLD(Unit("ENG", "AMY", "ANK"))
-    assert str(bld_2) == "( ENG AMY ANK ) BLD"
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL"), "( AUS FLT ALB ) CVY ( ENG AMY ANK ) CTO BUL"),
+        ((Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY"), "( FRA FLT APU ) CVY ( GER AMY ARM ) CTO CLY")
+    ],
+    # fmt: on
+)
+def test_CVY(input, expected_output):
+    cvy = CVY(*input)
+    assert str(cvy) == expected_output
 
 
-def test_REM():
-    rem_1 = REM(Unit("AUS", "FLT", "ALB"))
-    assert str(rem_1) == "( AUS FLT ALB ) REM"
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((Unit("AUS", "FLT", "ALB"), "BUL", "ADR"), "( AUS FLT ALB ) CTO BUL VIA ( ADR )"),
+        ((Unit("ENG", "AMY", "ANK"), "CLY", "ADR", "AEG"), "( ENG AMY ANK ) CTO CLY VIA ( ADR AEG )"),
+        ((Unit("FRA", "FLT", "APU"), "CON", "ADR", "AEG", "BAL"), "( FRA FLT APU ) CTO CON VIA ( ADR AEG BAL )"),
+    ],
+    # fmt: on
+)
+def test_MoveByCVY(input, expected_output):
+    mvc = MoveByCVY(*input)
+    assert str(mvc) == expected_output
 
-    rem_2 = REM(Unit("ENG", "AMY", "ANK"))
-    assert str(rem_2) == "( ENG AMY ANK ) REM"
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((Unit("AUS", "FLT", "ALB"), "BUL"), "( AUS FLT ALB ) RTO BUL"),
+        ((Unit("ENG", "AMY", "ANK"), "CLY"), "( ENG AMY ANK ) RTO CLY"),
+    ],
+    # fmt: on
+)
+def test_RTO(input, expected_output):
+    rto = RTO(*input)
+    assert str(rto) == expected_output
 
 
-def test_WVE():
-    wve_1 = WVE("AUS")
-    assert str(wve_1) == "AUS WVE"
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((Unit("AUS", "FLT", "ALB"),), "( AUS FLT ALB ) DSB"),
+        ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) DSB"),
+    ],
+    # fmt: on
+)
+def test_DSB(input, expected_output):
+    dsb = DSB(*input)
+    assert str(dsb) == expected_output
 
-    wve_2 = WVE("ENG")
-    assert str(wve_2) == "ENG WVE"
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((Unit("AUS", "FLT", "ALB"),), "( AUS FLT ALB ) BLD"),
+        ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) BLD"),
+    ],
+    # fmt: on
+)
+def test_BLD(input, expected_output):
+    bld = BLD(*input)
+    assert str(bld) == expected_output
 
 
-def test_turn():
-    turn_1 = Turn("SPR", 1901)
-    assert str(turn_1) == "SPR 1901"
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((Unit("AUS", "FLT", "ALB"),), "( AUS FLT ALB ) REM"),
+        ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) REM"),
+    ],
+    # fmt: on
+)
+def test_REM(input, expected_output):
+    rem = REM(*input)
+    assert str(rem) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        (("AUS",), "AUS WVE"),
+        (("ENG",), "ENG WVE"),
+    ],
+    # fmt: on
+)
+def test_WVE(input, expected_output):
+    wve = WVE(*input)
+    assert str(wve) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        (("SPR", 1901), "SPR 1901"),
+    ],
+    # fmt: on
+)
+def test_turn(input, expected_output):
+    turn_1 = Turn(*input)
+    assert str(turn_1) == expected_output
