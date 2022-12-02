@@ -253,12 +253,12 @@ class DAIDEVisitor(NodeVisitor):
         for scd_statment in scd_statements:
             _, power, _, supply_center, ws_supply_centers, _ = scd_statment
 
-            supply_centers = [supply_center]
+            supply_centers = [Location(supply_center)]
             for ws_sc in ws_supply_centers:
                 _, sc = ws_sc
-                supply_centers.append(sc)
+                supply_centers.append(Location(sc))
             power_and_supply_centers.append(
-                PowerAndSupplyCenters(power, supply_centers)
+                PowerAndSupplyCenters(power, *supply_centers)
             )
         return SCD(*power_and_supply_centers)
 
