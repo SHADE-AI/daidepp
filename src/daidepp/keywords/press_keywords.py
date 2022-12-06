@@ -61,11 +61,6 @@ class ALYVSS(_DAIDEObject):
     aly_powers: List[Power]
     vss_powers: List[Power]
 
-    def __init__(self, aly_power, vss_powers):
-        self.aly_powers = aly_power
-        self.vss_powers = vss_powers
-        self.__post_init__()
-
     def __str__(self):
         return (
             "ALY ( "
