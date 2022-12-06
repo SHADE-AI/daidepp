@@ -226,4 +226,6 @@ def level_130_messages():
 def bad_messages():
     return [
         "PRP (ENNG GER)",
+        "DMZ (STP NCS) (STP SCS)",
+        "DMZ (SPA NCS) (BUL ECS)",
     ]
