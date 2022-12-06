@@ -37,6 +37,9 @@ def test_basic_visitor(sample_daide_messages: List[str]):
         ("DRW ( ENG FRA)", DRW),
         ("REJ ( PRP (PCE (ENG FRA ) ) )", REJ),
         ("BWX ( PRP (PCE ( ENG FRA ) ) )", BWX),
+        ("SCD (FRA HOL)", SCD),
+        ("SCD (AUS ANK BEL BER) (GER BRE BUD BUL DEN)", SCD),
+        ("SCD (AUS ANK BEL BER) (GER BRE BUD BUL DEN) (FRA GRE HOL KIE)", SCD),
     ],
     # fmt: on
 )
