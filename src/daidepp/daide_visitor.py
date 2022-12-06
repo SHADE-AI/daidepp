@@ -115,32 +115,24 @@ class DAIDEVisitor(NodeVisitor):
         _, _, press_message, _ = visited_children
         return HUH(press_message)
 
-    def visit_qry_wht_prp_ins(
-        self, node, visited_children
-    ) -> Union[QRY, WHT, PRP, INS]:
+    def idk_param(self, node, visited_children) -> Union[QRY, WHT, PRP, INS]:
         return visited_children[0]
 
     def visit_idk(self, node, visited_children) -> IDK:
-        _, _, qry_exp_wht_prp_ins_sug, _ = visited_children
+        _, _, idk_param, _ = visited_children
 
-        return (
-            IDK(qry_exp_wht_prp_ins_sug[0])
-            if isinstance(qry_exp_wht_prp_ins_sug, list)
-            else IDK(qry_exp_wht_prp_ins_sug)
-        )
+        return IDK(idk_param[0]) if isinstance(idk_param, list) else IDK(idk_param)
 
     def visit_sry(self, node, visited_children) -> SRY:
         _, _, exp, _ = visited_children
         return SRY(exp)
 
-    def visit_fct_thk_prp_ins(
-        self, node, visited_children
-    ) -> Union[FCT, THK, PRP, INS]:
+    def why_param(self, node, visited_children) -> Union[FCT, THK, PRP, INS]:
         return visited_children[0]
 
     def visit_why(self, node, visited_children) -> WHY:
-        _, _, fct_thk_prp_ins, _ = visited_children
-        return WHY(fct_thk_prp_ins)
+        _, _, why_param, _ = visited_children
+        return WHY(why_param)
 
     def visit_pob(self, node, visited_children) -> POB:
         _, _, why, _ = visited_children
@@ -475,20 +467,10 @@ class DAIDEVisitor(NodeVisitor):
         return visited_children[0]
 
     def generic_visit(self, node, visited_children) -> Any:
-        # if len(visited_children) == 1:
-        #     return visited_children[0]
         return visited_children or node
 
     def visit_daide_string(self, node, visited_children) -> Any:
         return visited_children[0]
-
-    # def visit(self, node: Node) -> Any:
-    #     result = super().visit(node)
-    #     if isinstance(result, list):
-    #         logger.warn(f"Visitor returned a list: {result}")
-    #         return result[0]
-    #     else:
-    #         return result
 
 
 daide_visitor = DAIDEVisitor()
