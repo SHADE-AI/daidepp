@@ -107,14 +107,14 @@ def test_ALYVSS(input, expected_output):
     alyvss = ALYVSS(*input)
     assert str(alyvss) == expected_output
 
-
+        
 @pytest.mark.parametrize(
     # fmt: off
     ["input"],
     [
         ((["AUS"], ["ENG"],),),
         ((["FRA"], ["GER", "TUR"],),),
-        ((["AUS", "FRA"], ["GER"],),),
+        ((["AUS", "FRA"],[]),),
     ],
     # fmt: on
 )
