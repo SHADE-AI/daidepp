@@ -1,4 +1,5 @@
 import pytest
+from typing_extensions import get_args
 
 from daidepp.grammar import create_daide_grammar
 from daidepp.grammar.grammar import DAIDELevel
@@ -16,7 +17,7 @@ def sample_daide_messages():
 def _grammar():
     return {
         level: create_daide_grammar(level=level, allow_just_arrangement=True)
-        for level in range(10, DAIDELevel.__args__[-1] + 10, 10)
+        for level in range(10, get_args(DAIDELevel)[-1] + 10, 10)
     }
 
 

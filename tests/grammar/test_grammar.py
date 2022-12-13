@@ -1,5 +1,6 @@
 import pytest
 from parsimonious.exceptions import ParseError
+
 from daidepp.grammar.grammar import DAIDELevel
 
 
@@ -24,7 +25,9 @@ def test_level_20_messages(grammar, level_20_messages):
 
 
 @pytest.mark.parametrize(
-    "grammar", [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160], indirect=True
+    "grammar",
+    [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160],
+    indirect=True,
 )
 def test_level_30_messages(grammar, level_30_messages):
     for message in level_30_messages:
@@ -32,7 +35,9 @@ def test_level_30_messages(grammar, level_30_messages):
 
 
 @pytest.mark.parametrize(
-    "grammar", [40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160], indirect=True
+    "grammar",
+    [40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160],
+    indirect=True,
 )
 def test_level_40_messages(grammar, level_40_messages):
     for message in level_40_messages:
@@ -71,7 +76,9 @@ def test_level_80_messages(grammar, level_80_messages):
         grammar.parse(message)
 
 
-@pytest.mark.parametrize("grammar", [90, 100, 110, 120, 130, 140, 150, 160], indirect=True)
+@pytest.mark.parametrize(
+    "grammar", [90, 100, 110, 120, 130, 140, 150, 160], indirect=True
+)
 def test_level_90_messages(grammar, level_90_messages):
     for message in level_90_messages:
         grammar.parse(message)
