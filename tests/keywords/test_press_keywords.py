@@ -114,7 +114,7 @@ def test_ALYVSS(input, expected_output):
     [
         ((["AUS"], ["ENG"],),),
         ((["FRA"], ["GER", "TUR"],),),
-        ((["AUS", "FRA"], ["GER"],),),
+        ((["AUS", "FRA"],[]),),
     ],
     # fmt: on
 )
