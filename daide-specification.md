@@ -20,9 +20,9 @@ The syntax is split into a number of levels. Each level completely includes all 
 [Level 100: Conditionals](#level-100-conditionals)  
 [Level 110: Puppets and Favours](#level-110-puppets-and-favours)  
 [Level 120: Forwarding Press](#level-120-forwarding-press)  
-[Level 130: Explanations](#level-130-explanations) \
-[Level 140: Sending Emotional State](#level-140-sending-emotional-state) \
-[Level 150: Requesting and Demanding Offer](#level-150-requesting-and-demanding-offer)
+[Level 130: Explanations](#level-130-explanations)  
+[Level 140: Sending Emotional State](#level-140-sending-emotional-state)  
+[Level 150: Requesting and Demanding Offer](#level-150-requesting-and-demanding-offer)  
 [Level 160: Utility Bounds](#level-160-utility-bounds)  
 
 All Bots must implement the commands in all levels – they should not assume that they will never be playing in a game that is above the level they are designed for. Where a Bot receives a message that is above its intended level, there is a response it can use to indicate this.
@@ -944,7 +944,7 @@ Follwing level 60, a power can demand or Insist on an offer with **INS** token s
 > **press_message = INS(ROF)**
 
 Example,**SND (GER AUS) (INS(ROF))"** , if any power insisting or demanding Germany and Austria for an offer
-## Level 140: Utility Bounds
+## Level 160: Utility Bounds
 
 Level 160 adds the ability to specify a utility lower or upper bound for a power. This is intended for use with threats to show how much cooperation benefits the receiver over the threatened punishment.
 
