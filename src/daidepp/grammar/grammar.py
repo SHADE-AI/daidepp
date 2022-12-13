@@ -51,7 +51,7 @@ LEVEL_10: GrammarDict = {
     "try": '"TRY" lpar try_tokens (ws try_tokens)* rpar',
     "huh": '"HUH" lpar press_message rpar',
     "prp": '"PRP" lpar arrangement rpar',
-    "aly_vss": '"ALY" lpar power (ws power)+ rpar "VSS" lpar power (ws power)+ rpar',
+    "aly_vss": '"ALY" lpar power (ws power)* rpar "VSS" lpar power (ws power)* rpar',
     "slo": '"SLO" lpar power rpar',
     "not": '("NOT" lpar arrangement rpar)',
     "nar": '"NAR" lpar arrangement rpar',
