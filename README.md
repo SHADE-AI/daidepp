@@ -55,7 +55,7 @@ Example:
 >>> grammar.parse("PRP(XDO((ENG FLT EDI) SUP (ENG AMY LVP) MTO CLY))")
 >>> grammar.parse("PRP(PCE (AUS ENG))") # this would fail
 ```
-Note: Because of the way Parsimonious simplifies grammars, there may be some edge cases where the given list of press keywords do not result in a grammar object with the correct order of keywords i.e. it may fail to parse even when the message is valid. If this happens, try adding providing the function with a few more keywords.
+*Note*: Because of the way Parsimonious simplifies grammars, there may be some edge cases where the given list of press keywords does not result in a grammar object with the correct order of keywords (i.e. it may fail to parse even when the message is valid). If this happens, try providing the function with a few more keywords.
 
 
 ## Pull Requests
