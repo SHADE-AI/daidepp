@@ -113,6 +113,12 @@ def test_level_150_messages(grammar, level_150_messages):
         grammar.parse(message)
 
 
+@pytest.mark.parametrize("grammar", [160], indirect=True)
+def test_level_160_messages(grammar, level_160_messages):
+    for message in level_160_messages:
+        grammar.parse(message)
+
+
 @pytest.mark.parametrize("grammar", [130], indirect=True)
 def test_bad_messages(grammar, bad_messages):
     with pytest.raises(ParseError):

@@ -134,6 +134,8 @@ TryTokens = Literal[
     "HPY",
     "ANG",
     "RFO",
+    "ULB",
+    "UUB",
 ]
 
 SupplyCenter = Literal[
@@ -217,4 +219,6 @@ PressKeywords = Literal[
     "HPY",
     "ANG",
     "RFO",
+    "ULB",
+    "UUB",
 ]

@@ -240,6 +240,14 @@ def level_150_messages():
 
 
 @pytest.fixture
+def level_160_messages():
+    return [
+        "ULB (AUS 0.9)",
+        "UUB (GER 0.1)",
+    ]
+
+
+@pytest.fixture
 def bad_messages():
     return [
         "PRP (ENNG GER)",

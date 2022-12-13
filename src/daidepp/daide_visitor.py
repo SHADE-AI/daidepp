@@ -488,5 +488,16 @@ class DAIDEVisitor(NodeVisitor):
     def visit_rfo(self, node, visited_children) -> RFO:
         return RFO()
 
+    def visit_float(self, node, visited_children) -> float:
+        return float(visited_children[1].text)
+
+    def visit_ulb(self, node, visited_children) -> ULB:
+        _, _, power, utility, _ = visited_children
+        return ULB(power, utility)
+
+    def visit_uub(self, node, visited_children) -> UUB:
+        _, _, power, utility, _ = visited_children
+        return UUB(power, utility)
+
 
 daide_visitor = DAIDEVisitor()

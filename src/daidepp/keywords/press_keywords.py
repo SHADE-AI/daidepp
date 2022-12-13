@@ -448,7 +448,6 @@ class UHY(_DAIDEObject):
     press_message: PressMessage
 
     def __str__(self):
-        # print(f"UHY ( {self.press_message} )")
         return f"UHY ( {self.press_message} )"
 
 
@@ -474,11 +473,46 @@ class RFO(_DAIDEObject):
         return f"RFO"
 
 
+@dataclass
+class ULB:
+    power: Power
+    float_val: float
+
+    def __str__(self):
+        return f"ULB ( {self.power} {self.float_val} )"
+
+
+@dataclass
+class UUB:
+    power: Power
+    float_val: float
+
+    def __str__(self):
+        return f"UUB ( {self.power} {self.float_val} )"
+
+
 Reply = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, UHY, HPY, ANG]
-PressMessage = Union[PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF]
+PressMessage = Union[
+    PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF, ULB, UUB
+]
 Message = Union[PressMessage, Reply]
 Arrangement = Union[
-    PCE, ALYVSS, DRW, XDO, DMZ, AND, ORR, SCD, CHO, FOR, XOY, YDO, SND, FWD, BCC, RFO
+    PCE,
+    ALYVSS,
+    DRW,
+    XDO,
+    DMZ,
+    AND,
+    ORR,
+    SCD,
+    CHO,
+    FOR,
+    XOY,
+    YDO,
+    SND,
+    FWD,
+    BCC,
+    RFO,
 ]
 
 AnyDAIDEToken = Union[
@@ -536,4 +570,6 @@ AnyDAIDEToken = Union[
     HPY,
     ANG,
     RFO,
+    ULB,
+    UUB,
 ]

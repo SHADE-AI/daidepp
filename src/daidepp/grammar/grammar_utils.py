@@ -1,4 +1,4 @@
-from typing import List, Set, Tuple
+from typing import List, Set, Tuple, Union
 
 import parsimonious
 from parsimonious.grammar import Grammar
@@ -32,12 +32,14 @@ class DAIDEGrammar(Grammar):
             self.try_tokens: List[str] = try_tokens_strings
 
     @staticmethod
-    def from_level(level: DAIDELevel, allow_just_arrangement: bool = False):
+    def from_level(
+        level: Union[DAIDELevel, List[DAIDELevel]], allow_just_arrangement: bool = False
+    ):
         return create_daide_grammar(level, allow_just_arrangement)
 
 
 def create_daide_grammar(
-    level: DAIDELevel = 30,
+    level: Union[DAIDELevel, List[DAIDELevel]] = 30,
     allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> DAIDEGrammar:
@@ -47,13 +49,17 @@ def create_daide_grammar(
     see https://github.com/erikrose/parsimonious for more information.
 
     Args:
-        level (DAIDE_LEVEL, optional): level of DIADE to create grammar for. Defaults to 30.
-        allow_just_arrangement (bool, optional): if set to True, the parser accepts strings that
-        are only arrangements, in addition to press messages. So, for example, the parser could parse
-        'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
-        string_type (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default),
-        the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize
-        messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized.
+        level (Union[DAIDELevel,List[DAIDELevel]], optional):
+            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            only include levels in list rather than all levels up to given value.
+        allow_just_arrangement (bool, optional):
+            if set to True, the parser accepts strings that are only arrangements,
+            in addition to press messages. So, for example, the parser could parse
+            'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
+        string_type (Literal["message", "arrangement", "all"], optional):
+            if 'message' is passed (default), the grammar will only recognize full DAIDE messages.
+            If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is
+            passed, any DAIDE pattern should be recognized.
 
     Returns:
         DAIDEGrammar: Grammar object
@@ -63,17 +69,24 @@ def create_daide_grammar(
     return grammar
 
 
-def _create_daide_grammar_dict(level: DAIDELevel = 30) -> GrammarDict:
+def _create_daide_grammar_dict(
+    level: Union[DAIDELevel, List[DAIDELevel]] = 30
+) -> GrammarDict:
     """Combine DAIDE grammar dicts into one dict.
 
     Args:
-        level (DAIDE_LEVEL, optional): The level of DAIDE to make grammar for. Defaults to 30.
+        level (Union[DAIDELevel,List[DAIDELevel]], optional):
+            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            only include levels in list rather than all levels up to given value.
 
     Returns:
-        GRAMMAR_DICT: Dictionary representing all rules for passed daide level
+        GrammarDict: Dictionary representing all rules for passed daide level
     """
 
-    level_idxs = list(range(int((level / 10) + 1)))
+    if type(level) is list:
+        level_idxs = [int((i) / 10) for i in level]
+    else:
+        level_idxs = list(range(int((level / 10) + 1)))
     grammar: GrammarDict = {}
 
     for level_idx in level_idxs:
@@ -83,14 +96,24 @@ def _create_daide_grammar_dict(level: DAIDELevel = 30) -> GrammarDict:
 
 
 def _create_daide_grammar_str(
-    level: DAIDELevel = 30,
+    level: Union[DAIDELevel, List[DAIDELevel]] = 30,
     allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
     """Create string representing DAIDE grammar in PEG
 
     Args:
-        level (DAIDE_LEVEL, optional): _description_. Defaults to 30.
+        level (Union[DAIDELevel,List[DAIDELevel]], optional):
+            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            only include levels in list rather than all levels up to given value.
+        allow_just_arrangement (bool, optional):
+            if set to True, the parser accepts strings that are only arrangements,
+            in addition to press messages. So, for example, the parser could parse
+            'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
+        string_type (Literal["message", "arrangement", "all"], optional):
+            if 'message' is passed (default), the grammar will only recognize full DAIDE messages.
+            If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is
+            passed, any DAIDE pattern should be recognized.
 
     Returns:
         str: string representing DAIDE grammar in PEG

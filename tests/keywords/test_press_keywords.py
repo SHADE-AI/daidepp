@@ -622,3 +622,33 @@ def test_ANG(input, expected_output):
 def test_RFO():
     rfo = RFO()
     assert str(rfo) == "RFO"
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        (("GER", .9), "ULB ( GER 0.9 )"),
+        (("GER", 1.9), "ULB ( GER 1.9 )"),
+        (("AUS", 0.2), "ULB ( AUS 0.2 )"),
+    ],
+    # fmt: on
+)
+def test_ULB(input, expected_output):
+    ulb = ULB(*input)
+    assert str(ulb) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        (("GER", .9), "UUB ( GER 0.9 )"),
+        (("GER", 1.9), "UUB ( GER 1.9 )"),
+        (("AUS", 0.2), "UUB ( AUS 0.2 )"),
+    ],
+    # fmt: on
+)
+def test_UUB(input, expected_output):
+    uub = UUB(*input)
+    assert str(uub) == expected_output
