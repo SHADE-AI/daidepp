@@ -472,21 +472,20 @@ class DAIDEVisitor(NodeVisitor):
     def visit_daide_string(self, node, visited_children) -> Any:
         return visited_children[0]
 
-
-    def visit_uhy(self, node, visited_children):
+    def visit_uhy(self, node, visited_children) -> UHY:
         _, _, press_message, _ = visited_children
         return UHY(press_message)
 
-    def visit_hpy(self, node, visited_children):
+    def visit_hpy(self, node, visited_children) -> HPY:
         _, _, press_message, _ = visited_children
         return HPY(press_message)
 
-    def visit_ang(self, node, visited_children):
+    def visit_ang(self, node, visited_children) -> ANG:
         _, _, press_message, _ = visited_children
 
         return ANG(press_message)
 
-    def visit_rfo(self, node, visited_children):
+    def visit_rfo(self, node, visited_children) -> RFO:
         return RFO()
 
 

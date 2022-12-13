@@ -223,6 +223,7 @@ def level_130_messages():
         "IDK (SUG (PCE (ENG FRA)))",
     ]
 
+
 @pytest.fixture
 def level_140_messages():
     return [
@@ -232,11 +233,11 @@ def level_140_messages():
         "ANG (PRP (ALY (ITA TUR) VSS (ENG RUS)))",
     ]
 
+
 @pytest.fixture
 def level_150_messages():
-    return [
-        "RFO"
-    ]
+    return ["RFO"]
+
 
 @pytest.fixture
 def bad_messages():

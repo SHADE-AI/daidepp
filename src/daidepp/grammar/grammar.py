@@ -8,7 +8,9 @@ from typing import Dict, Tuple
 
 from typing_extensions import Literal
 
-DAIDELevel = Literal[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
+DAIDELevel = Literal[
+    0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150
+]
 
 TRAIL_TOKEN = "---"  # any value starting with '---' is meant to be a continuation of that key, not a replacement
 
@@ -191,11 +193,11 @@ LEVEL_140: GrammarDict = {
 
 # Requesting and Demanding Offer
 LEVEL_150: GrammarDict = {
-    "rfo":'"RFO"',
+    "rfo": '"RFO"',
     "arrangement": f"{TRAIL_TOKEN}rfo",
     "try_tokens": f'{TRAIL_TOKEN}"RFO"',
 }
-    
+
 
 LEVELS: Tuple[GrammarDict] = (
     LEVEL_0,

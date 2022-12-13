@@ -4,7 +4,9 @@ from daidepp.grammar.grammar import DAIDELevel
 
 
 @pytest.mark.parametrize(
-    "grammar", [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150], indirect=True
+    "grammar",
+    [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+    indirect=True,
 )
 def test_level_10_messages(grammar, level_10_messages):
     for message in level_10_messages:
@@ -12,7 +14,9 @@ def test_level_10_messages(grammar, level_10_messages):
 
 
 @pytest.mark.parametrize(
-    "grammar", [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150], indirect=True
+    "grammar",
+    [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+    indirect=True,
 )
 def test_level_20_messages(grammar, level_20_messages):
     for message in level_20_messages:
@@ -43,19 +47,25 @@ def test_level_50_messages(grammar, level_50_messages):
         grammar.parse(message)
 
 
-@pytest.mark.parametrize("grammar", [60, 70, 80, 90, 100, 110, 120, 130, 140, 150], indirect=True)
+@pytest.mark.parametrize(
+    "grammar", [60, 70, 80, 90, 100, 110, 120, 130, 140, 150], indirect=True
+)
 def test_level_60_messages(grammar, level_60_messages):
     for message in level_60_messages:
         grammar.parse(message)
 
 
-@pytest.mark.parametrize("grammar", [70, 80, 90, 100, 110, 120, 130, 140, 150], indirect=True)
+@pytest.mark.parametrize(
+    "grammar", [70, 80, 90, 100, 110, 120, 130, 140, 150], indirect=True
+)
 def test_level_70_messages(grammar, level_70_messages):
     for message in level_70_messages:
         grammar.parse(message)
 
 
-@pytest.mark.parametrize("grammar", [80, 90, 100, 110, 120, 130, 140, 150], indirect=True)
+@pytest.mark.parametrize(
+    "grammar", [80, 90, 100, 110, 120, 130, 140, 150], indirect=True
+)
 def test_level_80_messages(grammar, level_80_messages):
     for message in level_80_messages:
         grammar.parse(message)

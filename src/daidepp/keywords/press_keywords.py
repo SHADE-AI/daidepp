@@ -442,6 +442,7 @@ class POB(_DAIDEObject):
     def __str__(self):
         return f"POB ( {self.why} )"
 
+
 @dataclass
 class UHY(_DAIDEObject):
     press_message: PressMessage
@@ -450,12 +451,14 @@ class UHY(_DAIDEObject):
         # print(f"UHY ( {self.press_message} )")
         return f"UHY ( {self.press_message} )"
 
+
 @dataclass
 class HPY(_DAIDEObject):
     press_message: PressMessage
 
     def __str__(self):
         return f"HPY ( {self.press_message} )"
+
 
 @dataclass
 class ANG(_DAIDEObject):
@@ -464,9 +467,9 @@ class ANG(_DAIDEObject):
     def __str__(self):
         return f"ANG ( {self.press_message} )"
 
+
 @dataclass
 class RFO(_DAIDEObject):
-
     def __str__(self):
         return f"RFO"
 

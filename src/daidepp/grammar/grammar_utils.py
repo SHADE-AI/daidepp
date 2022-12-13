@@ -213,8 +213,8 @@ def create_grammar_from_press_keywords(
     Parameters
     ----------
     keywords : List[PressKeywords]
-        List of press keywords. Although the type hint says List[PressKeywords], 
-        this can be a list of string literals or DAIDEObjects (to avoid circular imports). 
+        List of press keywords. Although the type hint says List[PressKeywords],
+        this can be a list of string literals or DAIDEObjects (to avoid circular imports).
     allow_just_arrangement : bool, optional
          if set to True, the parser accepts strings that are only arrangements, in
          addition to press messages. So, for example, the parser could parse, by default False
