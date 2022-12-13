@@ -64,4 +64,5 @@ Three files should be updated whenever making a PR:
 
 - [`grammar.py`](./src/daidepp/grammar/grammar.py): the machine-readable grammar
 - [`daide_visitor.py`](./src/daidepp/daide_visitor.py): the visitor object to parse a message
+- ['press_keywords.py'](./src/daidepp/keywords/press_keywords.py): DAIDE press keyword objects
 - [The daide markdown specification](./daide-specification.md): the human-readable specification
