@@ -15,7 +15,8 @@ DAIDE parser using [parsimonious](https://github.com/erikrose/parsimonious). Par
 
 ## Use
 
-Using the grammar in `grammar.py`, you can create a parse tree from a DAIDE press message or reply. The nodes of the parse tree can be visited to return something more useful. The visiting rules for each of the nodes of the parse tree are defined in `node_visitor.py`.
+### Basic usage
+Using the grammar and grammar utils in [`grammar`](./src/daidepp/grammar/), you can create a parse tree from a DAIDE press message or reply. The nodes of the parse tree can be visited to return something more useful. The visiting rules for each of the nodes of the parse tree are defined in [`daide_visitor.py`](./src/daidepp/daide_visitor.py).
 
 Example:
 
@@ -31,8 +32,8 @@ PRP ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ( AND ( SLO ( ENG ) ) 
 
 If the DAIDE token is not in the grammar or if the message is malformed, the parser will just thrown an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.
 
-
-In addition, DAIDE strings can be constructed using the classes in `keywords.py`. Each class has type hints that indicate the parameters that should be used.
+### DAIDE string construction with keyword classes
+In addition, DAIDE strings can be constructed using the classes in [`base_keywords.py`](./src/daidepp/keywords/base_keywords.py) and [`press_keywords`](./src/daidepp/keywords/press_keywords.py). Each class has type hints that indicate the parameters that should be used.
 
 Example:
 
@@ -41,12 +42,27 @@ Example:
 >>> str(AND(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG"))))
 `AND ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) )`
  ```
-Each class in `keywords.py` uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout `tests/test_keywords.py`, which provides examples for each class. 
+Each keyword class uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout [`tests/keywords`](./tests/keywords/), which provides examples for each class. 
+
+### Grammar construction with press keywords
+Grammar can also be created using a subset of press keywords. The list of press keywords can be found in ['constants.py'](./src/daidepp/constants.py) under `PressKeywords`.
+
+Example:
+```python3
+>>> from daidepp.grammar.grammar_utils import create_grammar_from_press_keywords
+>>> grammar = create_grammar_from_press_keywords(["PRP", "XDO", "ALY_VSS"]
+>>> grammar.parse("PRP (ALY (ITA TUR) VSS (ENG RUS))")
+>>> grammar.parse("PRP(XDO((ENG FLT EDI) SUP (ENG AMY LVP) MTO CLY))")
+>>> grammar.parse("PRP(PCE (AUS ENG))") # this would fail
+```
+*Note*: Because of the way Parsimonious simplifies grammars, there may be some edge cases where the given list of press keywords does not result in a grammar object with the correct order of keywords (i.e. it may fail to parse even when the message is valid). If this happens, try providing the function with a few more keywords.
+
 
 ## Pull Requests
 
 Three files should be updated whenever making a PR:
 
-- [`grammar.py`](./src/daidepp/grammar.py): the machine-readable grammar
-- [`node_visitor.py`](./src/daidepp/node_visitor.py): the visitor object to parse a message
+- [`grammar.py`](./src/daidepp/grammar/grammar.py): the machine-readable grammar
+- [`daide_visitor.py`](./src/daidepp/daide_visitor.py): the visitor object to parse a message
+- ['press_keywords.py'](./src/daidepp/keywords/press_keywords.py): DAIDE press keyword objects
 - [The daide markdown specification](./daide-specification.md): the human-readable specification
