@@ -45,7 +45,7 @@ Example:
 Each keyword class uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout [`tests/keywords`](./tests/keywords/), which provides examples for each class. 
 
 ### Grammar construction with press keywords
-Grammar can also be created using a subset of press keywords. The list of press keywords can be found in ['constants.py'](./src/daidepp/constants.py) under `PressKeywords`.
+Grammar can also be created using a subset of press keywords. The list of press keywords can be found in [`constants.py`](./src/daidepp/constants.py) under `PressKeywords`.
 
 Example:
 ```python3
@@ -64,5 +64,5 @@ Three files should be updated whenever making a PR:
 
 - [`grammar.py`](./src/daidepp/grammar/grammar.py): the machine-readable grammar
 - [`daide_visitor.py`](./src/daidepp/daide_visitor.py): the visitor object to parse a message
-- ['press_keywords.py'](./src/daidepp/keywords/press_keywords.py): DAIDE press keyword objects
+- [`press_keywords.py`](./src/daidepp/keywords/press_keywords.py): DAIDE press keyword objects
 - [The daide markdown specification](./daide-specification.md): the human-readable specification
