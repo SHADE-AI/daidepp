@@ -2,8 +2,9 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from daidepp.grammar import create_daide_grammar
+from daidepp.grammar.grammar import DAIDELevel
 
-_grammar = create_daide_grammar(130, string_type="all")
+_grammar = create_daide_grammar(DAIDELevel.__args__[-1], string_type="all")
 
 
 @dataclass

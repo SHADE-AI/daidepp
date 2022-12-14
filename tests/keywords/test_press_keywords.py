@@ -578,3 +578,47 @@ def test_WHY(input, expected_output):
 def test_POB(input, expected_output):
     pob = POB(*input)
     assert str(pob) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((PRP(PCE("AUS", "GER")),), "UHY ( PRP ( PCE ( AUS GER ) ) )"),
+    ],
+    # fmt: on
+)
+def test_UHY(input, expected_output):
+    uhy = UHY(*input)
+    assert str(uhy) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((PRP(PCE("AUS", "GER")),), "HPY ( PRP ( PCE ( AUS GER ) ) )"),
+    ],
+    # fmt: on
+)
+def test_HPY(input, expected_output):
+    hpy = HPY(*input)
+    assert str(hpy) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((PRP(PCE("AUS", "GER")),), "ANG ( PRP ( PCE ( AUS GER ) ) )"),
+    ],
+    # fmt: on
+)
+def test_ANG(input, expected_output):
+    ang = ANG(*input)
+    assert str(ang) == expected_output
+
+
+def test_RFO():
+    rfo = RFO()
+    assert str(rfo) == "RFO"
