@@ -8,7 +8,9 @@ from typing import Dict, Tuple
 
 from typing_extensions import Literal
 
-DAIDELevel = Literal[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+DAIDELevel = Literal[
+    0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160
+]
 
 TRAIL_TOKEN = "---"  # any value starting with '---' is meant to be a continuation of that key, not a replacement
 
@@ -178,6 +180,33 @@ LEVEL_130: GrammarDict = {
     "try_tokens": f'{TRAIL_TOKEN}"WHY" / "POB"',
 }
 
+
+# Sending Emotional State
+LEVEL_140: GrammarDict = {
+    "uhy": '"UHY" lpar press_message rpar',
+    "hpy": '"HPY" lpar press_message rpar',
+    "ang": '"ANG" lpar press_message rpar',
+    "reply": f"{TRAIL_TOKEN}hpy / uhy / ang",
+    "try_tokens": f'{TRAIL_TOKEN}"UHY" / "HPY" / "ANG"',
+}
+
+
+# Requesting and Demanding Offer
+LEVEL_150: GrammarDict = {
+    "rfo": '"RFO"',
+    "arrangement": f"{TRAIL_TOKEN}rfo",
+    "try_tokens": f'{TRAIL_TOKEN}"RFO"',
+}
+
+# Utilities
+LEVEL_160: GrammarDict = {
+    "float": 'ws*~"[-+]?((\d*\.\d+)|(\d+\.?))([Ee][+-]?\d+)?"',
+    "ulb": '"ULB" lpar power float rpar',
+    "uub": '"UUB" lpar power float rpar',
+    "press_message": f"{TRAIL_TOKEN}ulb / uub",
+    "try_tokens": f'{TRAIL_TOKEN}"ULB" / "UUB"',
+}
+
 LEVELS: Tuple[GrammarDict] = (
     LEVEL_0,
     LEVEL_10,
@@ -193,6 +222,9 @@ LEVELS: Tuple[GrammarDict] = (
     LEVEL_110,
     LEVEL_120,
     LEVEL_130,
+    LEVEL_140,
+    LEVEL_150,
+    LEVEL_160,
 )
 
 GrammarDict = Dict[str, str]

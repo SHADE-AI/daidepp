@@ -1,6 +1,8 @@
 import pytest
+from typing_extensions import get_args
 
 from daidepp.grammar import create_daide_grammar
+from daidepp.grammar.grammar import DAIDELevel
 
 
 @pytest.fixture(scope="session")
@@ -15,7 +17,7 @@ def sample_daide_messages():
 def _grammar():
     return {
         level: create_daide_grammar(level=level, allow_just_arrangement=True)
-        for level in range(10, 140, 10)
+        for level in range(10, get_args(DAIDELevel)[-1] + 10, 10)
     }
 
 
@@ -220,6 +222,29 @@ def level_130_messages():
         "IDK (PRP(XDO((ENG FLT EDI) SUP (ENG AMY LVP) MTO CLY)))",
         "IDK (INS (PCE (ITA TUR)))",
         "IDK (SUG (PCE (ENG FRA)))",
+    ]
+
+
+@pytest.fixture
+def level_140_messages():
+    return [
+        "UHY (PRP (ALY (ITA TUR) VSS (ENG RUS)))",
+        "UHY ( PRP ( PCE ( AUS GER ) ) )",
+        "HPY (PRP (ALY (ITA TUR) VSS (ENG RUS)))",
+        "ANG (PRP (ALY (ITA TUR) VSS (ENG RUS)))",
+    ]
+
+
+@pytest.fixture
+def level_150_messages():
+    return ["RFO"]
+
+
+@pytest.fixture
+def level_160_messages():
+    return [
+        "ULB (AUS 0.9)",
+        "UUB (GER 0.1)",
     ]
 
 

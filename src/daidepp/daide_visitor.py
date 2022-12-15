@@ -222,7 +222,7 @@ class DAIDEVisitor(NodeVisitor):
         for par_arr in par_arrangements:
             _, arr, _ = par_arr
             arrangements.append(arr)
-        return ORR(arrangements)
+        return ORR(*arrangements)
 
     def visit_dmz(self, node, visited_children) -> DMZ:
         _, _, power, ws_powers, _, _, province, ws_provinces, _ = visited_children
@@ -471,6 +471,33 @@ class DAIDEVisitor(NodeVisitor):
 
     def visit_daide_string(self, node, visited_children) -> Any:
         return visited_children[0]
+
+    def visit_uhy(self, node, visited_children) -> UHY:
+        _, _, press_message, _ = visited_children
+        return UHY(press_message)
+
+    def visit_hpy(self, node, visited_children) -> HPY:
+        _, _, press_message, _ = visited_children
+        return HPY(press_message)
+
+    def visit_ang(self, node, visited_children) -> ANG:
+        _, _, press_message, _ = visited_children
+
+        return ANG(press_message)
+
+    def visit_rfo(self, node, visited_children) -> RFO:
+        return RFO()
+
+    def visit_float(self, node, visited_children) -> float:
+        return float(visited_children[1].text)
+
+    def visit_ulb(self, node, visited_children) -> ULB:
+        _, _, power, utility, _ = visited_children
+        return ULB(power, utility)
+
+    def visit_uub(self, node, visited_children) -> UUB:
+        _, _, power, utility, _ = visited_children
+        return UUB(power, utility)
 
 
 daide_visitor = DAIDEVisitor()

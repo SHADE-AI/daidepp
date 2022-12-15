@@ -578,3 +578,77 @@ def test_WHY(input, expected_output):
 def test_POB(input, expected_output):
     pob = POB(*input)
     assert str(pob) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((PRP(PCE("AUS", "GER")),), "UHY ( PRP ( PCE ( AUS GER ) ) )"),
+    ],
+    # fmt: on
+)
+def test_UHY(input, expected_output):
+    uhy = UHY(*input)
+    assert str(uhy) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((PRP(PCE("AUS", "GER")),), "HPY ( PRP ( PCE ( AUS GER ) ) )"),
+    ],
+    # fmt: on
+)
+def test_HPY(input, expected_output):
+    hpy = HPY(*input)
+    assert str(hpy) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        ((PRP(PCE("AUS", "GER")),), "ANG ( PRP ( PCE ( AUS GER ) ) )"),
+    ],
+    # fmt: on
+)
+def test_ANG(input, expected_output):
+    ang = ANG(*input)
+    assert str(ang) == expected_output
+
+
+def test_RFO():
+    rfo = RFO()
+    assert str(rfo) == "RFO"
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        (("GER", .9), "ULB ( GER 0.9 )"),
+        (("GER", 1.9), "ULB ( GER 1.9 )"),
+        (("AUS", 0.2), "ULB ( AUS 0.2 )"),
+    ],
+    # fmt: on
+)
+def test_ULB(input, expected_output):
+    ulb = ULB(*input)
+    assert str(ulb) == expected_output
+
+
+@pytest.mark.parametrize(
+    # fmt: off
+    ["input", "expected_output"],
+    [
+        (("GER", .9), "UUB ( GER 0.9 )"),
+        (("GER", 1.9), "UUB ( GER 1.9 )"),
+        (("AUS", 0.2), "UUB ( AUS 0.2 )"),
+    ],
+    # fmt: on
+)
+def test_UUB(input, expected_output):
+    uub = UUB(*input)
+    assert str(uub) == expected_output

@@ -21,6 +21,9 @@ The syntax is split into a number of levels. Each level completely includes all 
 [Level 110: Puppets and Favours](#level-110-puppets-and-favours)  
 [Level 120: Forwarding Press](#level-120-forwarding-press)  
 [Level 130: Explanations](#level-130-explanations)  
+[Level 140: Sending Emotional State](#level-140-sending-emotional-state)  
+[Level 150: Requesting and Demanding Offer](#level-150-requesting-and-demanding-offer)  
+[Level 160: Utility Bounds](#level-160-utility-bounds)  
 
 All Bots must implement the commands in all levels – they should not assume that they will never be playing in a game that is above the level they are designed for. Where a Bot receives a message that is above its intended level, there is a response it can use to indicate this.
 
@@ -890,6 +893,76 @@ I don't know whether I'll accept that. Throw in something else to make it worthw
 **reply = IDK (SUG (arrangement))**
 
 I don't really know whether I desire that.
+
+## Level 140: Sending Emotional State
+
+In Level 140, we add the ability to respond to a message by expressing the emotional state upon receiving the message. One of following can be sent:
+
+> **reply = UHY(press_message)**
+
+Unhappy with the message
+
+<!-- End of page 15 -->
+
+> **reply = HPY(press_message)**
+
+Happy with the message
+
+> **reply = ANG(press_message)**
+
+Angry with the message
+
+The above responses should only be sent as a response to a received message. **press_message** should be identical to the received message.
+
+## Level 150: Requesting and Demanding Offer
+
+In Level 150, we add the ability to request or demand for an offer.
+
+### (i) Requesting an offer
+
+From Level 10, a power can propose an arrangement with **press_message**
+
+> **press_message = PRP(arrangement)**
+
+To request an offer:
+
+> **arrangement = ROF**
+
+Thus, to send a request for an offer to a power or multiple powers:
+
+> **SND(power power…)(PRP(ROF))**
+
+Here, the list of powers **(power power ...)** who will receive the request.
+
+Example, **SND (GER AUS) (PRP(ROF))** , if any power is requesting Germany and Russia for an offer
+
+
+### (i) Demanding an offer
+
+Follwing level 60, a power can demand or Insist on an offer with **INS** token such as the following:
+
+> **press_message = INS(ROF)**
+
+Example,**SND (GER AUS) (INS(ROF))"** , if any power insisting or demanding Germany and Austria for an offer
+## Level 160: Utility Bounds
+
+Level 160 adds the ability to specify a utility lower or upper bound for a power. This is intended for use with threats to show how much cooperation benefits the receiver over the threatened punishment.
+
+> **arrangement = ULB (power float)**
+
+Utility lower bound of float for power.
+
+> **arrangement = UUB (power float)**
+
+Utility upper bound of float for power.
+
+Float is a floating point number in a format typically used by programming languages. It is currently parsed with the following regular expression:
+[-+]?((\d*\\.\d+)|(\d+\\.?))([Ee][+-]?\d+)?
+
+Example message sent from England to Germany:
+> IFF (XDO((GER AMY BER) MTO MUN)) THN (PRP (ULB (GER 0.8))) ELS (INS (UUB (GER 0.1)))
+
+This is a threat from England to Germany that says if you move BER to MUN then I will move to give you at least 0.8 utility, but if you do anything else I will move to prevent you from getting more than 0.1 utility.
 
 ## Level 8000: Free Text Press
 
