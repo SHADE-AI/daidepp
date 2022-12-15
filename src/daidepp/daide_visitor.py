@@ -195,7 +195,7 @@ class DAIDEVisitor(NodeVisitor):
         return SLO(power)
 
     def visit_not(self, node, visited_children) -> NOT:
-        _, _, arrangement_qry, _ = visited_children
+        _, _, arrangement_qry, _ = visited_children[0]
         return NOT(arrangement_qry)
 
     def visit_nar(self, node, visited_children) -> NAR:
