@@ -195,7 +195,7 @@ class DAIDEVisitor(NodeVisitor):
         return SLO(power)
 
     def visit_not(self, node, visited_children) -> NOT:
-        _, _, arrangement_qry, _ = visited_children[0]
+        _, _, arrangement_qry, _ = visited_children
         return NOT(arrangement_qry)
 
     def visit_nar(self, node, visited_children) -> NAR:
@@ -222,7 +222,7 @@ class DAIDEVisitor(NodeVisitor):
         for par_arr in par_arrangements:
             _, arr, _ = par_arr
             arrangements.append(arr)
-        return ORR(arrangements)
+        return ORR(*arrangements)
 
     def visit_dmz(self, node, visited_children) -> DMZ:
         _, _, power, ws_powers, _, _, province, ws_provinces, _ = visited_children
