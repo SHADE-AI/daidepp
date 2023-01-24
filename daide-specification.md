@@ -959,10 +959,17 @@ Utility upper bound of float for power.
 Float is a floating point number in a format typically used by programming languages. It is currently parsed with the following regular expression:
 [-+]?((\d*\\.\d+)|(\d+\\.?))([Ee][+-]?\d+)?
 
+Strategy Robot Note: We intend to use INS to indicate active punishment or reward (changing our move to enfore the utility bound). In contrast, PRP indicates that we predict the utility bound is correct without our active enforcement.
+
 Example message sent from England to Germany:
 > IFF (XDO((GER AMY BER) MTO MUN)) THN (PRP (ULB (GER 0.8))) ELS (INS (UUB (GER 0.1)))
 
-This is a threat from England to Germany that says if you move BER to MUN then I will move to give you at least 0.8 utility, but if you do anything else I will move to prevent you from getting more than 0.1 utility.
+This is a threat from England to Germany that says if you move BER to MUN then I predict you will get at least 0.8 utility, but if you do anything else I will move to prevent you from getting more than 0.1 utility. In this case we are actively punishing Germany.
+
+Example message sent from England to Germany:
+> IFF (XDO((GER AMY BER) MTO MUN)) THN (PRP (ULB (GER 0.8))) ELS (PRP (UUB (GER 0.3)))
+
+This is a threat from England to Germany that says if you move BER to MUN then I predict you will get at least 0.8 utility, but if you do anything else I will predict you will get at most 0.3 utility. In this case we are not actively punishing or rewarding, we are just sharing the results of our game theory analysis.
 
 ## Level 8000: Free Text Press
 

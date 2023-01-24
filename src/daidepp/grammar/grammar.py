@@ -203,7 +203,7 @@ LEVEL_160: GrammarDict = {
     "float": 'ws*~"[-+]?((\d*\.\d+)|(\d+\.?))([Ee][+-]?\d+)?"',
     "ulb": '"ULB" lpar power float rpar',
     "uub": '"UUB" lpar power float rpar',
-    "press_message": f"{TRAIL_TOKEN}ulb / uub",
+    "arrangement": f"{TRAIL_TOKEN}ulb / uub",
     "try_tokens": f'{TRAIL_TOKEN}"ULB" / "UUB"',
 }
 
