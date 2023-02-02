@@ -485,8 +485,8 @@ class DAIDEVisitor(NodeVisitor):
 
         return ANG(press_message)
 
-    def visit_rfo(self, node, visited_children) -> RFO:
-        return RFO()
+    def visit_rof(self, node, visited_children) -> ROF:
+        return ROF()
 
     def visit_float(self, node, visited_children) -> float:
         return float(visited_children[1].text)

@@ -468,9 +468,9 @@ class ANG(_DAIDEObject):
 
 
 @dataclass
-class RFO(_DAIDEObject):
+class ROF(_DAIDEObject):
     def __str__(self):
-        return f"RFO"
+        return f"ROF"
 
 
 @dataclass
@@ -512,7 +512,7 @@ Arrangement = Union[
     SND,
     FWD,
     BCC,
-    RFO,
+    ROF,
 ]
 
 AnyDAIDEToken = Union[
@@ -569,7 +569,7 @@ AnyDAIDEToken = Union[
     UHY,
     HPY,
     ANG,
-    RFO,
+    ROF,
     ULB,
     UUB,
 ]
