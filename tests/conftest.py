@@ -67,6 +67,7 @@ def level_20_messages():
         "XDO (AUS WVE)",
         "DMZ (AUS) (LVP)",
         "DMZ (AUS GER) (LVP CLY)",
+        "DMZ ( GER RUS ) ( BLA SEV (STP NCS) )",
     ]
 
 

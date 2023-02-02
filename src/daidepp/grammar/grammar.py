@@ -73,10 +73,11 @@ LEVEL_10: GrammarDict = {
 # prov_no_coast: all province tokens without coasts
 # province: all provinces including coasts
 
+# "dmz": '"DMZ" lpar power (ws power)* rpar lpar prov_no_coast (ws prov_no_coast)* rpar',
 # Order Proposals
 LEVEL_20: GrammarDict = {
     "xdo": '"XDO" lpar order rpar',
-    "dmz": '"DMZ" lpar power (ws power)* rpar lpar prov_no_coast (ws prov_no_coast)* rpar',
+    "dmz": '"DMZ" lpar power (ws power)* rpar lpar province (ws province)* rpar',
     "arrangement": f"{TRAIL_TOKEN}xdo / dmz",
     "try_tokens": f'{TRAIL_TOKEN}"XDO" / "DMZ"',
 }
