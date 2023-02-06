@@ -418,9 +418,6 @@ class DAIDEVisitor(NodeVisitor):
     def visit_power(self, node, visited_children) -> Power:
         return node.text
 
-    def visit_prov_coast(self, node, visited_children) -> ProvinceCoast:
-        return node.text
-
     def visit_prov_no_coast(self, node, visited_children) -> ProvinceNoCoast:
         return Location(province=node.text)
 
