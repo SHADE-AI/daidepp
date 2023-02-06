@@ -238,7 +238,7 @@ def level_140_messages():
 
 @pytest.fixture
 def level_150_messages():
-    return ["RFO"]
+    return ["ROF"]
 
 
 @pytest.fixture

@@ -37,7 +37,7 @@ LEVEL_0: GrammarDict = {
     "coast": '"NCS" / "ECS" / "SCS" / "WCS"',
     "prov_land_sea": '"ALB" / "ANK" / "APU" / "ARM" / "BEL" / "BER" / "BRE" / "BUL" / "CLY" / "CON" / "DEN" / "EDI" / "FIN" / "GAS" / "GRE" / "HOL" / "KIE" / "LON" / "LVN" / "LVP" / "MAR" / "NAF" / "NAP" / "NWY" / "PIC" / "PIE" / "POR" / "PRU" / "ROM" / "RUM" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "SYR" / "TRI" / "TUN" / "TUS" / "VEN" / "YOR" / "WAL"',
     "prov_landlock": '"BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" ',
-    "prov_sea": '"ADR" / "AEG" / "BAL" / "BAR" / "BLA" / "GOB" / "EAS" / "ECH" / "HEL" / "ION" / "IRI" / "LYO" / "MAO" / "NAO" / "NTH" / "NWG" / "SKA" / "TYS" / "WES"',
+    "prov_sea": '"ADR" / "AEG" / "BAL" / "BAR" / "BLA" / "GOB" / "EAS" / "ECH" / "HEL" / "ION" / "IRI" / "GOL" / "MAO" / "NAO" / "NTH" / "NWG" / "SKA" / "TYS" / "WES"',
     "supply_center": '"ANK" / "BEL" / "BER" / "BRE" / "BUD" / "BUL" / "CON" / "DEN" / "EDI" / "GRE" / "HOL" / "KIE" / "LON" / "LVP" / "MAR" / "MOS" / "MUN" / "NAP" / "NWY" / "PAR" / "POR" / "ROM" / "RUM" / "SER" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "TRI" / "TUN" / "VEN" / "VIE" / "WAR"',
     "turn": 'season ws ~"\d{4}"',
     "season": '"SPR" / "SUM" / "FAL" / "AUT" / "WIN"',
@@ -194,9 +194,9 @@ LEVEL_140: GrammarDict = {
 
 # Requesting and Demanding Offer
 LEVEL_150: GrammarDict = {
-    "rfo": '"RFO"',
-    "arrangement": f"{TRAIL_TOKEN}rfo",
-    "try_tokens": f'{TRAIL_TOKEN}"RFO"',
+    "rof": '"ROF"',
+    "arrangement": f"{TRAIL_TOKEN}rof",
+    "try_tokens": f'{TRAIL_TOKEN}"ROF"',
 }
 
 # Utilities
