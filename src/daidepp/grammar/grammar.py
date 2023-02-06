@@ -193,9 +193,9 @@ LEVEL_140: GrammarDict = {
 
 # Requesting and Demanding Offer
 LEVEL_150: GrammarDict = {
-    "rfo": '"RFO"',
-    "arrangement": f"{TRAIL_TOKEN}rfo",
-    "try_tokens": f'{TRAIL_TOKEN}"RFO"',
+    "rof": '"ROF"',
+    "arrangement": f"{TRAIL_TOKEN}rof",
+    "try_tokens": f'{TRAIL_TOKEN}"ROF"',
 }
 
 # Utilities

@@ -619,9 +619,9 @@ def test_ANG(input, expected_output):
     assert str(ang) == expected_output
 
 
-def test_RFO():
-    rfo = RFO()
-    assert str(rfo) == "RFO"
+def test_ROF():
+    rof = ROF()
+    assert str(rof) == "ROF"
 
 
 @pytest.mark.parametrize(
