@@ -12,9 +12,5 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.7'
-      - run: |
-          MSG="${{ github.event.head_commit.message }}"
-          echo "commit_msg=$MSG" >> $GITHUB_OUTPUT
-        id: get_commit_msg
-      - run: python test.py {{ steps.get_commit_msg.outputs.commit_msg }}
+      - run: python test.py {{ github.event.head_commit.message }}
       - uses: stefanzweifel/git-auto-commit-action@v4
