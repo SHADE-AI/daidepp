@@ -14,6 +14,7 @@ jobs:
           python-version: '3.7'
       - run: |
           MSG="${{ github.event.head_commit.message }}"
-          echo $MSG >> test.txt
-      - run: python test.py
+          echo "commit_msg=$MSG" >> $GITHUB_OUTPUT
+        id: get_commit_msg
+      - run: python test.py {{ steps.get_commit_msg.outputs.commit_msg }}
       - uses: stefanzweifel/git-auto-commit-action@v4
