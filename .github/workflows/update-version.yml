@@ -12,5 +12,5 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.7'
-      - run: python test.py {{ github.event.head_commit.message }}
+      - run: python test.py foobarbaz # {{ github.event.head_commit.message }}
       - uses: stefanzweifel/git-auto-commit-action@v4
