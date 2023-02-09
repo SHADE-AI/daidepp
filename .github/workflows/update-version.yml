@@ -5,12 +5,14 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  update_version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: bpshaver/bump-semantic-version
         with:
-          python-version: '3.7'
-      - run: python test.py foobarbaz # {{ github.event.head_commit.message }}
-      - uses: stefanzweifel/git-auto-commit-action@v4
+          file: setup.cfg
+          # We could always bump major, minor, or patch, or we could pass a value to
+          # this argument ourselves if we have some better way of inferring which
+          # version to bump
+          version: infer 
+
