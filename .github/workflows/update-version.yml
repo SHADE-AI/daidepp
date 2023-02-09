@@ -8,7 +8,7 @@ jobs:
   update_version:
     runs-on: ubuntu-latest
     steps:
-      - uses: bpshaver/bump-semantic-version@v0.0.4
+      - uses: bpshaver/bump-semantic-version@v0.0.6
         with:
           file: setup.cfg
           # We could always bump major, minor, or patch, or we could pass a value to
