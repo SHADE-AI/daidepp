@@ -30,7 +30,7 @@ Example:
 PRP ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ) )
 ```
 
-If the DAIDE token is not in the grammar or if the message is malformed, the parser will just thrown an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.
+If the DAIDE token is not in the grammar or if the message is malformed, the parser will just throw an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.
 
 ### DAIDE string construction with keyword classes
 In addition, DAIDE strings can be constructed using the classes in [`base_keywords.py`](./src/daidepp/keywords/base_keywords.py) and [`press_keywords`](./src/daidepp/keywords/press_keywords.py). Each class has type hints that indicate the parameters that should be used.
