@@ -42,7 +42,7 @@ Example:
 >>> str(AND(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG"))))
 `AND ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) )`
  ```
-Each keyword class uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout [`tests/keywords`](./tests/keywords/), which provides examples for each class. 
+Each keyword class uses different parameters for instantiation, so it is recommended to carefully follow the type hints or check out [`tests/keywords`](./tests/keywords/), which provides examples for each class. 
 
 ### Grammar construction with press keywords
 Grammar can also be created using a subset of press keywords. The list of press keywords can be found in [`constants.py`](./src/daidepp/constants.py) under `PressKeywords`.
