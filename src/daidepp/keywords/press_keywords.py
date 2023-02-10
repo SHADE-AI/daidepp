@@ -518,7 +518,19 @@ class UUB:
 
 Reply = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, UHY, HPY, ANG]
 PressMessage = Union[
-    PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF,
+    PRP,
+    CCL,
+    FCT,
+    TRY,
+    FRM,
+    THK,
+    INS,
+    QRY,
+    SUG,
+    HOW,
+    WHT,
+    EXP,
+    IFF,
 ]
 Message = Union[PressMessage, Reply]
 Arrangement = Union[
@@ -542,7 +554,7 @@ Arrangement = Union[
     ROF,
 ]
 
-AnyDAIDEToken = Union[
+AnyDAIDEToken = Literal[
     RTO,
     DSB,
     BLD,
