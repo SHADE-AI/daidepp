@@ -493,9 +493,9 @@ class ANG(_DAIDEObject):
 
 
 @dataclass
-class RFO(_DAIDEObject):
+class ROF(_DAIDEObject):
     def __str__(self):
-        return f"RFO"
+        return f"ROF"
 
 
 @dataclass
@@ -518,7 +518,7 @@ class UUB:
 
 Reply = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, UHY, HPY, ANG]
 PressMessage = Union[
-    PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF, ULB, UUB
+    PRP, CCL, FCT, TRY, FRM, THK, INS, QRY, SUG, HOW, WHT, EXP, IFF,
 ]
 Message = Union[PressMessage, Reply]
 Arrangement = Union[
@@ -537,7 +537,9 @@ Arrangement = Union[
     SND,
     FWD,
     BCC,
-    RFO,
+    ULB,
+    UUB,
+    ROF,
 ]
 
 AnyDAIDEToken = Union[
@@ -594,7 +596,7 @@ AnyDAIDEToken = Union[
     UHY,
     HPY,
     ANG,
-    RFO,
+    ROF,
     ULB,
     UUB,
 ]

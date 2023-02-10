@@ -67,6 +67,7 @@ def level_20_messages():
         "XDO (AUS WVE)",
         "DMZ (AUS) (LVP)",
         "DMZ (AUS GER) (LVP CLY)",
+        "DMZ ( GER RUS ) ( BLA SEV (STP NCS) )",
     ]
 
 
@@ -237,7 +238,7 @@ def level_140_messages():
 
 @pytest.fixture
 def level_150_messages():
-    return ["RFO"]
+    return ["ROF"]
 
 
 @pytest.fixture

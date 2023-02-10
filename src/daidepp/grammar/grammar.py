@@ -73,10 +73,11 @@ LEVEL_10: GrammarDict = {
 # prov_no_coast: all province tokens without coasts
 # province: all provinces including coasts
 
+# "dmz": '"DMZ" lpar power (ws power)* rpar lpar prov_no_coast (ws prov_no_coast)* rpar',
 # Order Proposals
 LEVEL_20: GrammarDict = {
     "xdo": '"XDO" lpar order rpar',
-    "dmz": '"DMZ" lpar power (ws power)* rpar lpar prov_no_coast (ws prov_no_coast)* rpar',
+    "dmz": '"DMZ" lpar power (ws power)* rpar lpar province (ws province)* rpar',
     "arrangement": f"{TRAIL_TOKEN}xdo / dmz",
     "try_tokens": f'{TRAIL_TOKEN}"XDO" / "DMZ"',
 }
@@ -193,9 +194,9 @@ LEVEL_140: GrammarDict = {
 
 # Requesting and Demanding Offer
 LEVEL_150: GrammarDict = {
-    "rfo": '"RFO"',
-    "arrangement": f"{TRAIL_TOKEN}rfo",
-    "try_tokens": f'{TRAIL_TOKEN}"RFO"',
+    "rof": '"ROF"',
+    "arrangement": f"{TRAIL_TOKEN}rof",
+    "try_tokens": f'{TRAIL_TOKEN}"ROF"',
 }
 
 # Utilities
@@ -203,7 +204,7 @@ LEVEL_160: GrammarDict = {
     "float": 'ws*~"[-+]?((\d*\.\d+)|(\d+\.?))([Ee][+-]?\d+)?"',
     "ulb": '"ULB" lpar power float rpar',
     "uub": '"UUB" lpar power float rpar',
-    "press_message": f"{TRAIL_TOKEN}ulb / uub",
+    "arrangement": f"{TRAIL_TOKEN}ulb / uub",
     "try_tokens": f'{TRAIL_TOKEN}"ULB" / "UUB"',
 }
 
