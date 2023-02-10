@@ -36,7 +36,7 @@ jobs:
           patch_version=$(
             cat setup.cfg | # Get it from the setup.cfg, not pip
             grep ^version |
-            awk '{ print $3 }'
+            awk '{ print $3 }' |
             awk 'BEGIN { FS = "." } ; { print $3 }' # Get patch version
           )
           echo "version=$patch_version" >> $GITHUB_OUTPUT
