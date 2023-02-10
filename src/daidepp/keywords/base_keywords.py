@@ -42,8 +42,8 @@ class Unit(_DAIDEObject):
 
     def __post_init__(self):
         if isinstance(self.location, str):
-            assert self.location in _prov_no_coast
             self.location = Location(province=self.location)
+        super().__post_init__()
 
     def __str__(self):
         return f"{self.power} {self.unit_type} {self.location}"
@@ -71,7 +71,7 @@ class MTO(_DAIDEObject):
 
 
 @dataclass
-class SUP:
+class SUP(_DAIDEObject):
     supporting_unit: Unit
     supported_unit: Unit
     province_no_coast: Optional[ProvinceNoCoast] = None
@@ -104,15 +104,15 @@ class SUP:
 
 
 @dataclass
-class CVY:
+class CVY(_DAIDEObject):
     convoying_unit: Unit
     convoyed_unit: Unit
     province: Location
 
     def __post_init__(self):
         if isinstance(self.province, str):
-            assert self.province in _prov_no_coast
             self.province = Location(province=self.province)
+        super().__post_init__()
 
     def __str__(self):
         return f"( {self.convoying_unit} ) CVY ( {self.convoyed_unit} ) CTO {self.province.province}"
