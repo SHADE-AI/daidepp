@@ -69,13 +69,13 @@ ProvinceSea = Literal[
     "BAL",
     "BAR",
     "BLA",
-    "BOT",
+    "GOB",
     "EAS",
-    "ENG",
+    "ECH",
     "HEL",
     "ION",
     "IRI",
-    "LYO",
+    "GOL",
     "MAO",
     "NAO",
     "NTH",
@@ -87,6 +87,7 @@ ProvinceSea = Literal[
 ProvinceCoast = Literal[
     "STP NCS", "STP SCS", "SPA NCS", "SPA SCS", "BUL ECS", "BUL SCS"
 ]
+Coast = Literal["NCS", "ECS", "SCS"]
 Province = Literal[ProvinceLandSea, ProvinceLandlock, ProvinceSea, ProvinceCoast]
 ProvinceNoCoast = Literal[ProvinceLandSea, ProvinceLandlock, ProvinceSea]
 
