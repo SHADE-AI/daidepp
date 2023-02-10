@@ -1,0 +1,54 @@
+name: Update Version
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  update_version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2.11.1
+        id: filter
+        with:
+          filters: |
+            src:
+              - 'src/**/*.*'
+            pyproject:
+              - 'pyproject.toml'
+            setup:
+              - 'setup.cfg'
+      - uses: bpshaver/bump-semantic-version@v0.0.8
+        if: |
+          ${{ steps.filter.outputs.src == 'true' || 
+              steps.filter.outputs.pyproject == 'true' || 
+              steps.filter.outputs.setup == 'true' }}
+        with:
+          file: setup.cfg
+          # We could always bump major, minor, or patch, or we could pass a value to
+          # this argument ourselves if we have some better way of inferring which
+          # version to bump
+          version: infer 
+      - name: save_patch_version
+        run: |
+          patch_version=$(
+            cat setup.cfg | # Get it from the setup.cfg, not pip
+            grep ^version |
+            awk '{ print $3 }'
+            awk 'BEGIN { FS = "." } ; { print $3 }' # Get patch version
+          )
+          echo "version=$patch_version" >> $GITHUB_OUTPUT
+      - name: make_tag
+        if: |
+          ${{ steps.save_patch_version.outputs.version == '0' }}
+        run: |
+          version=$(
+            cat setup.cfg |
+            grep ^version |
+            awk '{ print $3 }'
+          )
+          git tag v$version
+          git push --tags
+
