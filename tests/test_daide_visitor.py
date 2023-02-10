@@ -2,9 +2,9 @@ from typing import List
 
 import pytest
 
-from daidepp.daide_visitor import daide_visitor
 from daidepp.grammar import create_daide_grammar
 from daidepp.keywords import *
+from daidepp.visitor import daide_visitor
 
 grammar = create_daide_grammar(level=130, string_type="all")
 
