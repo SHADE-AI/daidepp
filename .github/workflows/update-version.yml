@@ -34,9 +34,7 @@ jobs:
       - name: save_patch_version
         run: |
           patch_version=$(
-            cat setup.cfg | # Get it from the setup.cfg, not pip
-            grep ^version |
-            awk '{ print $3 }' |
+            awk '/^version/ { print $3 }' setup.cfg |
             awk 'BEGIN { FS = "." } ; { print $3 }' # Get patch version
           )
           echo "version=$patch_version" >> $GITHUB_OUTPUT
@@ -45,9 +43,7 @@ jobs:
           ${{ steps.save_patch_version.outputs.version == '0' }}
         run: |
           version=$(
-            cat setup.cfg |
-            grep ^version |
-            awk '{ print $3 }'
+            awk '/^version/ { print $3 }' setup.cfg
           )
           git tag v$version
           git push --tags
