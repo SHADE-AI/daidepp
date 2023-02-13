@@ -12,3 +12,4 @@ except ImportError:
     from importlib_metadata import version
 
 __version__ = version("daidepp")
+__ben__ = 'was here'
