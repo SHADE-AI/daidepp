@@ -31,21 +31,22 @@ jobs:
           # this argument ourselves if we have some better way of inferring which
           # version to bump
           version: infer 
-          push_options: '--force'
-      - name: save_patch_version
-        run: |
-          patch_version=$(
-            awk '/^version/ { print $3 }' setup.cfg |
-            awk 'BEGIN { FS = "." } ; { print $3 }' # Get patch version
-          )
-          echo "version=$patch_version" >> $GITHUB_OUTPUT
       - name: make_tag
         if: |
-          ${{ steps.save_patch_version.outputs.version == '0' }}
+          ${{ steps.filter.outputs.src == 'true' || 
+              steps.filter.outputs.pyproject == 'true' || 
+              steps.filter.outputs.setup == 'true' }}
         run: |
           version=$(
             awk '/^version/ { print $3 }' setup.cfg
           )
-          git tag v$version
-          git push --tags
+          patch=$(
+            echo $version | 
+            awk 'BEGIN { FS = "." }; { print $3 }'
+          }
+          if [ $patch == 0 ]
+          then
+            git tag v$version
+            git push --tags
+          fi
 
