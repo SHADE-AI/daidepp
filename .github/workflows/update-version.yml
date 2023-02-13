@@ -31,7 +31,6 @@ jobs:
           # this argument ourselves if we have some better way of inferring which
           # version to bump
           version: infer 
-          push_options: '--force'
       - name: save_patch_version
         run: |
           patch_version=$(
