@@ -20,7 +20,7 @@ jobs:
               - 'pyproject.toml'
             setup:
               - 'setup.cfg'
-      - uses: bpshaver/bump-semantic-version@v0.0.8
+      - uses: bpshaver/bump-semantic-version@v0.0.10
         if: |
           ${{ steps.filter.outputs.src == 'true' || 
               steps.filter.outputs.pyproject == 'true' || 
@@ -31,6 +31,7 @@ jobs:
           # this argument ourselves if we have some better way of inferring which
           # version to bump
           version: infer 
+          push_options: '--force'
       - name: save_patch_version
         run: |
           patch_version=$(
