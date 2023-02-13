@@ -43,7 +43,7 @@ jobs:
           patch=$(
             echo $version | 
             awk 'BEGIN { FS = "." }; { print $3 }'
-          }
+          )
           if [ $patch == 0 ]
           then
             git tag v$version
