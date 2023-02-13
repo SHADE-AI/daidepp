@@ -2,11 +2,18 @@ import logging
 from typing import Any
 
 from parsimonious.nodes import Node, NodeVisitor
+from typing_extensions import get_args
 
-from daidepp.keywords import *
+from daidepp.constants import ProvinceNoCoast
+from daidepp.keywords.base_keywords import *
+from daidepp.keywords.press_keywords import *
 
 logger = logging.getLogger(__file__)
 logger.addHandler(logging.StreamHandler())
+
+__all__ = ["DAIDEVisitor", "daide_visitor"]
+
+_prov_no_coast = get_args(ProvinceNoCoast)
 
 
 class DAIDEVisitor(NodeVisitor):
@@ -418,7 +425,7 @@ class DAIDEVisitor(NodeVisitor):
     def visit_power(self, node, visited_children) -> Power:
         return node.text
 
-    def visit_prov_no_coast(self, node, visited_children) -> ProvinceNoCoast:
+    def visit_prov_no_coast(self, node, visited_children) -> Location:
         return Location(province=node.text)
 
     def visit_prov_sea(self, node, visited_children) -> ProvinceSea:
@@ -435,7 +442,14 @@ class DAIDEVisitor(NodeVisitor):
         return node.text
 
     def visit_province(self, node, visited_children) -> Location:
-        return visited_children[0]
+        if isinstance(visited_children[0], str):
+            return Location(province=visited_children[0])
+        elif isinstance(visited_children[0], Location):
+            return visited_children[0]
+        else:
+            raise ValueError(
+                f"Cannot execute for child of type {type(visited_children[0])}"
+            )
 
     def visit_prov_landlock(self, node, visited_children) -> Location:
         return Location(province=node.text)

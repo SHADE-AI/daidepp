@@ -19,6 +19,6 @@ class _DAIDEObject(ABC):
         try:
             _grammar.parse(str(self))
         except Exception as e:
-            raise Exception(
+            raise ValueError(
                 f"Incorrect values passed, object is not valid DAIDE. Received '{str(self)}'"
             )

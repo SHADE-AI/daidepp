@@ -57,12 +57,38 @@ def test_MTO(input, expected_output):
     [
         ((Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL"), "( AUS FLT ALB ) SUP ( ENG AMY ANK ) MTO BUL"),
         ((Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY"), "( FRA FLT APU ) SUP ( GER AMY ARM ) MTO CLY"),
+        ((Unit("FRA", "FLT", Location("APU")), Unit("GER", "AMY", Location("ARM")), "CLY"), "( FRA FLT APU ) SUP ( GER AMY ARM ) MTO CLY"),
+        ((Unit("AUS", "FLT", Location("ALB")), Unit("ENG", "AMY", Location("ANK")), "BUL"), "( AUS FLT ALB ) SUP ( ENG AMY ANK ) MTO BUL")
     ],
     # fmt: on
 )
 def test_SUP(input, expected_output):
     sup = SUP(*input)
     assert str(sup) == expected_output
+
+
+@pytest.mark.parametrize(
+    ["supporting_unit", "supported_unit", "province_no_coast"],
+    [
+        (
+            Unit("AUS", "FLT", Location("ALB")),
+            Unit("ENG", "AMY", Location("ANK")),
+            "BUL",
+        ),
+        (
+            Unit("AUS", "FLT", Location("ALB")),
+            Unit("ENG", "AMY", Location("ANK")),
+            Location("BUL"),
+        ),
+    ],
+)
+def test_SUP_location(supporting_unit, supported_unit, province_no_coast):
+    sup = SUP(
+        supported_unit=supported_unit,
+        supporting_unit=supporting_unit,
+        province_no_coast=province_no_coast,
+    )
+    assert isinstance(sup.province_no_coast_location, Location)
 
 
 @pytest.mark.parametrize(

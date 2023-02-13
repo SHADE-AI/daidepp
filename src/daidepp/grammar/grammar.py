@@ -208,7 +208,7 @@ LEVEL_160: GrammarDict = {
     "try_tokens": f'{TRAIL_TOKEN}"ULB" / "UUB"',
 }
 
-LEVELS: Tuple[GrammarDict] = (
+LEVELS: Tuple[GrammarDict, ...] = (
     LEVEL_0,
     LEVEL_10,
     LEVEL_20,
