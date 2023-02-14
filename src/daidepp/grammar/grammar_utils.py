@@ -219,7 +219,6 @@ def _merge_shared_key_values(
 def _merge_shared_key_value(
     old_grammar: GrammarDict, new_grammar: GrammarDict, shared_key: str
 ) -> str:
-
     if new_grammar[shared_key][:3] == TRAIL_TOKEN:
         new_value = old_grammar[shared_key] + " / " + new_grammar[shared_key][3:]
     else:
@@ -372,7 +371,6 @@ def _get_overlapping_members_from_original_grammar(
 def _find_grammar_key_dependencies(
     keywords: List[PressKeywords], grammar: DAIDEGrammar, include_level_0: bool = True
 ) -> DAIDEGrammar:
-
     keywords_dependencies = []
     if include_level_0:
         keywords_dependencies.extend(LEVEL_0.keys())
@@ -402,7 +400,6 @@ def _find_grammar_key_dependencies(
 def _find_grammar_key_dependencies_helper(
     grammar_key: str, grammar: DAIDEGrammar, accumulator: List[str]
 ) -> List[str]:
-
     grammar_key = grammar_key.lower()
 
     recursion_terminators = [
