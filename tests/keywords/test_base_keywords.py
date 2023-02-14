@@ -4,8 +4,7 @@ from daidepp.keywords.base_keywords import *
 
 
 @pytest.mark.parametrize(
-    # fmt: off
-    ["input", "expected_output"], 
+    ["input", "expected_output"],
     [
         (("AUS", "FLT", "ALB"), "AUS FLT ALB"),
         (("ENG", "AMY", "ANK"), "ENG AMY ANK"),
@@ -15,7 +14,6 @@ from daidepp.keywords.base_keywords import *
         (("RUS", "AMY", "BER"), "RUS AMY BER"),
         (("TUR", "FLT", "BRE"), "TUR FLT BRE"),
     ],
-    # fmt: on
 )
 def test_Unit(input, expected_output):
     print(input)
@@ -24,13 +22,11 @@ def test_Unit(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
-    ["input", "expected_output"], 
+    ["input", "expected_output"],
     [
         ((Unit("AUS", "FLT", "ALB"),), "( AUS FLT ALB ) HLD"),
-        ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) HLD")
+        ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) HLD"),
     ],
-    # fmt: on
 )
 def test_HLD(input, expected_output):
     hld = HLD(*input)
@@ -38,13 +34,11 @@ def test_HLD(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
-    ["input", "expected_output"], 
+    ["input", "expected_output"],
     [
         ((Unit("AUS", "FLT", "ALB"), "BUL"), "( AUS FLT ALB ) MTO BUL"),
-        ((Unit("ENG", "AMY", "ANK"), "CLY"), "( ENG AMY ANK ) MTO CLY")
+        ((Unit("ENG", "AMY", "ANK"), "CLY"), "( ENG AMY ANK ) MTO CLY"),
     ],
-    # fmt: on
 )
 def test_MTO(input, expected_output):
     mto = MTO(*input)
@@ -52,15 +46,33 @@ def test_MTO(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
-        ((Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL"), "( AUS FLT ALB ) SUP ( ENG AMY ANK ) MTO BUL"),
-        ((Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY"), "( FRA FLT APU ) SUP ( GER AMY ARM ) MTO CLY"),
-        ((Unit("FRA", "FLT", Location("APU")), Unit("GER", "AMY", Location("ARM")), "CLY"), "( FRA FLT APU ) SUP ( GER AMY ARM ) MTO CLY"),
-        ((Unit("AUS", "FLT", Location("ALB")), Unit("ENG", "AMY", Location("ANK")), "BUL"), "( AUS FLT ALB ) SUP ( ENG AMY ANK ) MTO BUL")
+        (
+            (Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL"),
+            "( AUS FLT ALB ) SUP ( ENG AMY ANK ) MTO BUL",
+        ),
+        (
+            (Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY"),
+            "( FRA FLT APU ) SUP ( GER AMY ARM ) MTO CLY",
+        ),
+        (
+            (
+                Unit("FRA", "FLT", Location("APU")),
+                Unit("GER", "AMY", Location("ARM")),
+                "CLY",
+            ),
+            "( FRA FLT APU ) SUP ( GER AMY ARM ) MTO CLY",
+        ),
+        (
+            (
+                Unit("AUS", "FLT", Location("ALB")),
+                Unit("ENG", "AMY", Location("ANK")),
+                "BUL",
+            ),
+            "( AUS FLT ALB ) SUP ( ENG AMY ANK ) MTO BUL",
+        ),
     ],
-    # fmt: on
 )
 def test_SUP(input, expected_output):
     sup = SUP(*input)
@@ -92,13 +104,17 @@ def test_SUP_location(supporting_unit, supported_unit, province_no_coast):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
-        ((Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL"), "( AUS FLT ALB ) CVY ( ENG AMY ANK ) CTO BUL"),
-        ((Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY"), "( FRA FLT APU ) CVY ( GER AMY ARM ) CTO CLY")
+        (
+            (Unit("AUS", "FLT", "ALB"), Unit("ENG", "AMY", "ANK"), "BUL"),
+            "( AUS FLT ALB ) CVY ( ENG AMY ANK ) CTO BUL",
+        ),
+        (
+            (Unit("FRA", "FLT", "APU"), Unit("GER", "AMY", "ARM"), "CLY"),
+            "( FRA FLT APU ) CVY ( GER AMY ARM ) CTO CLY",
+        ),
     ],
-    # fmt: on
 )
 def test_CVY(input, expected_output):
     cvy = CVY(*input)
@@ -106,14 +122,21 @@ def test_CVY(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
-        ((Unit("AUS", "FLT", "ALB"), "BUL", "ADR"), "( AUS FLT ALB ) CTO BUL VIA ( ADR )"),
-        ((Unit("ENG", "AMY", "ANK"), "CLY", "ADR", "AEG"), "( ENG AMY ANK ) CTO CLY VIA ( ADR AEG )"),
-        ((Unit("FRA", "FLT", "APU"), "CON", "ADR", "AEG", "BAL"), "( FRA FLT APU ) CTO CON VIA ( ADR AEG BAL )"),
+        (
+            (Unit("AUS", "FLT", "ALB"), "BUL", "ADR"),
+            "( AUS FLT ALB ) CTO BUL VIA ( ADR )",
+        ),
+        (
+            (Unit("ENG", "AMY", "ANK"), "CLY", "ADR", "AEG"),
+            "( ENG AMY ANK ) CTO CLY VIA ( ADR AEG )",
+        ),
+        (
+            (Unit("FRA", "FLT", "APU"), "CON", "ADR", "AEG", "BAL"),
+            "( FRA FLT APU ) CTO CON VIA ( ADR AEG BAL )",
+        ),
     ],
-    # fmt: on
 )
 def test_MoveByCVY(input, expected_output):
     mvc = MoveByCVY(*input)
@@ -121,13 +144,11 @@ def test_MoveByCVY(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
         ((Unit("AUS", "FLT", "ALB"), "BUL"), "( AUS FLT ALB ) RTO BUL"),
         ((Unit("ENG", "AMY", "ANK"), "CLY"), "( ENG AMY ANK ) RTO CLY"),
     ],
-    # fmt: on
 )
 def test_RTO(input, expected_output):
     rto = RTO(*input)
@@ -135,13 +156,11 @@ def test_RTO(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
         ((Unit("AUS", "FLT", "ALB"),), "( AUS FLT ALB ) DSB"),
         ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) DSB"),
     ],
-    # fmt: on
 )
 def test_DSB(input, expected_output):
     dsb = DSB(*input)
@@ -149,13 +168,11 @@ def test_DSB(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
         ((Unit("AUS", "FLT", "ALB"),), "( AUS FLT ALB ) BLD"),
         ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) BLD"),
     ],
-    # fmt: on
 )
 def test_BLD(input, expected_output):
     bld = BLD(*input)
@@ -163,13 +180,11 @@ def test_BLD(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
         ((Unit("AUS", "FLT", "ALB"),), "( AUS FLT ALB ) REM"),
         ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) REM"),
     ],
-    # fmt: on
 )
 def test_REM(input, expected_output):
     rem = REM(*input)
@@ -177,13 +192,11 @@ def test_REM(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
         (("AUS",), "AUS WVE"),
         (("ENG",), "ENG WVE"),
     ],
-    # fmt: on
 )
 def test_WVE(input, expected_output):
     wve = WVE(*input)
@@ -191,12 +204,10 @@ def test_WVE(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    # fmt: off
     ["input", "expected_output"],
     [
         (("SPR", 1901), "SPR 1901"),
     ],
-    # fmt: on
 )
 def test_turn(input, expected_output):
     turn_1 = Turn(*input)
