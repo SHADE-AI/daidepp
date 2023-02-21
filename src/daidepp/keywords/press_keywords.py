@@ -554,7 +554,7 @@ Arrangement = Union[
     ROF,
 ]
 
-AnyDAIDEToken = Literal[
+AnyDAIDEToken = Union[
     RTO,
     DSB,
     BLD,

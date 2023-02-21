@@ -23,11 +23,24 @@ Example:
 ```python3
 >>> from daidepp import create_daide_grammar, daide_visitor
 >>> grammar = create_daide_grammar(level=130)
->>> message = 'PRP (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS)) (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS))))'
+>>> message = 'PRP (AND (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS))) (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS))))'
 >>> parse_tree = grammar.parse(message)
 >>> output = daide_visitor.visit(parse_tree) # object composed of dataclass objects in keywords.py
 >>> print(output)
-PRP ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ) )
+`PRP ( AND ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ) ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ) )`
+```
+
+The daide_visitor outputs a dataclass that can be used to access useful information about the message.
+```python3
+>>> grammar = create_daide_grammar(level=130, allow_just_arrangement=True) # allows for messages without PRP
+>>> parse_tree = grammar.parse('ALY (GER FRA) VSS (TUR ITA)')
+>>> output = daide_visitor.visit(parse_tree)
+>>> print(output)
+`ALY ( GER FRA ) VSS ( TUR ITA )`
+>>> print(output.aly_power)
+['GER', 'FRA']
+>>> print(output.vss_power)
+['TUR','ITA']
 ```
 
 If the DAIDE token is not in the grammar or if the message is malformed, the parser will just thrown an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.
@@ -39,8 +52,8 @@ Example:
 
 ```python3
 >>> from daidepp import AND, PRP, PCE
->>> str(AND(PRP(PCE("AUS")), PRP(PCE("AUS", "ENG"))))
-`AND ( PRP ( PCE ( AUS ) ) ) ( PRP ( PCE ( AUS ENG ) ) ) ( PRP ( PCE ( AUS ENG FRA ) ) )`
+>>> str(AND(PCE("AUS", "ENG"), PCE("AUS", "ENG"), PCE("AUS", "ENG", "FRA")))
+`AND ( PCE ( AUS ENG ) ) ( PCE ( AUS ENG ) ) ( PCE ( AUS ENG FRA ) )`
  ```
 Each keyword class uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout [`tests/keywords`](./tests/keywords/), which provides examples for each class. 
 
