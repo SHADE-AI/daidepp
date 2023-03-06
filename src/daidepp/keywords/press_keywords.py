@@ -13,6 +13,7 @@ class PCE(_DAIDEObject):
     powers: Tuple[Power]
 
     def __init__(self, *powers: Power):
+        powers = tuple(sorted(powers))
         self.powers = powers
         self.__post_init__()
 
@@ -61,6 +62,10 @@ class ALYVSS(_DAIDEObject):
     aly_powers: List[Power]
     vss_powers: List[Power]
 
+    def __post_init(self):
+        self.aly_powers = list(sorted(self.aly_powers))
+        self.vss_powers = list(sorted(self.vss_powers))
+
     def __str__(self):
         return (
             "ALY ( "
@@ -100,7 +105,7 @@ class DRW(_DAIDEObject):
     powers: Tuple[Power] = tuple()
 
     def __init__(self, *powers: Power):
-        self.powers = powers
+        self.powers = tuple(sorted(powers))
         self.__post_init__()
 
     def __str__(self):
@@ -193,6 +198,7 @@ class DMZ(_DAIDEObject):
             else:
                 exhaustive_provinces.append(province)
         self.exhaustive_provinces = exhaustive_provinces
+        self.powers = list(sorted(self.powers))
 
     def __str__(self):
         return (
