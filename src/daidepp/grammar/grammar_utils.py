@@ -1,6 +1,7 @@
-from typing import List, Set, Tuple, Union
+from collections import OrderedDict, defaultdict
+from typing import Dict, List, Optional, Set, Tuple, Union
+import warnings
 
-import parsimonious
 from parsimonious.grammar import Grammar
 from typing_extensions import Literal
 
@@ -219,6 +220,7 @@ def _merge_shared_key_values(
 def _merge_shared_key_value(
     old_grammar: GrammarDict, new_grammar: GrammarDict, shared_key: str
 ) -> str:
+
     if new_grammar[shared_key][:3] == TRAIL_TOKEN:
         new_value = old_grammar[shared_key] + " / " + new_grammar[shared_key][3:]
     else:
@@ -230,7 +232,6 @@ def create_grammar_from_press_keywords(
     keywords: List[PressKeywords],
     allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
-    include_level_0: bool = True,
 ) -> DAIDEGrammar:
     """Construct new DAIDE grammar from a list of keywords.
 
@@ -249,210 +250,162 @@ def create_grammar_from_press_keywords(
         string_type (Literal["message", "arrangement", "all"], optional): if 'message' is passed (default),
         the grammar will only recognize full DAIDE messages. If 'arrangement' is passed, it will recognize
         messages and arrangements. And if 'all' is passed, any DAIDE pattern should be recognized, by default "message"
-    include_level_0 : bool, optional
-        arg to include level_0 DAIDE keywords, by default True
 
     Returns
     -------
     DAIDEGrammar
         DAIDEGrammar composed from the list of keywords.
     """
-
-    grammar = create_daide_grammar(
+    full_grammar = create_daide_grammar(
         level=DAIDELevel.__args__[-1],
         allow_just_arrangement=allow_just_arrangement,
         string_type=string_type,
     )
+    current_set = set(LEVEL_0.keys())
+    current_set |= set(keyword.lower() for keyword in keywords)
 
-    keywords_dependencies = _find_grammar_key_dependencies(
-        keywords=keywords, grammar=grammar, include_level_0=include_level_0
-    )
-
-    grammar_dict = _create_daide_grammar_dict(level=DAIDELevel.__args__[-1])
-
-    _construct_grammar_dict_value_based_on_dependencies(
-        grammar, grammar_dict, "arrangement", keywords_dependencies
-    )
-    _construct_grammar_dict_value_based_on_dependencies(
-        grammar, grammar_dict, "sub_arrangement", keywords_dependencies
-    )
-    _construct_grammar_dict_value_based_on_dependencies(
-        grammar, grammar_dict, "reply", keywords_dependencies
-    )
-    _construct_grammar_dict_value_based_on_dependencies(
-        grammar, grammar_dict, "press_message", keywords_dependencies
-    )
-    _construct_grammar_dict_value_based_on_dependencies(
-        grammar, grammar_dict, "message", keywords_dependencies
-    )
-    _construct_grammar_dict_value_based_on_dependencies(
-        grammar, grammar_dict, "try_tokens", keywords_dependencies
-    )
-
-    grammar_key_priority = [
-        "message",
-        "press_message",
-        "reply",
-        "arrangement",
-        "sub_arrangement",
-    ]
-    for key in grammar_key_priority[::-1]:
-        if key in keywords_dependencies:
-            keywords_dependencies.insert(
-                0, keywords_dependencies.pop(keywords_dependencies.index(key))
-            )
-
-    new_grammar_dict = {
-        keyword: grammar_dict[keyword] for keyword in keywords_dependencies
+    # dict of special keywords and their members
+    special_keywords = {
+        special_keyword: [
+            member.name for member in full_grammar[special_keyword].members
+        ]
+        for special_keyword in [
+            "message",
+            "arrangement",
+            "sub_arrangement",
+            "press_message",
+            "reply",
+        ]
     }
 
-    if allow_just_arrangement and not "arrangement" in new_grammar_dict.keys():
-        raise ValueError(
-            "Passed 'allow_just_arrangement=True' but 'arrangement' keywords are not part of the new grammar."
+    special_keywords["try_tokens"] = [
+        member.literal.lower() for member in full_grammar["try_tokens"].members
+    ]
+    keyword_dependencies_special_keywords = defaultdict(list)
+    for keyword in current_set:
+        # 'message' is only added if press_message or reply is added
+        for special_keyword in [
+            "arrangement",
+            "sub_arrangement",
+            "press_message",
+            "reply",
+        ]:
+            if keyword in special_keywords[special_keyword]:
+                keyword_dependencies_special_keywords[special_keyword].append(
+                    (keyword, [keyword])
+                )
+        if keyword in special_keywords["try_tokens"] or keyword == "aly_vss":
+            if keyword == "aly_vss":
+                keyword_dependencies_special_keywords["try_tokens"] += [
+                    ('"ALY"', []),
+                    ('"VSS"', []),
+                ]
+            else:
+                keyword_dependencies_special_keywords["try_tokens"].append(
+                    (f'"{keyword.upper()}"', [])
+                )
+
+    if "press_message" in keyword_dependencies_special_keywords:
+        keyword_dependencies_special_keywords["message"].append(
+            ("press_message", ["press_message"])
         )
+    if "reply" in keyword_dependencies_special_keywords:
+        keyword_dependencies_special_keywords["message"].append(("reply", ["reply"]))
+
+    current_set |= set(keyword_dependencies_special_keywords.keys())
+
+    keyword_dependencies = _find_grammar_key_dependencies(
+        keywords=keywords, current_set=current_set
+    )
+    keyword_dependencies = {
+        **keyword_dependencies,
+        **keyword_dependencies_special_keywords,
+    }
+
+    new_grammar_dict = OrderedDict(LEVEL_0)
+    for keyword, rules in keyword_dependencies.items():
+        rule_str = _create_grammar_dict_entry(keyword, rules)
+        new_grammar_dict[keyword] = rule_str
+
+    if "sub_arrangement" in new_grammar_dict:
+        new_grammar_dict.move_to_end("sub_arrangement", last=False)
+    if "arrangement" in new_grammar_dict:
+        new_grammar_dict.move_to_end("arrangement", last=False)
+    if "reply" in new_grammar_dict:
+        new_grammar_dict.move_to_end("reply", last=False)
+    if "press_message" in new_grammar_dict:
+        new_grammar_dict.move_to_end("press_message", last=False)
+    if "message" in new_grammar_dict:
+        new_grammar_dict.move_to_end("message", last=False)
 
     new_grammar_str = _create_grammar_str_from_dict(
         new_grammar_dict, allow_just_arrangement, string_type
     )
-
     new_grammar = DAIDEGrammar(new_grammar_str)
-
     return new_grammar
 
 
-def _construct_grammar_dict_value_based_on_dependencies(
-    grammar: DAIDEGrammar,
-    grammar_dict: GrammarDict,
-    grammar_key: str,
-    keywords_dependencies: List[str],
-):
-    members_in_dependencies = _get_overlapping_members_from_original_grammar(
-        grammar, grammar_key, keywords_dependencies
-    )
-
-    # try tokens should be all caps with surrounded by quotes
-    if grammar_key == "try_tokens":
-        members_in_dependencies = [
-            '"' + key.upper() + '"' for key in members_in_dependencies
-        ]
-
-        if "aly_vss" in keywords_dependencies:
-            members_in_dependencies.extend(["'ALY'", "'VSS'"])
-
-    if members_in_dependencies:
-        grammar_dict[grammar_key] = " / ".join(members_in_dependencies)
-
-        keywords_dependencies.append(grammar_key)
-
-    elif grammar_key in keywords_dependencies:
-        raise ValueError(
-            f"New grammar depends on '{grammar_key}', but the given keywords "
-            f"do not depend on the '{grammar_key}' members. Such as: {[member.name for member in grammar[grammar_key].members]}"
+def _create_grammar_dict_entry(keyword, rules):
+    if not rules:
+        warnings.warn(
+            f"Requires addtional keywords to form {keyword}'s grammar rule. Ommiting {keyword} from new new grammar."
         )
+        return
 
+    rule_str, _ = rules[0]
+    for rule, _ in rules[1:]:
+        rule_str += f" / {rule}"
 
-def _get_overlapping_members_from_original_grammar(
-    grammar: DAIDEGrammar, grammar_key: str, keywords_dependencies: List[str]
-) -> List[str]:
-    if grammar_key == "try_tokens":
-        original_members: List[str] = [
-            member.literal.lower() for member in grammar[grammar_key].members
-        ]
-    else:
-        original_members: List[str] = [
-            member.name for member in grammar[grammar_key].members
-        ]
-    original_members_in_dependencies: List[str] = [
-        keyword for keyword in keywords_dependencies if keyword in original_members
-    ]
-    return original_members_in_dependencies
+    return rule_str
 
 
 def _find_grammar_key_dependencies(
-    keywords: List[PressKeywords], grammar: DAIDEGrammar, include_level_0: bool = True
-) -> DAIDEGrammar:
-    keywords_dependencies = []
-    if include_level_0:
-        keywords_dependencies.extend(LEVEL_0.keys())
+    keywords: List[PressKeywords],
+    current_set: Set[str],
+) -> Dict[str, List[Tuple[str, List[str]]]]:
+    keywords_dependencies = defaultdict(list)
 
     for keyword in keywords:
         if not isinstance(keyword, str):
             keyword = keyword.__name__
 
         keyword = keyword.lower()
-        if not keyword in grammar.keys():
+        if not any(keyword in level.keys() for level in LEVELS):
             raise ValueError(
                 f"keyword: '{keyword}' is not part of the DAIDE++ grammar."
             )
 
-        accumulator = []
-        _find_grammar_key_dependencies_helper(
-            grammar_key=keyword, grammar=grammar, accumulator=accumulator
-        )
-        keywords_dependencies.extend(accumulator)
-
-    keywords_dependencies = list(set(keywords_dependencies))
-    keywords_dependencies.sort()
+        grammar = _find_highest_level_grammar_dict(keyword)
+        grammar_rule = grammar[keyword]
+        for split in grammar_rule.split("/"):
+            split = split.strip()
+            chars_to_replace = [
+                '"',
+                "(",
+                ")",
+                "+",
+                "*",
+                "?",
+                "/",
+            ]
+            tokens = set(
+                split.translate({ord(char): "" for char in chars_to_replace}).split()
+            )
+            dependencies = set()
+            for token in tokens:
+                if _find_highest_level_grammar_dict(token):
+                    dependencies.add(token)
+            if (
+                dependencies & current_set - set(["lpar", "rpar", "ws"])
+                or not dependencies
+            ):
+                keywords_dependencies[keyword].append((split, list(dependencies)))
 
     return keywords_dependencies
 
 
-def _find_grammar_key_dependencies_helper(
-    grammar_key: str, grammar: DAIDEGrammar, accumulator: List[str]
-) -> List[str]:
-    grammar_key = grammar_key.lower()
-
-    recursion_terminators = [
-        "message",
-        "reply",
-        "press_message",
-        "arrangement",
-        "sub_arrangement",
-        "lpar",
-        "rpar",
-        "ws",
-    ]
-
-    if grammar_key in accumulator:
-        return
-
-    elif grammar_key in recursion_terminators:
-        accumulator.append(grammar_key)
-
-    elif grammar_key in grammar.keys():
-        accumulator.append(grammar_key)
-        for member in grammar[grammar_key].members:
-            if member.name != "":
-                _find_grammar_key_dependencies_helper(member.name, grammar, accumulator)
-
-            else:
-                grammar_keys = _search_nested_members_for_keys(member, grammar)
-
-                for key in grammar_keys:
-                    _find_grammar_key_dependencies_helper(key, grammar, accumulator)
-
-
-def _search_nested_members_for_keys(
-    member: parsimonious.expressions, grammar: DAIDEGrammar
-) -> List[str]:
-    keys = []
-
-    recursion_terminators = [
-        "message",
-        "reply",
-        "press_message",
-        "arrangement",
-        "sub_arrangement",
-        "lpar",
-        "rpar",
-        "ws",
-    ]
-
-    if member.name != "" and member.name in grammar.keys():
-        keys.append(member.name)
-
-    elif not member.name in recursion_terminators and hasattr(member, "members"):
-        for member_member in member.members:
-            keys.extend(_search_nested_members_for_keys(member_member, grammar))
-
-    return keys
+def _find_highest_level_grammar_dict(grammar_key: str) -> Optional[GrammarDict]:
+    for grammar_level in LEVELS[::-1]:
+        if grammar_key in grammar_level.keys():
+            return grammar_level
+    return None
