@@ -325,7 +325,8 @@ def create_grammar_from_press_keywords(
     new_grammar_dict = OrderedDict(LEVEL_0)
     for keyword, rules in keyword_dependencies.items():
         rule_str = _create_grammar_dict_entry(keyword, rules)
-        new_grammar_dict[keyword] = rule_str
+        if rule_str:
+            new_grammar_dict[keyword] = rule_str
 
     if "sub_arrangement" in new_grammar_dict:
         new_grammar_dict.move_to_end("sub_arrangement", last=False)
