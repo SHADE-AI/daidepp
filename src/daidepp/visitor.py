@@ -223,7 +223,7 @@ class DAIDEVisitor(NodeVisitor):
         return AND(*arrangements)
 
     def visit_orr(self, node, visited_children) -> ORR:
-        _, _, arrangement, _, par_arrangements = visited_children[0]
+        _, _, arrangement, _, par_arrangements = visited_children
 
         arrangements = [arrangement]
         for par_arr in par_arrangements:
