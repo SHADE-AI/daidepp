@@ -10,6 +10,7 @@ def sample_daide_messages():
     return [
         "PRP(XDO((ENG FLT EDI) SUP (ENG AMY LVP) MTO CLY))",
         "PRP(XDO((ENG FLT (STP SCS)) SUP (ENG AMY LVP) MTO CLY))",
+        "PRP ( AND ( XDO ( ( AUS AMY BUD ) MTO SER ) ) ( XDO ( ( AUS AMY VIE ) MTO TRI ) ) ( XDO ( ( AUS FLT TRI ) MTO ALB ) ) ( XDO ( ( ENG AMY LVP ) MTO WAL ) ) ( XDO ( ( ENG FLT EDI ) MTO NTH ) ) ( XDO ( ( ENG FLT LON ) MTO ECH ) ) )",
     ]
 
 
