@@ -24,6 +24,7 @@ The syntax is split into a number of levels. Each level completely includes all 
 [Level 140: Sending Emotional State](#level-140-sending-emotional-state)  
 [Level 150: Requesting and Demanding Offer](#level-150-requesting-and-demanding-offer)  
 [Level 160: Utility Bounds](#level-160-utility-bounds)  
+[Level 170: Protocol Start](#level-170-protocol-start)  
 
 All Bots must implement the commands in all levels – they should not assume that they will never be playing in a game that is above the level they are designed for. Where a Bot receives a message that is above its intended level, there is a response it can use to indicate this.
 
@@ -970,6 +971,30 @@ Example message sent from England to Germany:
 > IFF (XDO((GER AMY BER) MTO MUN)) THN (PRP (ULB (GER 0.8))) ELS (PRP (UUB (GER 0.3)))
 
 This is a threat from England to Germany that says if you move BER to MUN then I predict you will get at least 0.8 utility, but if you do anything else I will predict you will get at most 0.3 utility. In this case we are not actively punishing or rewarding, we are just sharing the results of our game theory analysis.
+
+## Level 170: Protocol Start
+
+Level 170 adds the ability to request a specified set of powers to start a predefined protocol. It is intended to allow powers to agree to use protocols with specific requirements or changed interpretations of DAIDE while cleanly falling back to regular DAIDE if the protocol is not supported.
+
+> **arrangement = PTC int (power power ...)**
+
+Start protocol (identified by int) with listed powers. In most cases this power list should include the sender to indicate that the sender will participate in the protocol.
+
+The following table lists currently used protocol numbers, a brief explanation, and who created the protocol. Please update this table anytime you create a protocol so we avoid colliding protocol numbers.
+
+|   Protocol Number | Created By     | Brief Explanation |
+| ----------------: | :------------  | :---------------- |
+| 1                 | Strategy Robot | 3-way negotiation |
+
+Example message sent from England to Germany and France:
+> PRP(PTC 1 (ENG GER FRA))
+
+This message asks Germany and France to start using protocol 1 with Germany, France, and England.
+
+A power indicates that it understands and will participate in this protocol by replying YES (within some timeout).
+> YES(PRP(PTC 1 (ENG GER FRA)))
+
+Any other response (REJ, HUH, ignoring the message, etc) is assumed to indicate that this power will not participate in the protocol.
 
 ## Level 8000: Free Text Press
 
