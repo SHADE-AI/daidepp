@@ -515,6 +515,13 @@ class UUB:
     def __str__(self):
         return f"UUB ( {self.power} {self.float_val} )"
 
+@dataclass
+class PTC:
+    int_val: int
+    powers: List[Power]
+
+    def __str__(self):
+        return f"PTC {self.int_val} ( " + " ".join(self.powers) + " )"
 
 Reply = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, UHY, HPY, ANG]
 PressMessage = Union[
@@ -552,6 +559,7 @@ Arrangement = Union[
     ULB,
     UUB,
     ROF,
+    PTC,
 ]
 
 AnyDAIDEToken = Union[
@@ -611,4 +619,5 @@ AnyDAIDEToken = Union[
     ROF,
     ULB,
     UUB,
+    PTC,
 ]

@@ -740,3 +740,15 @@ def test_ULB(input, expected_output):
 def test_UUB(input, expected_output):
     uub = UUB(*input)
     assert str(uub) == expected_output
+
+
+@pytest.mark.parametrize(
+    ["input", "expected_output"],
+    [
+        ((1, ["ENG", "GER"]), "PTC 1 ( ENG GER )"),
+        ((234, ["RUS", "GER", "FRA"]), "PTC 234 ( RUS GER FRA )"),
+    ],
+)
+def test_PTC(input, expected_output):
+    ptc = PTC(*input)
+    assert str(ptc) == expected_output

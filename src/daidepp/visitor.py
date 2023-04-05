@@ -510,5 +510,17 @@ class DAIDEVisitor(NodeVisitor):
         _, _, power, utility, _ = visited_children
         return UUB(power, utility)
 
+    def visit_int(self, node, visited_children) -> float:
+        return int(visited_children[1].text)
+
+    def visit_ptc(self, node, visited_children) -> PTC:
+        _, int_val, _, power, more_powers, _ = visited_children
+
+        powers = [power]
+        for next_power in more_powers:
+            _, next_pow = next_power
+            powers.append(next_pow)
+        return PTC(int_val, powers)
+
 
 daide_visitor = DAIDEVisitor()

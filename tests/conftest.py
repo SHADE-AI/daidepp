@@ -251,6 +251,14 @@ def level_160_messages():
 
 
 @pytest.fixture
+def level_170_messages():
+    return [
+        "PTC 1 (ENG)",
+        "PTC 2432 (RUS GER)",
+    ]
+
+
+@pytest.fixture
 def bad_messages():
     return [
         "PRP (ENNG GER)",
