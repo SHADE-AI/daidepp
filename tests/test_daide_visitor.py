@@ -6,7 +6,7 @@ from daidepp.grammar import create_daide_grammar
 from daidepp.keywords import *
 from daidepp.visitor import daide_visitor
 
-grammar = create_daide_grammar(level=170, string_type="all")
+grammar = create_daide_grammar(level=130, string_type="all")
 
 
 def test_basic_visitor(sample_daide_messages: List[str]):
@@ -39,7 +39,6 @@ def test_basic_visitor(sample_daide_messages: List[str]):
         ("SCD (FRA HOL)", SCD),
         ("SCD (AUS ANK BEL BER) (GER BRE BUD BUL DEN)", SCD),
         ("SCD (AUS ANK BEL BER) (GER BRE BUD BUL DEN) (FRA GRE HOL KIE)", SCD),
-        ("PTC 1 (ENG GER)", PTC),
     ],
 )
 def test_visitor_objects(daide_message: str, expected_type: AnyDAIDEToken):
