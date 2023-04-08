@@ -189,9 +189,11 @@ def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> Gramm
     old_keys = set(old_grammar.keys())
     new_keys = set(new_grammar.keys())
 
-    old_unique = old_keys.difference(new_keys)
-    new_unique = new_keys.difference(old_keys)
-    shared_keys = new_keys.intersection(old_keys)
+    # Sorting is needed to maintain the original order of the `GrammarDict`s
+    sort_key = (list(old_grammar) + list(new_grammar)).index
+    old_unique = sorted(old_keys.difference(new_keys), key=sort_key)
+    new_unique = sorted(new_keys.difference(old_keys), key=sort_key)
+    shared_keys = sorted(new_keys.intersection(old_keys), key=sort_key)
 
     merged_grammar: GrammarDict = {}
     for key in old_unique:
