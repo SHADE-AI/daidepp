@@ -208,15 +208,6 @@ def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> Gramm
     return merged_grammar
 
 
-def _merge_shared_key_values(
-    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_keys: Set[str]
-) -> GrammarDict:
-    merged_grammar = {}
-    for key in shared_keys:
-        merged_grammar[key] = _merge_shared_key_value(old_grammar, new_grammar, key)
-    return merged_grammar
-
-
 def _merge_shared_key_value(
     old_grammar: GrammarDict, new_grammar: GrammarDict, shared_key: str
 ) -> str:
