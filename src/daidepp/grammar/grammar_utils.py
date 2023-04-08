@@ -173,7 +173,7 @@ def _create_grammar_str_from_dict(
         # message needs to be the first rule in the string, per parsimonious rules:
         # "The first rule is taken to be the default start symbol, but you can override that."
         # https://github.com/erikrose/parsimonious#example-usage
-        if item[0] == "message" and string_type == "message":
+        if item[0] == "message" and string_type in {"message", "arrangement"}:
             left = item[0]
             right = item[1]
             if string_type == "arrangement":
