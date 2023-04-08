@@ -128,7 +128,7 @@ def _create_daide_grammar_str(
     return grammar_str
 
 
-def _sort_grammar_keys(keys: List[str]) -> Tuple:
+def _sort_grammar_keys(keys: List[str]) -> List[str]:
     keys_list = []
 
     keys.remove("lpar")
