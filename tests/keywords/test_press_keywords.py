@@ -104,7 +104,7 @@ def test_HUH(input, expected_output):
                 ["AUS", "GER"],
                 ["TUR", "ITA"],
             ),
-            "ALY ( AUS GER ) VSS ( TUR ITA )",
+            "ALY ( AUS GER ) VSS ( ITA TUR )",
         ),
     ],
 )
@@ -611,7 +611,7 @@ def test_YDO(input, expected_output):
                 ["GER", "FRA"],
                 PRP(PCE("TUR", "RUS")),
             ),
-            "SND ( AUS ) ( GER FRA ) ( PRP ( PCE ( RUS TUR ) ) )",
+            "SND ( AUS ) ( FRA GER ) ( PRP ( PCE ( RUS TUR ) ) )",
         ),
     ],
 )
