@@ -62,7 +62,7 @@ class ALYVSS(_DAIDEObject):
     aly_powers: List[Power]
     vss_powers: List[Power]
 
-    def __post_init(self):
+    def __post_init__(self):
         self.aly_powers = list(sorted(self.aly_powers))
         self.vss_powers = list(sorted(self.vss_powers))
 
@@ -450,6 +450,9 @@ class BCC(_DAIDEObject):
     powers: List[Power]
     power_2: Power
 
+    def __post_init__(self):
+        self.powers = sorted(self.powers)
+
     def __str__(self):
         return (
             f"BCC ( {self.power_1} ) ( "
@@ -560,7 +563,7 @@ Arrangement = Union[
     ROF,
 ]
 
-AnyDAIDEToken = Literal[
+AnyDAIDEToken = Union[
     RTO,
     DSB,
     BLD,

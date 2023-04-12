@@ -70,10 +70,6 @@ LEVEL_10: GrammarDict = {
     "try_tokens": '"PRP" / "PCE" / "ALY" / "VSS" / "DRW" / "SLO" / "NOT" / "NAR" / "YES" / "REJ" / "BWX" / "FCT"',
 }
 
-# prov_no_coast: all province tokens without coasts
-# province: all provinces including coasts
-
-# "dmz": '"DMZ" lpar power (ws power)* rpar lpar prov_no_coast (ws prov_no_coast)* rpar',
 # Order Proposals
 LEVEL_20: GrammarDict = {
     "xdo": '"XDO" lpar order rpar',
@@ -95,15 +91,15 @@ LEVEL_30: GrammarDict = {
 LEVEL_40: GrammarDict = {
     "scd": '"SCD" (lpar power ws supply_center (ws supply_center)* rpar)+',
     "occ": '"OCC" (lpar unit rpar)+',
+    "sub_arrangement": f"{TRAIL_TOKEN}scd / occ",
     "arrangement": f"{TRAIL_TOKEN}scd / occ",
     "try_tokens": f'{TRAIL_TOKEN}"SCD" / "OCC"',
 }
 
 # Nested Multipart Arrangements
 LEVEL_50: GrammarDict = {
-    "and": '("AND" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+) / ("AND" lpar arrangement rpar (lpar arrangement rpar)+)',
-    "orr": '("ORR" lpar sub_arrangement rpar (lpar sub_arrangement rpar)+) / ("ORR" lpar arrangement rpar (lpar arrangement rpar)+)',
     "cho": '"CHO" lpar (~"\d+ \d+") rpar (lpar arrangement rpar)+',
+    "sub_arrangement": f"{TRAIL_TOKEN}and / orr / cho",
     "arrangement": f"{TRAIL_TOKEN}cho",
     "try_tokens": f'{TRAIL_TOKEN}"CHO"',  # This isn't included in the original daide spec but I think they just forgot it.
 }
@@ -142,6 +138,7 @@ LEVEL_80: GrammarDict = {
 # Future Discussions
 LEVEL_90: GrammarDict = {
     "for": '("FOR" lpar turn rpar lpar arrangement rpar) / ("FOR" lpar (lpar turn rpar lpar turn rpar) rpar lpar arrangement rpar)',
+    "sub_arrangement": f"{TRAIL_TOKEN}for",
     "arrangement": f"{TRAIL_TOKEN}for",
     "try_tokens": f'{TRAIL_TOKEN}"FOR"',
 }
@@ -157,6 +154,7 @@ LEVEL_100: GrammarDict = {
 LEVEL_110: GrammarDict = {
     "xoy": '"XOY" lpar power rpar lpar power rpar',
     "ydo": '"YDO" lpar power rpar (lpar unit rpar)+',
+    "sub_arrangement": f"{TRAIL_TOKEN}xoy / ydo",
     "arrangement": f"{TRAIL_TOKEN}xoy / ydo",
     "try_tokens": f'{TRAIL_TOKEN}"XOY" / "YDO"',
 }
@@ -166,6 +164,7 @@ LEVEL_120: GrammarDict = {
     "snd": '"SND" lpar power rpar lpar power (ws power)* rpar lpar message rpar',
     "fwd": '"FWD" lpar power (ws power)* rpar lpar power rpar lpar power rpar',
     "bcc": '"BCC" lpar power rpar lpar power (ws power)* rpar lpar power rpar',
+    "sub_arrangement": f"{TRAIL_TOKEN}snd / fwd / bcc",
     "arrangement": f"{TRAIL_TOKEN}snd / fwd / bcc",
     "try_tokens": f'{TRAIL_TOKEN}"SND" / "FWD" / "BCC"',
 }
@@ -204,6 +203,7 @@ LEVEL_160: GrammarDict = {
     "float": 'ws*~"[-+]?((\d*\.\d+)|(\d+\.?))([Ee][+-]?\d+)?"',
     "ulb": '"ULB" lpar power float rpar',
     "uub": '"UUB" lpar power float rpar',
+    "sub_arrangement": f"{TRAIL_TOKEN}ulb / uub",
     "arrangement": f"{TRAIL_TOKEN}ulb / uub",
     "try_tokens": f'{TRAIL_TOKEN}"ULB" / "UUB"',
 }
