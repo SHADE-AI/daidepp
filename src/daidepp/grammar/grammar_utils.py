@@ -67,10 +67,7 @@ def create_daide_grammar(
     Returns:
         DAIDEGrammar: Grammar object
     """
-    if allow_just_arrangement and string_type == "message":
-        string_type = "arrangement"
-
-    grammar_str = _create_daide_grammar_str(level, string_type)
+    grammar_str = _create_daide_grammar_str(level, allow_just_arrangement, string_type)
     grammar = DAIDEGrammar(grammar_str)
     return grammar
 
@@ -103,6 +100,7 @@ def _create_daide_grammar_dict(
 
 def _create_daide_grammar_str(
     level: Union[DAIDELevel, List[DAIDELevel]] = 30,
+    allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
     """Create string representing DAIDE grammar in PEG
@@ -111,6 +109,10 @@ def _create_daide_grammar_str(
         level (Union[DAIDELevel,List[DAIDELevel]], optional):
             The level of DAIDE to make grammar for. Defaults to 30. If its a list,
             only include levels in list rather than all levels up to given value.
+        allow_just_arrangement (bool, optional):
+            if set to True, the parser accepts strings that are only arrangements,
+            in addition to press messages. So, for example, the parser could parse
+            'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
         string_type (Literal["message", "arrangement", "all"], optional):
             if 'message' is passed (default), the grammar will only recognize full DAIDE messages.
             If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is
@@ -121,12 +123,12 @@ def _create_daide_grammar_str(
     """
     grammar_dict = _create_daide_grammar_dict(level)
     grammar_str = _create_grammar_str_from_dict(
-        grammar_dict, string_type
+        grammar_dict, allow_just_arrangement, string_type
     )
     return grammar_str
 
 
-def _sort_grammar_keys(keys: List[str]) -> List[str]:
+def _sort_grammar_keys(keys: List[str]) -> Tuple:
     keys_list = []
 
     keys.remove("lpar")
@@ -160,6 +162,7 @@ def _sort_grammar_keys(keys: List[str]) -> List[str]:
 
 def _create_grammar_str_from_dict(
     grammar: GrammarDict,
+    allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
     grammar_str = ""
@@ -173,10 +176,12 @@ def _create_grammar_str_from_dict(
         # message needs to be the first rule in the string, per parsimonious rules:
         # "The first rule is taken to be the default start symbol, but you can override that."
         # https://github.com/erikrose/parsimonious#example-usage
-        if item[0] == "message" and string_type in {"message", "arrangement"}:
+        if item[0] == "message" and string_type == "message":
             left = item[0]
             right = item[1]
-            if string_type == "arrangement":
+            if (
+                allow_just_arrangement or string_type == "arrangement"
+            ) and string_type != "all":
                 right += " / arrangement"
             grammar_str = f"{left} = {right}\n" + grammar_str
 
@@ -189,17 +194,24 @@ def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> Gramm
     old_keys = set(old_grammar.keys())
     new_keys = set(new_grammar.keys())
 
-    # Sorting is needed to maintain the original order of the `GrammarDict`s
-    sort_key = (list(old_grammar) + list(new_grammar)).index
-    old_unique = sorted(old_keys.difference(new_keys), key=sort_key)
-    new_unique = sorted(new_keys.difference(old_keys), key=sort_key)
-    shared_keys = sorted(new_keys.intersection(old_keys), key=sort_key)
+    old_unique = old_keys.difference(new_keys)
+    new_unique = new_keys.difference(old_keys)
+    shared_keys = new_keys.intersection(old_keys)
 
     merged_grammar: GrammarDict = {}
     for key in old_unique:
         merged_grammar[key] = old_grammar[key]
     for key in new_unique:
         merged_grammar[key] = new_grammar[key]
+    for key in shared_keys:
+        merged_grammar[key] = _merge_shared_key_value(old_grammar, new_grammar, key)
+    return merged_grammar
+
+
+def _merge_shared_key_values(
+    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_keys: Set[str]
+) -> GrammarDict:
+    merged_grammar = {}
     for key in shared_keys:
         merged_grammar[key] = _merge_shared_key_value(old_grammar, new_grammar, key)
     return merged_grammar
@@ -244,11 +256,9 @@ def create_grammar_from_press_keywords(
     DAIDEGrammar
         DAIDEGrammar composed from the list of keywords.
     """
-    if allow_just_arrangement and string_type == "message":
-        string_type = "arrangement"
-
     full_grammar = create_daide_grammar(
         level=DAIDELevel.__args__[-1],
+        allow_just_arrangement=allow_just_arrangement,
         string_type=string_type,
     )
     current_set = set(LEVEL_0.keys())
@@ -330,7 +340,7 @@ def create_grammar_from_press_keywords(
         new_grammar_dict.move_to_end("message", last=False)
 
     new_grammar_str = _create_grammar_str_from_dict(
-        new_grammar_dict, string_type
+        new_grammar_dict, allow_just_arrangement, string_type
     )
     new_grammar = DAIDEGrammar(new_grammar_str)
     return new_grammar
