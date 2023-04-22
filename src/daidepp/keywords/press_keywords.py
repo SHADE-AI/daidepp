@@ -13,6 +13,7 @@ class PCE(_DAIDEObject):
     powers: Tuple[Power]
 
     def __init__(self, *powers: Power):
+        powers = tuple(sorted(powers))
         self.powers = powers
         self.__post_init__()
 
@@ -61,6 +62,14 @@ class ALYVSS(_DAIDEObject):
     aly_powers: List[Power]
     vss_powers: List[Power]
 
+    def __post_init__(self):
+        if len(self.aly_powers) < 2:
+            raise ValueError("An alliance must have at least 2 allies.")
+        if len(self.vss_powers) < 1:
+            raise ValueError("An alliance must have at least 1 enemy.")
+        self.aly_powers = sorted(self.aly_powers)
+        self.vss_powers = sorted(self.vss_powers)
+
     def __str__(self):
         return (
             "ALY ( "
@@ -100,7 +109,7 @@ class DRW(_DAIDEObject):
     powers: Tuple[Power] = tuple()
 
     def __init__(self, *powers: Power):
-        self.powers = powers
+        self.powers = tuple(sorted(powers))
         self.__post_init__()
 
     def __str__(self):
@@ -148,6 +157,9 @@ class FRM(_DAIDEObject):
     recv_powers: List[Power]
     message: Message
 
+    def __post_init__(self):
+        self.recv_powers = sorted(self.recv_powers)
+
     def __str__(self):
         return (
             f"FRM ( {self.frm_power} ) ( "
@@ -193,6 +205,7 @@ class DMZ(_DAIDEObject):
             else:
                 exhaustive_provinces.append(province)
         self.exhaustive_provinces = exhaustive_provinces
+        self.powers = sorted(self.powers)
 
     def __str__(self):
         return (
@@ -416,6 +429,9 @@ class SND(_DAIDEObject):
     recv_powers: List[Power]
     message: Message
 
+    def __post_init__(self):
+        self.recv_powers = sorted(self.recv_powers)
+
     def __str__(self):
         return (
             f"SND ( {self.power} ) ( "
@@ -430,6 +446,9 @@ class FWD(_DAIDEObject):
     power_1: Power
     power_2: Power
 
+    def __post_init__(self):
+        self.powers = sorted(self.powers)
+
     def __str__(self):
         return (
             f"FWD ( "
@@ -443,6 +462,9 @@ class BCC(_DAIDEObject):
     power_1: Power
     powers: List[Power]
     power_2: Power
+
+    def __post_init__(self):
+        self.powers = sorted(self.powers)
 
     def __str__(self):
         return (

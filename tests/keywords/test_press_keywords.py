@@ -104,7 +104,7 @@ def test_HUH(input, expected_output):
                 ["AUS", "GER"],
                 ["TUR", "ITA"],
             ),
-            "ALY ( AUS GER ) VSS ( TUR ITA )",
+            "ALY ( AUS GER ) VSS ( ITA TUR )",
         ),
     ],
 )
@@ -242,7 +242,7 @@ def test_FCT(input, expected_output):
                 ["GER", "FRA"],
                 PRP(PCE("AUS", "ENG")),
             ),
-            "FRM ( AUS ) ( GER FRA ) ( PRP ( PCE ( AUS ENG ) ) )",
+            "FRM ( AUS ) ( FRA GER ) ( PRP ( PCE ( AUS ENG ) ) )",
         ),
     ],
 )
@@ -551,7 +551,7 @@ def test_FOR(input, expected_output):
                 PRP(PCE("AUS", "GER")),
                 PRP(PCE("GER", "FRA")),
             ),
-            "IFF ( PCE ( AUS ENG ) ) THN ( PRP ( PCE ( AUS GER ) ) ) ELS ( PRP ( PCE ( GER FRA ) ) )",
+            "IFF ( PCE ( AUS ENG ) ) THN ( PRP ( PCE ( AUS GER ) ) ) ELS ( PRP ( PCE ( FRA GER ) ) )",
         ),
     ],
 )
@@ -611,7 +611,7 @@ def test_YDO(input, expected_output):
                 ["GER", "FRA"],
                 PRP(PCE("TUR", "RUS")),
             ),
-            "SND ( AUS ) ( GER FRA ) ( PRP ( PCE ( TUR RUS ) ) )",
+            "SND ( AUS ) ( FRA GER ) ( PRP ( PCE ( RUS TUR ) ) )",
         ),
     ],
 )
@@ -647,7 +647,7 @@ def test_FWD(input, expected_output):
                 ["GER", "FRA"],
                 "ITA",
             ),
-            "BCC ( AUS ) ( GER FRA ) ( ITA )",
+            "BCC ( AUS ) ( FRA GER ) ( ITA )",
         ),
     ],
 )

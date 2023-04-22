@@ -1,6 +1,6 @@
+import warnings
 from collections import OrderedDict, defaultdict
 from typing import Dict, List, Optional, Set, Tuple, Union
-import warnings
 
 from parsimonious.grammar import Grammar
 from typing_extensions import Literal
@@ -29,10 +29,12 @@ class DAIDEGrammar(Grammar):
             self.try_tokens = None
         else:
             if try_tokens.name == "try_tokens" and hasattr(try_tokens, "members"):
-                try_tokens_strings = list(map(lambda x: x.literal, try_tokens.members))
+                try_tokens_strings: List[PressKeywords] = list(
+                    map(lambda x: x.literal, try_tokens.members)
+                )
             else:  # condition when there is a single try token. parsimonious replaces token with actual rule.
                 try_tokens_strings = try_tokens.name.upper()
-            self.try_tokens: List[str] = try_tokens_strings
+            self.try_tokens: List[PressKeywords] = try_tokens_strings
 
     @staticmethod
     def from_level(
@@ -208,7 +210,6 @@ def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> Gramm
 def _merge_shared_key_value(
     old_grammar: GrammarDict, new_grammar: GrammarDict, shared_key: str
 ) -> str:
-
     if new_grammar[shared_key][:3] == TRAIL_TOKEN:
         new_value = old_grammar[shared_key] + " / " + new_grammar[shared_key][3:]
     else:
