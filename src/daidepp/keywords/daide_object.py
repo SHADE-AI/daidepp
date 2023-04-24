@@ -9,13 +9,14 @@ from daidepp.grammar.grammar import DAIDELevel
 _grammar = create_daide_grammar(get_args(DAIDELevel)[-1], string_type="all")
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class _DAIDEObject(ABC):
     @abstractmethod
     def __str__(self) -> str:
         pass
 
     def __post_init__(self):
+        # print("post init ran!")
         try:
             _grammar.parse(str(self))
         except Exception as e:

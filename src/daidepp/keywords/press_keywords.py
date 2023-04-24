@@ -1,27 +1,29 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple, Union
+from typing import TYPE_CHECKING
 
 from daidepp.constants import *
 from daidepp.keywords.base_keywords import *
 from daidepp.keywords.daide_object import _DAIDEObject
 
+if TYPE_CHECKING:
+    from typing import FrozenSet, Iterable, List, Optional, Set, Tuple, Union
 
-@dataclass
+
+@dataclass(eq=True, frozen=True)
 class PCE(_DAIDEObject):
-    powers: Tuple[Power]
+    powers: FrozenSet[Power]
 
     def __init__(self, *powers: Power):
-        powers = tuple(sorted(powers))
-        self.powers = powers
+        object.__setattr__(self, "powers", frozenset(powers))
         self.__post_init__()
 
     def __str__(self):
-        return "PCE ( " + " ".join(self.powers) + " )"
+        return "PCE ( " + " ".join(sorted(self.powers)) + " )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class CCL(_DAIDEObject):
     press_message: PressMessage
 
@@ -29,19 +31,19 @@ class CCL(_DAIDEObject):
         return f"CCL ( {self.press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class TRY(_DAIDEObject):
-    try_tokens: Tuple[TryTokens]
+    try_tokens: FrozenSet[TryTokens]
 
     def __init__(self, *try_tokens):
-        self.try_tokens = try_tokens
+        object.__setattr__(self, "try_tokens", frozenset(try_tokens))
         self.__post_init__()
 
     def __str__(self):
-        return "TRY ( " + " ".join(self.try_tokens) + " )"
+        return "TRY ( " + " ".join(sorted(self.try_tokens)) + " )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class HUH(_DAIDEObject):
     press_message: PressMessage
 
@@ -49,7 +51,7 @@ class HUH(_DAIDEObject):
         return f"HUH ( {self.press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class PRP(_DAIDEObject):
     arrangement: Arrangement
 
@@ -57,30 +59,34 @@ class PRP(_DAIDEObject):
         return f"PRP ( {self.arrangement} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class ALYVSS(_DAIDEObject):
-    aly_powers: List[Power]
-    vss_powers: List[Power]
+    aly_powers: FrozenSet[Power]
+    vss_powers: FrozenSet[Power]
+
+    def __init__(self, aly_powers: Iterable[Power], vss_powers: Iterable[Power]):
+        object.__setattr__(self, "aly_powers", frozenset(aly_powers))
+        object.__setattr__(self, "vss_powers", frozenset(vss_powers))
+        self.__post_init__()
 
     def __post_init__(self):
+        super().__post_init__()
         if len(self.aly_powers) < 2:
             raise ValueError("An alliance must have at least 2 allies.")
         if len(self.vss_powers) < 1:
             raise ValueError("An alliance must have at least 1 enemy.")
-        self.aly_powers = sorted(self.aly_powers)
-        self.vss_powers = sorted(self.vss_powers)
 
     def __str__(self):
         return (
             "ALY ( "
-            + " ".join(self.aly_powers)
+            + " ".join(sorted(self.aly_powers))
             + " ) VSS ( "
-            + " ".join(self.vss_powers)
+            + " ".join(sorted(self.vss_powers))
             + " )"
         )
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class SLO(_DAIDEObject):
     power: Power
 
@@ -88,7 +94,7 @@ class SLO(_DAIDEObject):
         return f"SLO ( {self.power} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class NOT(_DAIDEObject):
     arrangement_qry: Union[Arrangement, QRY]
 
@@ -96,7 +102,7 @@ class NOT(_DAIDEObject):
         return f"NOT ( {self.arrangement_qry} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class NAR(_DAIDEObject):
     arrangement: Arrangement
 
@@ -104,22 +110,22 @@ class NAR(_DAIDEObject):
         return f"NAR ( {self.arrangement} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class DRW(_DAIDEObject):
-    powers: Tuple[Power] = tuple()
+    powers: FrozenSet[Power]
 
     def __init__(self, *powers: Power):
-        self.powers = tuple(sorted(powers))
+        object.__setattr__(self, "powers", frozenset(powers))
         self.__post_init__()
 
     def __str__(self):
         if self.powers:
-            return f"DRW ( " + " ".join(self.powers) + " )"
+            return f"DRW ( " + " ".join(sorted(self.powers)) + " )"
         else:
             return f"DRW"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class YES(_DAIDEObject):
     press_message: PressMessage
 
@@ -127,7 +133,7 @@ class YES(_DAIDEObject):
         return f"YES ( {self.press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class REJ(_DAIDEObject):
     press_message: PressMessage
 
@@ -135,7 +141,7 @@ class REJ(_DAIDEObject):
         return f"REJ ( {self.press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class BWX(_DAIDEObject):
     press_message: PressMessage
 
@@ -143,7 +149,7 @@ class BWX(_DAIDEObject):
         return f"BWX ( {self.press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class FCT(_DAIDEObject):
     arrangement_qry_not: Union[Arrangement, QRY, NOT]
 
@@ -151,24 +157,29 @@ class FCT(_DAIDEObject):
         return f"FCT ( {self.arrangement_qry_not} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class FRM(_DAIDEObject):
     frm_power: Power
-    recv_powers: List[Power]
+    recv_powers: Set[Power]
     message: Message
 
-    def __post_init__(self):
-        self.recv_powers = sorted(self.recv_powers)
+    def __init__(
+        self, frm_power: Power, recv_powers: Iterable[Power], message: Message
+    ):
+        object.__setattr__(self, "frm_power", frm_power)
+        object.__setattr__(self, "recv_powers", frozenset(recv_powers))
+        object.__setattr__(self, "message", message)
+        self.__post_init__()
 
     def __str__(self):
         return (
             f"FRM ( {self.frm_power} ) ( "
-            + " ".join(self.recv_powers)
+            + " ".join(sorted(self.recv_powers))
             + f" ) ( {self.message} )"
         )
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class XDO(_DAIDEObject):
     order: Command
 
@@ -176,18 +187,18 @@ class XDO(_DAIDEObject):
         return f"XDO ( {self.order} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class DMZ(_DAIDEObject):
     """This is an arrangement for the listed powers to remove all units from, and not order to, support to, convoy to, retreat to, or build any units in any of the list of provinces. Eliminated powers must not be included in the power list. The arrangement is continuous (i.e. it isn't just for the current turn)."""
 
-    powers: List[Power]
-    provinces: List[Location]
-    exhaustive_provinces: List[Location] = field(init=False)
+    powers: FrozenSet[Power]
+    provinces: FrozenSet[Location]
+    exhaustive_provinces: FrozenSet[Location] = field(init=False)
 
-    def __post_init__(self):
-        # This is helpful for checking if a move violates a DMZ order. All possible
-        # location objects are included, so one can simply do something like
-        # `assert order.loc not in dmz.exhaustive_provinces`
+    def __init__(self, powers: Iterable[Power], provinces: Iterable[Location]):
+        object.__setattr__(self, "powers", frozenset(powers))
+        object.__setattr__(self, "provinces", frozenset(sorted(provinces)))
+
         exhaustive_provinces: List[Location] = []
         for province in self.provinces:
             if province == Location(province="STP"):
@@ -204,64 +215,68 @@ class DMZ(_DAIDEObject):
                 exhaustive_provinces.append(Location(province="BUL", coast="SCS"))
             else:
                 exhaustive_provinces.append(province)
-        self.exhaustive_provinces = exhaustive_provinces
-        self.powers = sorted(self.powers)
+
+        object.__setattr__(
+            self, "exhaustive_provinces", frozenset(exhaustive_provinces)
+        )
 
     def __str__(self):
         return (
             "DMZ ( "
-            + " ".join(self.powers)
+            + " ".join(sorted(self.powers))
             + " ) ( "
-            + " ".join(map(lambda x: str(x), self.provinces))
+            + " ".join(sorted(map(lambda x: str(x), self.provinces)))
             + " )"
         )
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class AND(_DAIDEObject):
-    arrangements: Tuple[Arrangement]
+    arrangements: FrozenSet[Arrangement]
 
     def __init__(self, *arrangements: Arrangement):
-        self.arrangements = arrangements
+        object.__setattr__(self, "arrangements", frozenset(arrangements))
         self.__post_init__()
 
     def __str__(self):
-        arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
+        arr_str = sorted(["( " + str(arr) + " )" for arr in self.arrangements])
         return f"AND " + " ".join(arr_str)
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class ORR(_DAIDEObject):
     arrangements: Tuple[Arrangement]
 
     def __init__(self, *arrangements: Arrangement):
-        self.arrangements = arrangements
+        object.__setattr__(self, "arrangements", frozenset(arrangements))
         self.__post_init__()
 
     def __str__(self):
-        arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
+        arr_str = sorted(["( " + str(arr) + " )" for arr in self.arrangements])
         return f"ORR " + " ".join(arr_str)
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class PowerAndSupplyCenters:
     power: Power
-    supply_centers: Tuple[Location]  # Supply centers
+    supply_centers: FrozenSet[Location]  # Supply centers
 
     def __init__(self, power, *supply_centers: Location):
-        self.power = power
-        self.supply_centers = supply_centers
+        object.__setattr__(self, "power", power)
+        object.__setattr__(self, "supply_centers", frozenset(sorted(supply_centers)))
 
     def __str__(self):
         return f"{self.power} " + " ".join(map(lambda x: str(x), self.supply_centers))
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class SCD(_DAIDEObject):
     power_and_supply_centers: Tuple[PowerAndSupplyCenters]
 
     def __init__(self, *power_and_supply_centers: PowerAndSupplyCenters):
-        self.power_and_supply_centers = power_and_supply_centers
+        object.__setattr__(
+            self, "power_and_supply_centers", frozenset(power_and_supply_centers)
+        )
         self.__post_init__()
 
     def __str__(self):
@@ -269,12 +284,12 @@ class SCD(_DAIDEObject):
         return f"SCD " + " ".join(pas_str)
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class OCC(_DAIDEObject):
-    units: Tuple[Unit]
+    units: FrozenSet[Unit]
 
     def __init__(self, *units: Unit):
-        self.units = units
+        object.__setattr__(self, "units", frozenset(units))
         self.__post_init__()
 
     def __str__(self):
@@ -282,16 +297,16 @@ class OCC(_DAIDEObject):
         return f"OCC " + " ".join(unit_str)
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class CHO(_DAIDEObject):
     minimum: int
     maximum: int
-    arrangements: Tuple[Arrangement]
+    arrangements: FrozenSet[Arrangement]
 
     def __init__(self, minimum: int, maximum: int, *arrangements: Arrangement):
-        self.minimum = minimum
-        self.maximum = maximum
-        self.arrangements = arrangements
+        object.__setattr__(self, "minimum", minimum)
+        object.__setattr__(self, "maximum", maximum)
+        object.__setattr__(self, "arrangements", frozenset(arrangements))
         self.__post_init__()
 
     def __str__(self):
@@ -300,7 +315,7 @@ class CHO(_DAIDEObject):
         return f"CHO ( {self.minimum} {self.maximum} ) " + " ".join(arr_str)
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class INS(_DAIDEObject):
     arrangement: Arrangement
 
@@ -308,7 +323,7 @@ class INS(_DAIDEObject):
         return f"INS ( {self.arrangement} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class QRY(_DAIDEObject):
     arrangement: Arrangement
 
@@ -316,7 +331,7 @@ class QRY(_DAIDEObject):
         return f"QRY ( {self.arrangement} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class THK(_DAIDEObject):
     arrangement_qry_not: Union[Arrangement, QRY, NOT, None]
 
@@ -324,7 +339,7 @@ class THK(_DAIDEObject):
         return f"THK ( {self.arrangement_qry_not} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class IDK(_DAIDEObject):
     qry_exp_wht_prp_ins_sug: Union[QRY, EXP, WHT, PRP, INS, SUG]
 
@@ -332,7 +347,7 @@ class IDK(_DAIDEObject):
         return f"IDK ( {self.qry_exp_wht_prp_ins_sug} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class SUG(_DAIDEObject):
     arrangement: Arrangement
 
@@ -340,7 +355,7 @@ class SUG(_DAIDEObject):
         return f"SUG ( {self.arrangement} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class WHT(_DAIDEObject):
     unit: Unit
 
@@ -348,7 +363,7 @@ class WHT(_DAIDEObject):
         return f"WHT ( {self.unit} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class HOW(_DAIDEObject):
     province_power: Union[Location, Power]
 
@@ -356,7 +371,7 @@ class HOW(_DAIDEObject):
         return f"HOW ( {self.province_power} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class EXP(_DAIDEObject):
     turn: Turn
     message: Message
@@ -365,7 +380,7 @@ class EXP(_DAIDEObject):
         return f"EXP ( {self.turn} ) ( {self.message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class SRY(_DAIDEObject):
     exp: EXP
 
@@ -373,7 +388,7 @@ class SRY(_DAIDEObject):
         return f"SRY ( {self.exp} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class FOR(_DAIDEObject):
     start_turn: Turn
     end_turn: Optional[Turn]
@@ -386,7 +401,7 @@ class FOR(_DAIDEObject):
             return f"FOR ( ( {self.start_turn} ) ( {self.end_turn} ) ) ( {self.arrangement} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class IFF(_DAIDEObject):
     arrangement: Arrangement
     press_message: PressMessage
@@ -399,7 +414,7 @@ class IFF(_DAIDEObject):
             return f"IFF ( {self.arrangement} ) THN ( {self.press_message} ) ELS ( {self.els_press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class XOY(_DAIDEObject):
     power_x: Power
     power_y: Power
@@ -408,14 +423,14 @@ class XOY(_DAIDEObject):
         return f"XOY ( {self.power_x} ) ( {self.power_y} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class YDO(_DAIDEObject):
     power: Power
-    units: Tuple[Unit]
+    units: FrozenSet[Unit]
 
     def __init__(self, power, *units):
-        self.power = power
-        self.units = units
+        object.__setattr__(self, "power", power)
+        object.__setattr__(self, "units", frozenset(units))
         self.__post_init__()
 
     def __str__(self):
@@ -423,58 +438,64 @@ class YDO(_DAIDEObject):
         return f"YDO ( {self.power} ) " + " ".join(unit_str)
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class SND(_DAIDEObject):
     power: Power
     recv_powers: List[Power]
     message: Message
 
-    def __post_init__(self):
-        self.recv_powers = sorted(self.recv_powers)
+    def __init__(self, power: Power, recv_powers: Iterable[Power], message: Message):
+        object.__setattr__(self, "power", power)
+        object.__setattr__(self, "recv_powers", frozenset(sorted(recv_powers)))
+        object.__setattr__(self, "message", message)
 
     def __str__(self):
         return (
             f"SND ( {self.power} ) ( "
-            + " ".join(self.recv_powers)
+            + " ".join(sorted(self.recv_powers))
             + f" ) ( {self.message} )"
         )
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class FWD(_DAIDEObject):
-    powers: List[Power]
+    powers: FrozenSet[Power]
     power_1: Power
     power_2: Power
 
-    def __post_init__(self):
-        self.powers = sorted(self.powers)
+    def __init__(self, powers: Iterable[Power], power_1: Power, power_2: Power):
+        object.__setattr__(self, "powers", frozenset(sorted(powers)))
+        object.__setattr__(self, "power_1", power_1)
+        object.__setattr__(self, "power_2", power_2)
 
     def __str__(self):
         return (
             f"FWD ( "
-            + " ".join(self.powers)
+            + " ".join(sorted(self.powers))
             + f" ) ( {self.power_1} ) ( {self.power_2} )"
         )
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class BCC(_DAIDEObject):
     power_1: Power
-    powers: List[Power]
+    powers: FrozenSet[Power]
     power_2: Power
 
-    def __post_init__(self):
-        self.powers = sorted(self.powers)
+    def __init__(self, power_1: Power, powers: Iterable[Power], power_2: Power):
+        object.__setattr__(self, "power_1", power_1)
+        object.__setattr__(self, "powers", frozenset(sorted(powers)))
+        object.__setattr__(self, "power_2", power_2)
 
     def __str__(self):
         return (
             f"BCC ( {self.power_1} ) ( "
-            + " ".join(self.powers)
+            + " ".join(sorted(self.powers))
             + f" ) ( {self.power_2} )"
         )
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class WHY(_DAIDEObject):
     fct_thk_prp_ins: Union[FCT, THK, PRP, INS]
 
@@ -482,7 +503,7 @@ class WHY(_DAIDEObject):
         return f"WHY ( {self.fct_thk_prp_ins} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class POB(_DAIDEObject):
     why: WHY
 
@@ -490,7 +511,7 @@ class POB(_DAIDEObject):
         return f"POB ( {self.why} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class UHY(_DAIDEObject):
     press_message: PressMessage
 
@@ -498,7 +519,7 @@ class UHY(_DAIDEObject):
         return f"UHY ( {self.press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class HPY(_DAIDEObject):
     press_message: PressMessage
 
@@ -506,7 +527,7 @@ class HPY(_DAIDEObject):
         return f"HPY ( {self.press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class ANG(_DAIDEObject):
     press_message: PressMessage
 
@@ -514,14 +535,14 @@ class ANG(_DAIDEObject):
         return f"ANG ( {self.press_message} )"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class ROF(_DAIDEObject):
     def __str__(self):
         return f"ROF"
 
 
-@dataclass
-class ULB:
+@dataclass(eq=True, frozen=True)
+class ULB(_DAIDEObject):
     power: Power
     float_val: float
 
@@ -529,8 +550,8 @@ class ULB:
         return f"ULB ( {self.power} {self.float_val} )"
 
 
-@dataclass
-class UUB:
+@dataclass(eq=True, frozen=True)
+class UUB(_DAIDEObject):
     power: Power
     float_val: float
 
