@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import FrozenSet, List, Optional, Union
+from typing import Optional, Tuple, Union
 
 from typing_extensions import get_args
 
@@ -141,12 +141,12 @@ class CVY(_DAIDEObject):
 class MoveByCVY(_DAIDEObject):
     unit: Unit
     province: Location
-    province_seas: FrozenSet[ProvinceSea]
+    province_seas: Tuple[ProvinceSea]
 
     def __init__(self, unit, province, *province_seas):
         object.__setattr__(self, "unit", unit)
         object.__setattr__(self, "province", province)
-        object.__setattr__(self, "province_seas", frozenset(sorted(province_seas)))
+        object.__setattr__(self, "province_seas", tuple(sorted(province_seas)))
         self.__post_init__()
 
     def __post_init__(self):
@@ -159,7 +159,7 @@ class MoveByCVY(_DAIDEObject):
     def __str__(self):
         return (
             f"( {self.unit} ) CTO {self.province} VIA ( "
-            + " ".join(sorted(self.province_seas))
+            + " ".join(self.province_seas)
             + " )"
         )
 
