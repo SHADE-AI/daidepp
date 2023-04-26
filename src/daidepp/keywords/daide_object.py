@@ -21,4 +21,4 @@ class _DAIDEObject(ABC):
         except Exception as e:
             raise ValueError(
                 f"Incorrect values passed, object is not valid DAIDE. Received '{str(self)}'"
-            )
+            ) from e
