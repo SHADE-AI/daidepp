@@ -16,7 +16,6 @@ class _DAIDEObject(ABC):
         pass
 
     def __post_init__(self):
-        # print("post init ran!")
         try:
             _grammar.parse(str(self))
         except Exception as e:
