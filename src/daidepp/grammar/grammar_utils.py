@@ -122,9 +122,7 @@ def _create_daide_grammar_str(
         str: string representing DAIDE grammar in PEG
     """
     grammar_dict = _create_daide_grammar_dict(level)
-    grammar_str = _create_grammar_str_from_dict(
-        grammar_dict, string_type
-    )
+    grammar_str = _create_grammar_str_from_dict(grammar_dict, string_type)
     return grammar_str
 
 
@@ -330,9 +328,7 @@ def create_grammar_from_press_keywords(
     if "message" in new_grammar_dict:
         new_grammar_dict.move_to_end("message", last=False)
 
-    new_grammar_str = _create_grammar_str_from_dict(
-        new_grammar_dict, string_type
-    )
+    new_grammar_str = _create_grammar_str_from_dict(new_grammar_dict, string_type)
     new_grammar = DAIDEGrammar(new_grammar_str)
     return new_grammar
 
