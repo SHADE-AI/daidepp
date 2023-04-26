@@ -54,7 +54,7 @@ Example:
 >>> from daidepp import AND, PRP, PCE
 >>> str(AND(PCE("AUS", "ENG"), PCE("AUS", "ENG"), PCE("AUS", "ENG", "FRA")))
 `AND ( PCE ( AUS ENG ) ) ( PCE ( AUS ENG ) ) ( PCE ( AUS ENG FRA ) )`
- ```
+```
 Each keyword class uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout [`tests/keywords`](./tests/keywords/), which provides examples for each class. 
 
 ### Grammar construction with press keywords
