@@ -434,7 +434,7 @@ class YDO(_DAIDEObject):
         self.__post_init__()
 
     def __str__(self):
-        unit_str = ["( " + str(unit) + " )" for unit in self.units]
+        unit_str = sorted(["( " + str(unit) + " )" for unit in self.units])
         return f"YDO ( {self.power} ) " + " ".join(unit_str)
 
 
