@@ -146,7 +146,7 @@ class MoveByCVY(_DAIDEObject):
     def __init__(self, unit, province, *province_seas):
         object.__setattr__(self, "unit", unit)
         object.__setattr__(self, "province", province)
-        object.__setattr__(self, "province_seas", tuple(sorted(province_seas)))
+        object.__setattr__(self, "province_seas", tuple(province_seas))
         self.__post_init__()
 
     def __post_init__(self):
