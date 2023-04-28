@@ -141,7 +141,7 @@ class CVY(_DAIDEObject):
 class MoveByCVY(_DAIDEObject):
     unit: Unit
     province: Location
-    province_seas: FrozenSet[Location]
+    province_seas: FrozenSet[ProvinceSea]
 
     def __init__(self, unit, province, *province_seas):
         object.__setattr__(self, "unit", unit)
@@ -151,7 +151,7 @@ class MoveByCVY(_DAIDEObject):
     def __str__(self):
         return (
             f"( {self.unit} ) CTO {self.province} VIA ( "
-            + " ".join(sorted(map(lambda x: str(x), self.province_seas)))
+            + " ".join(sorted(self.province_seas))
             + " )"
         )
 
