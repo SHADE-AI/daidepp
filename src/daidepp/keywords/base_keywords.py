@@ -93,7 +93,7 @@ class SUP(_DAIDEObject):
 
     @property
     def province_no_coast_location(self) -> Optional[Location]:
-        if self.province_no_coast == None:
+        if self.province_no_coast is None:
             return self.province_no_coast
         else:
             return Location(self.province_no_coast)

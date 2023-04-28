@@ -25,7 +25,7 @@ class DAIDEGrammar(Grammar):
     def _set_try_tokens(self):
         try_tokens = self.get("try_tokens")
 
-        if try_tokens == None:
+        if try_tokens is None:
             self.try_tokens = None
         else:
             if try_tokens.name == "try_tokens" and hasattr(try_tokens, "members"):
