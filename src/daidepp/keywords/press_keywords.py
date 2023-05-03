@@ -19,6 +19,11 @@ class PCE(_DAIDEObject):
         object.__setattr__(self, "powers", frozenset(powers))
         self.__post_init__()
 
+    def __post_init__(self):
+        super().__post_init__()
+        if len(self.powers) < 2:
+            raise ValueError("A peace must have at least 2 powers.")
+
     def __str__(self):
         return "PCE ( " + " ".join(sorted(self.powers)) + " )"
 
@@ -38,6 +43,11 @@ class TRY(_DAIDEObject):
     def __init__(self, *try_tokens):
         object.__setattr__(self, "try_tokens", frozenset(try_tokens))
         self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.try_tokens:
+            raise ValueError("A TRY message must have at least 1 token.")
 
     def __str__(self):
         return "TRY ( " + " ".join(sorted(self.try_tokens)) + " )"
@@ -118,6 +128,11 @@ class DRW(_DAIDEObject):
         object.__setattr__(self, "powers", frozenset(powers))
         self.__post_init__()
 
+    def __post_init__(self):
+        super().__post_init__()
+        if len(self.powers) == 1:
+            raise ValueError("A draw cannot involve only a single power.")
+
     def __str__(self):
         if self.powers:
             return f"DRW ( " + " ".join(sorted(self.powers)) + " )"
@@ -171,6 +186,11 @@ class FRM(_DAIDEObject):
         object.__setattr__(self, "message", message)
         self.__post_init__()
 
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.recv_powers:
+            raise ValueError("A FRM must have at least 1 receiving power.")
+
     def __str__(self):
         return (
             f"FRM ( {self.frm_power} ) ( "
@@ -220,6 +240,15 @@ class DMZ(_DAIDEObject):
             self, "exhaustive_provinces", frozenset(exhaustive_provinces)
         )
 
+        self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.powers:
+            raise ValueError("A DMZ must involve at least 1 power.")
+        if not self.provinces:
+            raise ValueError("A DMZ must include at least 1 province.")
+
     def __str__(self):
         return (
             "DMZ ( "
@@ -238,6 +267,11 @@ class AND(_DAIDEObject):
         object.__setattr__(self, "arrangements", frozenset(arrangements))
         self.__post_init__()
 
+    def __post_init__(self):
+        super().__post_init__()
+        if len(self.arrangements) < 2:
+            raise ValueError("An AND must have at least 2 arrangements.")
+
     def __str__(self):
         arr_str = sorted(["( " + str(arr) + " )" for arr in self.arrangements])
         return f"AND " + " ".join(arr_str)
@@ -250,6 +284,11 @@ class ORR(_DAIDEObject):
     def __init__(self, *arrangements: Arrangement):
         object.__setattr__(self, "arrangements", frozenset(arrangements))
         self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if len(self.arrangements) < 2:
+            raise ValueError("An ORR must have at least 2 arrangements.")
 
     def __str__(self):
         arr_str = sorted(["( " + str(arr) + " )" for arr in self.arrangements])
@@ -264,6 +303,13 @@ class PowerAndSupplyCenters:
     def __init__(self, power, *supply_centers: Location):
         object.__setattr__(self, "power", power)
         object.__setattr__(self, "supply_centers", frozenset(sorted(supply_centers)))
+        self.__post_init__()
+
+    def __post_init__(self):
+        if not self.supply_centers:
+            raise ValueError(
+                "A PowerAndSupplyCenters must have at least 1 supply center."
+            )
 
     def __str__(self):
         return f"{self.power} " + " ".join(map(lambda x: str(x), self.supply_centers))
@@ -279,6 +325,11 @@ class SCD(_DAIDEObject):
         )
         self.__post_init__()
 
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.power_and_supply_centers:
+            raise ValueError("An SCD must have at least 1 power and supply center.")
+
     def __str__(self):
         pas_str = ["( " + str(pas) + " )" for pas in self.power_and_supply_centers]
         return f"SCD " + " ".join(pas_str)
@@ -291,6 +342,11 @@ class OCC(_DAIDEObject):
     def __init__(self, *units: Unit):
         object.__setattr__(self, "units", frozenset(units))
         self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.units:
+            raise ValueError("An OCC must have at least 1 unit.")
 
     def __str__(self):
         unit_str = ["( " + str(unit) + " )" for unit in self.units]
@@ -308,6 +364,11 @@ class CHO(_DAIDEObject):
         object.__setattr__(self, "maximum", maximum)
         object.__setattr__(self, "arrangements", frozenset(arrangements))
         self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.arrangements:
+            raise ValueError("A CHO must have at least 1 arrangement.")
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
@@ -448,6 +509,12 @@ class SND(_DAIDEObject):
         object.__setattr__(self, "power", power)
         object.__setattr__(self, "recv_powers", frozenset(sorted(recv_powers)))
         object.__setattr__(self, "message", message)
+        self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.recv_powers:
+            raise ValueError("A SND must have at least 1 receiving power.")
 
     def __str__(self):
         return (
@@ -467,6 +534,12 @@ class FWD(_DAIDEObject):
         object.__setattr__(self, "powers", frozenset(sorted(powers)))
         object.__setattr__(self, "power_1", power_1)
         object.__setattr__(self, "power_2", power_2)
+        self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.powers:
+            raise ValueError("A FWD must have at least 1 receiving power.")
 
     def __str__(self):
         return (
@@ -486,6 +559,12 @@ class BCC(_DAIDEObject):
         object.__setattr__(self, "power_1", power_1)
         object.__setattr__(self, "powers", frozenset(sorted(powers)))
         object.__setattr__(self, "power_2", power_2)
+        self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.powers:
+            raise ValueError("A BCC must have at least 1 receiving power.")
 
     def __str__(self):
         return (

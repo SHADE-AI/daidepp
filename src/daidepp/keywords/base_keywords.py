@@ -147,6 +147,14 @@ class MoveByCVY(_DAIDEObject):
         object.__setattr__(self, "unit", unit)
         object.__setattr__(self, "province", province)
         object.__setattr__(self, "province_seas", frozenset(sorted(province_seas)))
+        self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.province_seas:
+            raise ValueError(
+                "Movement via convoy must include at least one sea province."
+            )
 
     def __str__(self):
         return (
