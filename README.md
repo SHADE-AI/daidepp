@@ -10,13 +10,13 @@
 DAIDE parser using [parsimonious](https://github.com/erikrose/parsimonious). Parsimonious is a python package that uses "a simplified sort of EBNF notation" to define a grammar. The parser currently supports all 130 levels of DAIDE.
 
 - The original DAIDE specification is [here](daide-syntax.pdf)
-- The working markdown document that will included DAIDE enhancements is [here](daide-specification.md)
-- The machine-parsable grammar can be found in [this `.py` file](./src/daidepp/grammar.py)
+- The working Markdown document that will include DAIDE enhancements is [here](daide-specification.md)
+- The machine-parsable grammar can be found in [this `.py` file](./src/daidepp/grammar/grammar.py)
 
 ## Use
 
 ### Basic usage
-Using the grammar and grammar utils in [`grammar`](./src/daidepp/grammar/), you can create a parse tree from a DAIDE press message or reply. The nodes of the parse tree can be visited to return something more useful. The visiting rules for each of the nodes of the parse tree are defined in [`daide_visitor.py`](./src/daidepp/daide_visitor.py).
+Using the grammar and grammar utils in [`grammar`](./src/daidepp/grammar/), you can create a parse tree from a DAIDE press message or reply. The nodes of the parse tree can be visited to return something more useful. The visiting rules for each of the nodes of the parse tree are defined in [`visitor.py`](./src/daidepp/visitor.py).
 
 Example:
 
@@ -43,7 +43,7 @@ The daide_visitor outputs a dataclass that can be used to access useful informat
 ['TUR','ITA']
 ```
 
-If the DAIDE token is not in the grammar or if the message is malformed, the parser will just thrown an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.
+If the DAIDE token is not in the grammar or if the message is malformed, the parser will just throw an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.
 
 ### DAIDE string construction with keyword classes
 In addition, DAIDE strings can be constructed using the classes in [`base_keywords.py`](./src/daidepp/keywords/base_keywords.py) and [`press_keywords`](./src/daidepp/keywords/press_keywords.py). Each class has type hints that indicate the parameters that should be used.
@@ -76,6 +76,6 @@ Example:
 Three files should be updated whenever making a PR:
 
 - [`grammar.py`](./src/daidepp/grammar/grammar.py): the machine-readable grammar
-- [`daide_visitor.py`](./src/daidepp/daide_visitor.py): the visitor object to parse a message
+- [`visitor.py`](./src/daidepp/visitor.py): the visitor object to parse a message
 - [`press_keywords.py`](./src/daidepp/keywords/press_keywords.py): DAIDE press keyword objects
 - [The daide markdown specification](./daide-specification.md): the human-readable specification

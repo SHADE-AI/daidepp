@@ -55,7 +55,7 @@ def create_daide_grammar(
 
     Args:
         level (Union[DAIDELevel,List[DAIDELevel]], optional):
-            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            The level of DAIDE to make grammar for. Defaults to 30. If it's a list,
             only include levels in list rather than all levels up to given value.
         allow_just_arrangement (bool, optional):
             if set to True, the parser accepts strings that are only arrangements,
@@ -84,7 +84,7 @@ def _create_daide_grammar_dict(
 
     Args:
         level (Union[DAIDELevel,List[DAIDELevel]], optional):
-            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            The level of DAIDE to make grammar for. Defaults to 30. If it's a list,
             only include levels in list rather than all levels up to given value.
 
     Returns:
@@ -111,7 +111,7 @@ def _create_daide_grammar_str(
 
     Args:
         level (Union[DAIDELevel,List[DAIDELevel]], optional):
-            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            The level of DAIDE to make grammar for. Defaults to 30. If it's a list,
             only include levels in list rather than all levels up to given value.
         string_type (Literal["message", "arrangement", "all"], optional):
             if 'message' is passed (default), the grammar will only recognize full DAIDE messages.
@@ -336,7 +336,7 @@ def create_grammar_from_press_keywords(
 def _create_grammar_dict_entry(keyword, rules):
     if not rules:
         warnings.warn(
-            f"Requires addtional keywords to form {keyword}'s grammar rule. Ommiting {keyword} from new new grammar."
+            f"Requires additional keywords to form {keyword}'s grammar rule. Omitting {keyword} from new new grammar."
         )
         return
 

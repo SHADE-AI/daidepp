@@ -249,8 +249,8 @@ class DAIDEVisitor(NodeVisitor):
         _, scd_statements = visited_children
 
         power_and_supply_centers = []
-        for scd_statment in scd_statements:
-            _, power, _, supply_center, ws_supply_centers, _ = scd_statment
+        for scd_statement in scd_statements:
+            _, power, _, supply_center, ws_supply_centers, _ = scd_statement
 
             supply_centers = [Location(supply_center)]
             for ws_sc in ws_supply_centers:

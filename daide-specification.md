@@ -46,7 +46,7 @@ Unit type – can be one of **AMY**, **FLT**.
 ## Notation
 
 In the text, anything in [square brackets] may be omitted.
-Anything which is specified twice followed by a line of dots ... may be repeated any number of times (including once, but not including not at all unless it is also in [square brackets].
+Anything which is specified twice followed by a line of dots ... may be repeated any number of times (including once), but not including not at all unless it is also in [square brackets].
 
 Any (round brackets) are part of the syntax of the language.
 
@@ -79,7 +79,7 @@ Until a successful **NME**, **OBS** or **IAM** message has been received, the cl
 
 > **MAP ('name')**
 
-Once the client has joined the game, the **MAP** token is sent to specify the map which is to be used, as soon as the **HLO** or **OBS** has been received and acknowledged. The name is unique to the map - so if the client has played a game on a map with this name before, then this will be the same map again. The Standard map is called 'standard'. name can include only letters, numbers and underscore. Map names are not case sensitive.
+Once the client has joined the game, the **MAP** token is sent to specify the map which is to be used, as soon as the **HLO** or **OBS** has been received and acknowledged. The name is unique to the map - so if the client has played a game on a map with this name before, then this will be the same map again. The Standard map is called 'standard'. name can include only letters, numbers and underscore. Map names are not case-sensitive.
 
 The client may request another copy of the **MAP** message at any time, by sending **MAP** with no parameters.
 
@@ -297,7 +297,7 @@ The client may request a copy of the current **MIS** command by sending **MIS** 
 
 <!-- End of page 6 -->
 
-This is sent by the client to the server. It means don’t process orders until the deadline. It is the equivalent of set wait on the judges. The server will reply with **YES(NOT(GOF))**, or **REJ(NOT(GOF))** if the game has not started, the power has been eliminated, or the game has ended..
+This is sent by the client to the server. It means don’t process orders until the deadline. It is the equivalent of set wait on the judges. The server will reply with **YES(NOT(GOF))**, or **REJ(NOT(GOF))** if the game has not started, the power has been eliminated, or the game has ended.
 
 > **GOF**
 
@@ -350,7 +350,7 @@ The previous turn’s results may be requested by sending an **ORD** command to 
 
 <!-- End of page 7 -->
 
-The Server can send this at any point. It is a request for the client to save the current game with the name given. **gamename** will never be more than 8 characters, and can include only letters, numbers and underscore. Game names are not case sensitive. The client should save everything it will need in order to be able to resume the game at a later date. Once the game is saved, the client should respond with **YES (SVE ('gamename'))**. If there is an error saving the game, then it should respond with **REJ (SVE ('gamename'))**. Once the game has been saved, the client should continue playing.
+The Server can send this at any point. It is a request for the client to save the current game with the name given. **gamename** will never be more than 8 characters, and can include only letters, numbers and underscore. Game names are not case-sensitive. The client should save everything it will need in order to be able to resume the game at a later date. Once the game is saved, the client should respond with **YES (SVE ('gamename'))**. If there is an error saving the game, then it should respond with **REJ (SVE ('gamename'))**. Once the game has been saved, the client should continue playing.
 
 > **LOD ('gamename')**
 
@@ -370,7 +370,7 @@ This command is sent by the Server, and indicates that the client should exit. T
 
 This message is sent by the server, in games where there is a time limit for the turn. It indicates the number of seconds until the next deadline. It is sent immediately after each turn has processed (i.e. after the **ORD**, **SCO** (where appropriate), and **NOW** messages).
 
-In addition, the client can request **TME** to be sent at other times. To do this, the client sends **TME (seconds)** to the server. The server responds with **YES (TME (seconds))** to confirm this, or **REJ (TME (seconds))** if seconds is negative, or is longer than the length of the longest deadline, or if there are no deadlines. The server will then send **TME (seconds)** to the client, seconds seconds before the deadline, every turn.
+In addition, the client can request **TME** to be sent at other times. To do this, the client sends **TME (seconds)** to the server. The server responds with **YES (TME (seconds))** to confirm this, or **REJ (TME (seconds))** if seconds is negative, or is longer than the length of the longest deadline, or if there are no deadlines. The server will then send **TME (seconds)** to the client, **seconds** seconds before the deadline, every turn.
 
 Having requested a **TME** message, the client can cancel it with the message **NOT (TME(seconds))**. The server will respond with **YES (NOT(TME(seconds)))** to confirm it has been cancelled, or **REJ(NOT(TME(seconds)))** if there was no such time request. Alternatively the client can send **NOT(TME)** to request that all **TME** requests are cancelled. This will always be responded to with **YES(NOT(TME))**.
 
@@ -417,7 +417,7 @@ This command is sent from the server to the client, and indicates that the game 
 
 This command is sent by the client to the server, to indicate that the client would accept a DIAS draw at this point. The server responds with **YES (DRW)** , or **REJ(DRW)** if the game has not started or has ended, or the message is received from an eliminated **power** or an observer.
 
-**DRW** can also be sent from the server to the client, to indicate that a draw has been declared. This will happen as soon as all non- eliminated clients have simultaneously indicated that they will accept a draw at that point.
+**DRW** can also be sent from the server to the client, to indicate that a draw has been declared. This will happen as soon as all non-eliminated clients have simultaneously indicated that they will accept a draw at that point.
 
 If a turn processes after **DRW** is sent from the client to the server, then the command is ignored. The client must resend the command each turn it continues to want a draw.
 
@@ -472,7 +472,7 @@ The client can cancel a partial draw request with **NOT (DRW (power power power.
 > **SND (turn) (power power ...) (press_message)**  
 > **SND (turn) (power power ...) (reply)**
 
-These are sent by the client to the server, to send **press_message** to the list of countrys given. The recipient list must not include the sending power.
+These are sent by the client to the server, to send **press_message** to the list of countries given. The recipient list must not include the sending power.
 
 For the third and fourth forms, the server will check that turn is the current turn (i.e. the turn sent in the most recent **NOW** message), and will reply with **REJ(SND (turn) (power power ...) (press_message) )** or **REJ (SND (turn) (power power ...) (reply) )** if this is not the case.
 
@@ -693,7 +693,7 @@ The syntax for **INS** is exactly the same as for **PRP**, and the available rep
 
 > **press_message = QRY (arrangement)**
 
-The syntax for **QRY** is the same as for **PRP** and **INS**. **QRY** is asking a question – e.g. is there an alliance, rather then proposing – e.g. how about an alliance. **QRY** is responded to in exactly the same way as **PRP** and **INS**. However, the following extra responses are also available for **QRY**:
+The syntax for **QRY** is the same as for **PRP** and **INS**. **QRY** is asking a question – e.g. is there an alliance, rather than proposing – e.g. how about an alliance. **QRY** is responded to in exactly the same way as **PRP** and **INS**. However, the following extra responses are also available for **QRY**:
 
 > **reply = THK (QRY (arrangement))**
 
@@ -939,7 +939,7 @@ Example, **SND (GER AUS) (PRP(ROF))** , if any power is requesting Germany and R
 
 ### (i) Demanding an offer
 
-Follwing level 60, a power can demand or Insist on an offer with **INS** token such as the following:
+Following level 60, a power can demand or Insist on an offer with **INS** token such as the following:
 
 > **press_message = INS(ROF)**
 
@@ -959,7 +959,7 @@ Utility upper bound of float for power.
 Float is a floating point number in a format typically used by programming languages. It is currently parsed with the following regular expression:
 [-+]?((\d*\\.\d+)|(\d+\\.?))([Ee][+-]?\d+)?
 
-Strategy Robot Note: We intend to use INS to indicate active punishment or reward (changing our move to enfore the utility bound). In contrast, PRP indicates that we predict the utility bound is correct without our active enforcement.
+Strategy Robot Note: We intend to use INS to indicate active punishment or reward (changing our move to enforce the utility bound). In contrast, PRP indicates that we predict the utility bound is correct without our active enforcement.
 
 Example message sent from England to Germany:
 > IFF (XDO((GER AMY BER) MTO MUN)) THN (PRP (ULB (GER 0.8))) ELS (INS (UUB (GER 0.1)))
@@ -1318,7 +1318,7 @@ To read the table, the category in the first column can be replaced by any of th
 |       negated_client_request | OBS   | TME ( number )                                                                 |
 |                              | OBS   | DRW                                                                            |
 |                              | 10    | DRW ( power power_list )                                                       |
-|      negated_server _message | OBS   | CCD ( power )                                                                  |
+|       negated_server_message | OBS   | CCD ( power )                                                                  |
 |                              | OBS   | TME ( number )                                                                 |
 |                       number | OBS   | Any token from the Number categories                                           |
 |                  arrangement | 10    | PCE ( power power_list )                                                       |
