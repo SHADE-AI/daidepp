@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import FrozenSet, List, Optional, Union
+from typing import Optional, Tuple, Union
 
 from typing_extensions import get_args
 
@@ -93,7 +93,7 @@ class SUP(_DAIDEObject):
 
     @property
     def province_no_coast_location(self) -> Optional[Location]:
-        if self.province_no_coast == None:
+        if self.province_no_coast is None:
             return self.province_no_coast
         else:
             return Location(self.province_no_coast)
@@ -141,17 +141,25 @@ class CVY(_DAIDEObject):
 class MoveByCVY(_DAIDEObject):
     unit: Unit
     province: Location
-    province_seas: FrozenSet[Location]
+    province_seas: Tuple[ProvinceSea]
 
     def __init__(self, unit, province, *province_seas):
         object.__setattr__(self, "unit", unit)
         object.__setattr__(self, "province", province)
-        object.__setattr__(self, "province_seas", frozenset(sorted(province_seas)))
+        object.__setattr__(self, "province_seas", tuple(province_seas))
+        self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.province_seas:
+            raise ValueError(
+                "Movement via convoy must include at least one sea province."
+            )
 
     def __str__(self):
         return (
             f"( {self.unit} ) CTO {self.province} VIA ( "
-            + " ".join(sorted(map(lambda x: str(x), self.province_seas)))
+            + " ".join(self.province_seas)
             + " )"
         )
 
