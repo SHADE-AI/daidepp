@@ -16,7 +16,7 @@ class PCE(_DAIDEObject):
     powers: Tuple[Power]
 
     def __init__(self, *powers: Power):
-        object.__setattr__(self, "powers", tuple(sorted(powers)))
+        object.__setattr__(self, "powers", tuple(sorted(set(powers))))
         self.__post_init__()
 
     def __post_init__(self):
@@ -41,7 +41,7 @@ class TRY(_DAIDEObject):
     try_tokens: Tuple[TryTokens]
 
     def __init__(self, *try_tokens):
-        object.__setattr__(self, "try_tokens", tuple(sorted(try_tokens)))
+        object.__setattr__(self, "try_tokens", tuple(sorted(set(try_tokens))))
         self.__post_init__()
 
     def __post_init__(self):
@@ -75,8 +75,8 @@ class ALYVSS(_DAIDEObject):
     vss_powers: Tuple[Power]
 
     def __init__(self, aly_powers: Iterable[Power], vss_powers: Iterable[Power]):
-        object.__setattr__(self, "aly_powers", tuple(sorted(aly_powers)))
-        object.__setattr__(self, "vss_powers", tuple(sorted(vss_powers)))
+        object.__setattr__(self, "aly_powers", tuple(sorted(set(aly_powers))))
+        object.__setattr__(self, "vss_powers", tuple(sorted(set(vss_powers))))
         self.__post_init__()
 
     def __post_init__(self):
@@ -125,7 +125,7 @@ class DRW(_DAIDEObject):
     powers: Tuple[Power]
 
     def __init__(self, *powers: Power):
-        object.__setattr__(self, "powers", tuple(sorted(powers)))
+        object.__setattr__(self, "powers", tuple(sorted(set(powers))))
         self.__post_init__()
 
     def __post_init__(self):
@@ -182,7 +182,7 @@ class FRM(_DAIDEObject):
         self, frm_power: Power, recv_powers: Iterable[Power], message: Message
     ):
         object.__setattr__(self, "frm_power", frm_power)
-        object.__setattr__(self, "recv_powers", tuple(sorted(recv_powers)))
+        object.__setattr__(self, "recv_powers", tuple(sorted(set(recv_powers))))
         object.__setattr__(self, "message", message)
         self.__post_init__()
 
@@ -216,8 +216,8 @@ class DMZ(_DAIDEObject):
     exhaustive_provinces: Tuple[Location] = field(init=False)
 
     def __init__(self, powers: Iterable[Power], provinces: Iterable[Location]):
-        object.__setattr__(self, "powers", tuple(sorted(powers)))
-        object.__setattr__(self, "provinces", tuple(sorted(sorted(provinces))))
+        object.__setattr__(self, "powers", tuple(sorted(set(powers))))
+        object.__setattr__(self, "provinces", tuple(sorted(set(provinces))))
 
         exhaustive_provinces: List[Location] = []
         for province in self.provinces:
@@ -237,7 +237,7 @@ class DMZ(_DAIDEObject):
                 exhaustive_provinces.append(province)
 
         object.__setattr__(
-            self, "exhaustive_provinces", tuple(sorted(exhaustive_provinces))
+            self, "exhaustive_provinces", tuple(sorted(set(exhaustive_provinces)))
         )
 
         self.__post_init__()
@@ -264,7 +264,9 @@ class AND(_DAIDEObject):
     arrangements: Tuple[Arrangement]
 
     def __init__(self, *arrangements: Arrangement):
-        object.__setattr__(self, "arrangements", tuple(sorted(arrangements, key=str)))
+        object.__setattr__(
+            self, "arrangements", tuple(sorted(set(arrangements), key=str))
+        )
         self.__post_init__()
 
     def __post_init__(self):
@@ -282,7 +284,9 @@ class ORR(_DAIDEObject):
     arrangements: Tuple[Arrangement]
 
     def __init__(self, *arrangements: Arrangement):
-        object.__setattr__(self, "arrangements", tuple(sorted(arrangements, key=str)))
+        object.__setattr__(
+            self, "arrangements", tuple(sorted(set(arrangements), key=str))
+        )
         self.__post_init__()
 
     def __post_init__(self):
@@ -302,7 +306,7 @@ class PowerAndSupplyCenters:
 
     def __init__(self, power, *supply_centers: Location):
         object.__setattr__(self, "power", power)
-        object.__setattr__(self, "supply_centers", tuple(sorted(supply_centers)))
+        object.__setattr__(self, "supply_centers", tuple(sorted(set(supply_centers))))
         self.__post_init__()
 
     def __post_init__(self):
@@ -323,7 +327,7 @@ class SCD(_DAIDEObject):
         object.__setattr__(
             self,
             "power_and_supply_centers",
-            tuple(sorted(power_and_supply_centers, key=str)),
+            tuple(sorted(set(power_and_supply_centers), key=str)),
         )
         self.__post_init__()
 
@@ -342,7 +346,7 @@ class OCC(_DAIDEObject):
     units: Tuple[Unit]
 
     def __init__(self, *units: Unit):
-        object.__setattr__(self, "units", tuple(sorted(units, key=str)))
+        object.__setattr__(self, "units", tuple(sorted(set(units), key=str)))
         self.__post_init__()
 
     def __post_init__(self):
@@ -364,7 +368,9 @@ class CHO(_DAIDEObject):
     def __init__(self, minimum: int, maximum: int, *arrangements: Arrangement):
         object.__setattr__(self, "minimum", minimum)
         object.__setattr__(self, "maximum", maximum)
-        object.__setattr__(self, "arrangements", tuple(sorted(arrangements, key=str)))
+        object.__setattr__(
+            self, "arrangements", tuple(sorted(set(arrangements), key=str))
+        )
         self.__post_init__()
 
     def __post_init__(self):
@@ -493,7 +499,7 @@ class YDO(_DAIDEObject):
 
     def __init__(self, power, *units):
         object.__setattr__(self, "power", power)
-        object.__setattr__(self, "units", tuple(sorted(units, key=str)))
+        object.__setattr__(self, "units", tuple(sorted(set(units), key=str)))
         self.__post_init__()
 
     def __str__(self):
@@ -509,7 +515,7 @@ class SND(_DAIDEObject):
 
     def __init__(self, power: Power, recv_powers: Iterable[Power], message: Message):
         object.__setattr__(self, "power", power)
-        object.__setattr__(self, "recv_powers", tuple(sorted(recv_powers)))
+        object.__setattr__(self, "recv_powers", tuple(sorted(set(recv_powers))))
         object.__setattr__(self, "message", message)
         self.__post_init__()
 
@@ -533,7 +539,7 @@ class FWD(_DAIDEObject):
     power_2: Power
 
     def __init__(self, powers: Iterable[Power], power_1: Power, power_2: Power):
-        object.__setattr__(self, "powers", tuple(sorted(powers)))
+        object.__setattr__(self, "powers", tuple(sorted(set(powers))))
         object.__setattr__(self, "power_1", power_1)
         object.__setattr__(self, "power_2", power_2)
         self.__post_init__()
@@ -559,7 +565,7 @@ class BCC(_DAIDEObject):
 
     def __init__(self, power_1: Power, powers: Iterable[Power], power_2: Power):
         object.__setattr__(self, "power_1", power_1)
-        object.__setattr__(self, "powers", tuple(sorted(powers)))
+        object.__setattr__(self, "powers", tuple(sorted(set(powers))))
         object.__setattr__(self, "power_2", power_2)
         self.__post_init__()
 
