@@ -832,7 +832,7 @@ def test_UUB(input, expected_output):
     ["input", "expected_output"],
     [
         ((1, ["ENG", "GER"]), "PTC 1 ( ENG GER )"),
-        ((234, ["RUS", "GER", "FRA"]), "PTC 234 ( RUS GER FRA )"),
+        ((234, ["RUS", "GER", "FRA"]), "PTC 234 ( FRA GER RUS )"),
     ],
 )
 def test_PTC(input, expected_output):

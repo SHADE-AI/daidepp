@@ -645,13 +645,20 @@ class UUB(_DAIDEObject):
     def __str__(self):
         return f"UUB ( {self.power} {self.float_val} )"
 
-@dataclass
-class PTC:
+
+@dataclass(eq=True, frozen=True)
+class PTC(_DAIDEObject):
     int_val: int
-    powers: List[Power]
+    powers: Tuple[Power]
+
+    def __init__(self, int_val: int, powers: Iterable[Power]):
+        object.__setattr__(self, "int_val", int_val)
+        object.__setattr__(self, "powers", tuple(sorted(set(powers))))
+        self.__post_init__()
 
     def __str__(self):
         return f"PTC {self.int_val} ( " + " ".join(self.powers) + " )"
+
 
 Reply = Union[YES, REJ, BWX, HUH, FCT, THK, IDK, WHY, POB, UHY, HPY, ANG]
 PressMessage = Union[
