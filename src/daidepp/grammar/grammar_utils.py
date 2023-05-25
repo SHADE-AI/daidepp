@@ -1,6 +1,6 @@
+import warnings
 from collections import OrderedDict, defaultdict
 from typing import Dict, List, Optional, Set, Tuple, Union
-import warnings
 
 from parsimonious.grammar import Grammar
 from typing_extensions import Literal
@@ -25,14 +25,16 @@ class DAIDEGrammar(Grammar):
     def _set_try_tokens(self):
         try_tokens = self.get("try_tokens")
 
-        if try_tokens == None:
+        if try_tokens is None:
             self.try_tokens = None
         else:
             if try_tokens.name == "try_tokens" and hasattr(try_tokens, "members"):
-                try_tokens_strings = list(map(lambda x: x.literal, try_tokens.members))
+                try_tokens_strings: List[PressKeywords] = list(
+                    map(lambda x: x.literal, try_tokens.members)
+                )
             else:  # condition when there is a single try token. parsimonious replaces token with actual rule.
                 try_tokens_strings = try_tokens.name.upper()
-            self.try_tokens: List[str] = try_tokens_strings
+            self.try_tokens: List[PressKeywords] = try_tokens_strings
 
     @staticmethod
     def from_level(
@@ -53,7 +55,7 @@ def create_daide_grammar(
 
     Args:
         level (Union[DAIDELevel,List[DAIDELevel]], optional):
-            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            The level of DAIDE to make grammar for. Defaults to 30. If it's a list,
             only include levels in list rather than all levels up to given value.
         allow_just_arrangement (bool, optional):
             if set to True, the parser accepts strings that are only arrangements,
@@ -67,7 +69,10 @@ def create_daide_grammar(
     Returns:
         DAIDEGrammar: Grammar object
     """
-    grammar_str = _create_daide_grammar_str(level, allow_just_arrangement, string_type)
+    if allow_just_arrangement and string_type == "message":
+        string_type = "arrangement"
+
+    grammar_str = _create_daide_grammar_str(level, string_type)
     grammar = DAIDEGrammar(grammar_str)
     return grammar
 
@@ -79,7 +84,7 @@ def _create_daide_grammar_dict(
 
     Args:
         level (Union[DAIDELevel,List[DAIDELevel]], optional):
-            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            The level of DAIDE to make grammar for. Defaults to 30. If it's a list,
             only include levels in list rather than all levels up to given value.
 
     Returns:
@@ -100,19 +105,14 @@ def _create_daide_grammar_dict(
 
 def _create_daide_grammar_str(
     level: Union[DAIDELevel, List[DAIDELevel]] = 30,
-    allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
     """Create string representing DAIDE grammar in PEG
 
     Args:
         level (Union[DAIDELevel,List[DAIDELevel]], optional):
-            The level of DAIDE to make grammar for. Defaults to 30. If its a list,
+            The level of DAIDE to make grammar for. Defaults to 30. If it's a list,
             only include levels in list rather than all levels up to given value.
-        allow_just_arrangement (bool, optional):
-            if set to True, the parser accepts strings that are only arrangements,
-            in addition to press messages. So, for example, the parser could parse
-            'PCE (GER ITA)'. Normally, this would raise a ParseError. Left for backwards compatibility.
         string_type (Literal["message", "arrangement", "all"], optional):
             if 'message' is passed (default), the grammar will only recognize full DAIDE messages.
             If 'arrangement' is passed, it will recognize messages and arrangements. And if 'all' is
@@ -122,13 +122,11 @@ def _create_daide_grammar_str(
         str: string representing DAIDE grammar in PEG
     """
     grammar_dict = _create_daide_grammar_dict(level)
-    grammar_str = _create_grammar_str_from_dict(
-        grammar_dict, allow_just_arrangement, string_type
-    )
+    grammar_str = _create_grammar_str_from_dict(grammar_dict, string_type)
     return grammar_str
 
 
-def _sort_grammar_keys(keys: List[str]) -> Tuple:
+def _sort_grammar_keys(keys: List[str]) -> List[str]:
     keys_list = []
 
     keys.remove("lpar")
@@ -162,7 +160,6 @@ def _sort_grammar_keys(keys: List[str]) -> Tuple:
 
 def _create_grammar_str_from_dict(
     grammar: GrammarDict,
-    allow_just_arrangement: bool = False,
     string_type: Literal["message", "arrangement", "all"] = "message",
 ) -> str:
     grammar_str = ""
@@ -176,12 +173,10 @@ def _create_grammar_str_from_dict(
         # message needs to be the first rule in the string, per parsimonious rules:
         # "The first rule is taken to be the default start symbol, but you can override that."
         # https://github.com/erikrose/parsimonious#example-usage
-        if item[0] == "message" and string_type == "message":
+        if item[0] == "message" and string_type in {"message", "arrangement"}:
             left = item[0]
             right = item[1]
-            if (
-                allow_just_arrangement or string_type == "arrangement"
-            ) and string_type != "all":
+            if string_type == "arrangement":
                 right += " / arrangement"
             grammar_str = f"{left} = {right}\n" + grammar_str
 
@@ -194,9 +189,11 @@ def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> Gramm
     old_keys = set(old_grammar.keys())
     new_keys = set(new_grammar.keys())
 
-    old_unique = old_keys.difference(new_keys)
-    new_unique = new_keys.difference(old_keys)
-    shared_keys = new_keys.intersection(old_keys)
+    # Sorting is needed to maintain the original order of the `GrammarDict`s
+    sort_key = (list(old_grammar) + list(new_grammar)).index
+    old_unique = sorted(old_keys.difference(new_keys), key=sort_key)
+    new_unique = sorted(new_keys.difference(old_keys), key=sort_key)
+    shared_keys = sorted(new_keys.intersection(old_keys), key=sort_key)
 
     merged_grammar: GrammarDict = {}
     for key in old_unique:
@@ -208,19 +205,9 @@ def _merge_grammars(old_grammar: GrammarDict, new_grammar: GrammarDict) -> Gramm
     return merged_grammar
 
 
-def _merge_shared_key_values(
-    old_grammar: GrammarDict, new_grammar: GrammarDict, shared_keys: Set[str]
-) -> GrammarDict:
-    merged_grammar = {}
-    for key in shared_keys:
-        merged_grammar[key] = _merge_shared_key_value(old_grammar, new_grammar, key)
-    return merged_grammar
-
-
 def _merge_shared_key_value(
     old_grammar: GrammarDict, new_grammar: GrammarDict, shared_key: str
 ) -> str:
-
     if new_grammar[shared_key][:3] == TRAIL_TOKEN:
         new_value = old_grammar[shared_key] + " / " + new_grammar[shared_key][3:]
     else:
@@ -241,8 +228,8 @@ def create_grammar_from_press_keywords(
         List of press keywords. Although the type hint says List[PressKeywords],
         this can be a list of string literals or DAIDEObjects (to avoid circular imports).
     allow_just_arrangement : bool, optional
-         if set to True, the parser accepts strings that are only arrangements, in
-         addition to press messages. So, for example, the parser could parse, by default False
+        if set to True, the parser accepts strings that are only arrangements, in
+        addition to press messages. So, for example, the parser could parse, by default False
     string_type : Literal['message', 'arrangement', 'all'], optional
         if set to True, the parser accepts strings that
         are only arrangements, in addition to press messages. So, for example, the parser could parse
@@ -256,9 +243,11 @@ def create_grammar_from_press_keywords(
     DAIDEGrammar
         DAIDEGrammar composed from the list of keywords.
     """
+    if allow_just_arrangement and string_type == "message":
+        string_type = "arrangement"
+
     full_grammar = create_daide_grammar(
         level=DAIDELevel.__args__[-1],
-        allow_just_arrangement=allow_just_arrangement,
         string_type=string_type,
     )
     current_set = set(LEVEL_0.keys())
@@ -339,9 +328,7 @@ def create_grammar_from_press_keywords(
     if "message" in new_grammar_dict:
         new_grammar_dict.move_to_end("message", last=False)
 
-    new_grammar_str = _create_grammar_str_from_dict(
-        new_grammar_dict, allow_just_arrangement, string_type
-    )
+    new_grammar_str = _create_grammar_str_from_dict(new_grammar_dict, string_type)
     new_grammar = DAIDEGrammar(new_grammar_str)
     return new_grammar
 
@@ -349,7 +336,7 @@ def create_grammar_from_press_keywords(
 def _create_grammar_dict_entry(keyword, rules):
     if not rules:
         warnings.warn(
-            f"Requires addtional keywords to form {keyword}'s grammar rule. Ommiting {keyword} from new new grammar."
+            f"Requires additional keywords to form {keyword}'s grammar rule. Omitting {keyword} from new new grammar."
         )
         return
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import Optional, Tuple, Union
 
 from typing_extensions import get_args
 
@@ -11,7 +11,7 @@ from daidepp.keywords.daide_object import _DAIDEObject
 _prov_no_coast = [prov for lit in get_args(ProvinceNoCoast) for prov in get_args(lit)]
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class Location:
     province: ProvinceNoCoast
     coast: Optional[Coast] = None
@@ -20,10 +20,11 @@ class Location:
         self, province: Union[ProvinceNoCoast, Location], coast: Optional[Coast] = None
     ) -> None:
         if isinstance(province, Location):
-            self.province = province.province
+            object.__setattr__(self, "province", province.province)
         else:
-            self.province = province
-        self.coast = coast
+            object.__setattr__(self, "province", province)
+
+        object.__setattr__(self, "coast", coast)
 
     def __str__(self) -> str:
         if self.coast:
@@ -33,8 +34,13 @@ class Location:
     def __hash__(self) -> int:
         return hash(str(self))
 
+    def __lt__(self, o):
+        if self.province == o.province:
+            return self.coast < o.coast
+        return self.province < o.province
 
-@dataclass
+
+@dataclass(eq=True, frozen=True)
 class Unit(_DAIDEObject):
     power: Power
     unit_type: UnitType
@@ -42,14 +48,14 @@ class Unit(_DAIDEObject):
 
     def __post_init__(self):
         if isinstance(self.location, str):
-            self.location = Location(province=self.location)
+            object.__setattr__(self, "location", Location(province=self.location))
         super().__post_init__()
 
     def __str__(self):
         return f"{self.power} {self.unit_type} {self.location}"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class HLD(_DAIDEObject):
     unit: Unit
 
@@ -61,7 +67,7 @@ class HLD(_DAIDEObject):
         return self.unit.location
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class MTO(_DAIDEObject):
     unit: Unit
     location: Location
@@ -70,7 +76,7 @@ class MTO(_DAIDEObject):
         return f"( {self.unit} ) MTO {self.location}"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class SUP(_DAIDEObject):
     supporting_unit: Unit
     supported_unit: Unit
@@ -87,7 +93,7 @@ class SUP(_DAIDEObject):
 
     @property
     def province_no_coast_location(self) -> Optional[Location]:
-        if self.province_no_coast == None:
+        if self.province_no_coast is None:
             return self.province_no_coast
         else:
             return Location(self.province_no_coast)
@@ -103,7 +109,7 @@ class SUP(_DAIDEObject):
             return f"( {self.supporting_unit} ) SUP ( {self.supported_unit} ) MTO {self.province_no_coast}"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class CVY(_DAIDEObject):
     convoying_unit: Unit
     convoyed_unit: Unit
@@ -111,7 +117,7 @@ class CVY(_DAIDEObject):
 
     def __post_init__(self):
         if isinstance(self.province, str):
-            self.province = Location(province=self.province)
+            object.__setattr__(self, "province", Location(province=self.province))
         super().__post_init__()
 
     def __str__(self):
@@ -131,21 +137,29 @@ class CVY(_DAIDEObject):
         return self.unit.location
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class MoveByCVY(_DAIDEObject):
     unit: Unit
     province: Location
-    province_seas: List[Location]
+    province_seas: Tuple[ProvinceSea]
 
     def __init__(self, unit, province, *province_seas):
-        self.unit = unit
-        self.province = province
-        self.province_seas = province_seas
+        object.__setattr__(self, "unit", unit)
+        object.__setattr__(self, "province", province)
+        object.__setattr__(self, "province_seas", tuple(province_seas))
+        self.__post_init__()
+
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.province_seas:
+            raise ValueError(
+                "Movement via convoy must include at least one sea province."
+            )
 
     def __str__(self):
         return (
             f"( {self.unit} ) CTO {self.province} VIA ( "
-            + " ".join(map(lambda x: str(x), self.province_seas))
+            + " ".join(self.province_seas)
             + " )"
         )
 
@@ -154,7 +168,7 @@ class MoveByCVY(_DAIDEObject):
         return self.province
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class RTO(_DAIDEObject):
     unit: Unit
     location: Location
@@ -163,7 +177,7 @@ class RTO(_DAIDEObject):
         return f"( {self.unit} ) RTO {self.location}"
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class DSB(_DAIDEObject):
     unit: Unit
 
@@ -175,7 +189,7 @@ class DSB(_DAIDEObject):
         return None
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class BLD(_DAIDEObject):
     unit: Unit
 
@@ -187,7 +201,7 @@ class BLD(_DAIDEObject):
         return self.unit.location
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class REM(_DAIDEObject):
     unit: Unit
 
@@ -199,7 +213,7 @@ class REM(_DAIDEObject):
         return None
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class WVE(_DAIDEObject):
     """Wave a build"""
 
@@ -213,7 +227,7 @@ class WVE(_DAIDEObject):
         return None
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class Turn(_DAIDEObject):
     season: Season
     year: int
