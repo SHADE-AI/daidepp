@@ -368,7 +368,7 @@ class DAIDEVisitor(NodeVisitor):
             return SUP(supporting_unit, supported_unit)
         else:
             _, _, province_no_coast = ws_mto_prov = ws_province_no_coast[0]
-            return SUP(supporting_unit, supported_unit, province_no_coast)
+            return SUP(supporting_unit, supported_unit, province_no_coast.province)
 
     def visit_cvy(self, node, visited_children) -> CVY:
         _, convoying_unit, _, _, _, convoyed_unit, _, _, _, province = visited_children

@@ -82,6 +82,13 @@ class SUP(_DAIDEObject):
     supported_unit: Unit
     province_no_coast: Optional[ProvinceNoCoast] = None
 
+    def __post_init__(self):
+        if isinstance(self.province_no_coast, Location):
+            object.__setattr__(
+                self, "province_no_coast", self.province_no_coast.province
+            )
+        super().__post_init__()
+
     @property
     def unit(self) -> Unit:
         """Unit attribute to keep API consistent

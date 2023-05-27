@@ -100,6 +100,7 @@ def test_SUP_location(supporting_unit, supported_unit, province_no_coast):
         supporting_unit=supporting_unit,
         province_no_coast=province_no_coast,
     )
+    assert isinstance(sup.province_no_coast, str)
     assert isinstance(sup.province_no_coast_location, Location)
 
 
