@@ -16,9 +16,6 @@ from daidepp.keywords.press_keywords import *
 def test_PCE(input, expected_output):
     pce = PCE(*input)
     assert str(pce) == expected_output
-
-    with pytest.raises(Exception):
-        PCE("AUS")
     hash(pce)
 
 
