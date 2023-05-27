@@ -434,7 +434,7 @@ def test_OCC(input, expected_substrings):
     hash(occ)
 
     reversed_input = reversed(input)
-    occ_2 = OCC(*input)
+    occ_2 = OCC(*reversed_input)
     assert occ == occ_2
 
 
