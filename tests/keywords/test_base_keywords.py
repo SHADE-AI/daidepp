@@ -15,9 +15,10 @@ from daidepp.keywords.base_keywords import *
         (("TUR", "FLT", "BRE"), "TUR FLT BRE"),
     ],
 )
-def test_Unit(input, expected_output):
+def test_Unit(input, expected_output, daide_parser):
     unit = Unit(*input)
     assert str(unit) == expected_output
+    assert unit == daide_parser(expected_output)
     hash(unit)
 
 
@@ -28,9 +29,10 @@ def test_Unit(input, expected_output):
         ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) HLD"),
     ],
 )
-def test_HLD(input, expected_output):
+def test_HLD(input, expected_output, daide_parser):
     hld = HLD(*input)
     assert str(hld) == expected_output
+    assert hld == daide_parser(expected_output)
     hash(hld)
 
 
@@ -38,12 +40,15 @@ def test_HLD(input, expected_output):
     ["input", "expected_output"],
     [
         ((Unit("AUS", "FLT", "ALB"), "BUL"), "( AUS FLT ALB ) MTO BUL"),
+        ((Unit("AUS", "FLT", "ALB"), Location("BUL")), "( AUS FLT ALB ) MTO BUL"),
         ((Unit("ENG", "AMY", "ANK"), "CLY"), "( ENG AMY ANK ) MTO CLY"),
+        ((Unit("ENG", "AMY", "ANK"), Location("CLY")), "( ENG AMY ANK ) MTO CLY"),
     ],
 )
-def test_MTO(input, expected_output):
+def test_MTO(input, expected_output, daide_parser):
     mto = MTO(*input)
     assert str(mto) == expected_output
+    assert mto == daide_parser(expected_output)
     hash(mto)
 
 
@@ -76,9 +81,10 @@ def test_MTO(input, expected_output):
         ),
     ],
 )
-def test_SUP(input, expected_output):
+def test_SUP(input, expected_output, daide_parser):
     sup = SUP(*input)
     assert str(sup) == expected_output
+    assert sup == daide_parser(expected_output)
     hash(sup)
 
 
@@ -97,7 +103,7 @@ def test_SUP(input, expected_output):
         ),
     ],
 )
-def test_SUP_location(supporting_unit, supported_unit, province_no_coast):
+def test_SUP_location(supporting_unit, supported_unit, province_no_coast, daide_parser):
     sup = SUP(
         supported_unit=supported_unit,
         supporting_unit=supporting_unit,
@@ -105,6 +111,7 @@ def test_SUP_location(supporting_unit, supported_unit, province_no_coast):
     )
     assert isinstance(sup.province_no_coast, str)
     assert isinstance(sup.province_no_coast_location, Location)
+    assert sup == daide_parser(str(sup))
     hash(sup)
 
 
@@ -121,9 +128,10 @@ def test_SUP_location(supporting_unit, supported_unit, province_no_coast):
         ),
     ],
 )
-def test_CVY(input, expected_output):
+def test_CVY(input, expected_output, daide_parser):
     cvy = CVY(*input)
     assert str(cvy) == expected_output
+    assert cvy == daide_parser(expected_output)
     hash(cvy)
 
 
@@ -142,11 +150,24 @@ def test_CVY(input, expected_output):
             (Unit("FRA", "FLT", "APU"), "CON", "ADR", "AEG", "BAL"),
             "( FRA FLT APU ) CTO CON VIA ( ADR AEG BAL )",
         ),
+        (
+            (Unit("AUS", "FLT", "ALB"), Location("BUL"), "ADR"),
+            "( AUS FLT ALB ) CTO BUL VIA ( ADR )",
+        ),
+        (
+            (Unit("ENG", "AMY", "ANK"), Location("CLY"), "ADR", "AEG"),
+            "( ENG AMY ANK ) CTO CLY VIA ( ADR AEG )",
+        ),
+        (
+            (Unit("FRA", "FLT", "APU"), Location("CON"), "ADR", "AEG", "BAL"),
+            "( FRA FLT APU ) CTO CON VIA ( ADR AEG BAL )",
+        ),
     ],
 )
-def test_MoveByCVY(input, expected_output):
+def test_MoveByCVY(input, expected_output, daide_parser):
     mvc = MoveByCVY(*input)
     assert str(mvc) == expected_output
+    assert mvc == daide_parser(expected_output)
     hash(mvc)
 
 
@@ -154,12 +175,15 @@ def test_MoveByCVY(input, expected_output):
     ["input", "expected_output"],
     [
         ((Unit("AUS", "FLT", "ALB"), "BUL"), "( AUS FLT ALB ) RTO BUL"),
+        ((Unit("AUS", "FLT", "ALB"), Location("BUL")), "( AUS FLT ALB ) RTO BUL"),
         ((Unit("ENG", "AMY", "ANK"), "CLY"), "( ENG AMY ANK ) RTO CLY"),
+        ((Unit("ENG", "AMY", "ANK"), Location("CLY")), "( ENG AMY ANK ) RTO CLY"),
     ],
 )
-def test_RTO(input, expected_output):
+def test_RTO(input, expected_output, daide_parser):
     rto = RTO(*input)
     assert str(rto) == expected_output
+    assert rto == daide_parser(expected_output)
     hash(rto)
 
 
@@ -170,9 +194,10 @@ def test_RTO(input, expected_output):
         ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) DSB"),
     ],
 )
-def test_DSB(input, expected_output):
+def test_DSB(input, expected_output, daide_parser):
     dsb = DSB(*input)
     assert str(dsb) == expected_output
+    assert dsb == daide_parser(expected_output)
     hash(dsb)
 
 
@@ -183,9 +208,10 @@ def test_DSB(input, expected_output):
         ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) BLD"),
     ],
 )
-def test_BLD(input, expected_output):
+def test_BLD(input, expected_output, daide_parser):
     bld = BLD(*input)
     assert str(bld) == expected_output
+    assert bld == daide_parser(expected_output)
     hash(bld)
 
 
@@ -196,9 +222,10 @@ def test_BLD(input, expected_output):
         ((Unit("ENG", "AMY", "ANK"),), "( ENG AMY ANK ) REM"),
     ],
 )
-def test_REM(input, expected_output):
+def test_REM(input, expected_output, daide_parser):
     rem = REM(*input)
     assert str(rem) == expected_output
+    assert rem == daide_parser(expected_output)
     hash(rem)
 
 
@@ -209,9 +236,10 @@ def test_REM(input, expected_output):
         (("ENG",), "ENG WVE"),
     ],
 )
-def test_WVE(input, expected_output):
+def test_WVE(input, expected_output, daide_parser):
     wve = WVE(*input)
     assert str(wve) == expected_output
+    assert wve == daide_parser(expected_output)
     hash(wve)
 
 
@@ -221,7 +249,8 @@ def test_WVE(input, expected_output):
         (("SPR", 1901), "SPR 1901"),
     ],
 )
-def test_turn(input, expected_output):
+def test_turn(input, expected_output, daide_parser):
     turn_1 = Turn(*input)
     assert str(turn_1) == expected_output
+    assert turn_1 == daide_parser(expected_output)
     hash(turn_1)
