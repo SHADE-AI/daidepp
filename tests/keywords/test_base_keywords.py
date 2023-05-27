@@ -16,7 +16,6 @@ from daidepp.keywords.base_keywords import *
     ],
 )
 def test_Unit(input, expected_output):
-    print(input)
     unit = Unit(*input)
     assert str(unit) == expected_output
     hash(unit)
