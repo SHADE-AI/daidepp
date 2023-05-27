@@ -19,6 +19,7 @@ def test_Unit(input, expected_output):
     print(input)
     unit = Unit(*input)
     assert str(unit) == expected_output
+    hash(unit)
 
 
 @pytest.mark.parametrize(
@@ -31,6 +32,7 @@ def test_Unit(input, expected_output):
 def test_HLD(input, expected_output):
     hld = HLD(*input)
     assert str(hld) == expected_output
+    hash(hld)
 
 
 @pytest.mark.parametrize(
@@ -43,6 +45,7 @@ def test_HLD(input, expected_output):
 def test_MTO(input, expected_output):
     mto = MTO(*input)
     assert str(mto) == expected_output
+    hash(mto)
 
 
 @pytest.mark.parametrize(
@@ -77,6 +80,7 @@ def test_MTO(input, expected_output):
 def test_SUP(input, expected_output):
     sup = SUP(*input)
     assert str(sup) == expected_output
+    hash(sup)
 
 
 @pytest.mark.parametrize(
@@ -102,6 +106,7 @@ def test_SUP_location(supporting_unit, supported_unit, province_no_coast):
     )
     assert isinstance(sup.province_no_coast, str)
     assert isinstance(sup.province_no_coast_location, Location)
+    hash(sup)
 
 
 @pytest.mark.parametrize(
@@ -120,6 +125,7 @@ def test_SUP_location(supporting_unit, supported_unit, province_no_coast):
 def test_CVY(input, expected_output):
     cvy = CVY(*input)
     assert str(cvy) == expected_output
+    hash(cvy)
 
 
 @pytest.mark.parametrize(
@@ -142,6 +148,7 @@ def test_CVY(input, expected_output):
 def test_MoveByCVY(input, expected_output):
     mvc = MoveByCVY(*input)
     assert str(mvc) == expected_output
+    hash(mvc)
 
 
 @pytest.mark.parametrize(
@@ -154,6 +161,7 @@ def test_MoveByCVY(input, expected_output):
 def test_RTO(input, expected_output):
     rto = RTO(*input)
     assert str(rto) == expected_output
+    hash(rto)
 
 
 @pytest.mark.parametrize(
@@ -166,6 +174,7 @@ def test_RTO(input, expected_output):
 def test_DSB(input, expected_output):
     dsb = DSB(*input)
     assert str(dsb) == expected_output
+    hash(dsb)
 
 
 @pytest.mark.parametrize(
@@ -178,6 +187,7 @@ def test_DSB(input, expected_output):
 def test_BLD(input, expected_output):
     bld = BLD(*input)
     assert str(bld) == expected_output
+    hash(bld)
 
 
 @pytest.mark.parametrize(
@@ -190,6 +200,7 @@ def test_BLD(input, expected_output):
 def test_REM(input, expected_output):
     rem = REM(*input)
     assert str(rem) == expected_output
+    hash(rem)
 
 
 @pytest.mark.parametrize(
@@ -202,6 +213,7 @@ def test_REM(input, expected_output):
 def test_WVE(input, expected_output):
     wve = WVE(*input)
     assert str(wve) == expected_output
+    hash(wve)
 
 
 @pytest.mark.parametrize(
@@ -213,3 +225,4 @@ def test_WVE(input, expected_output):
 def test_turn(input, expected_output):
     turn_1 = Turn(*input)
     assert str(turn_1) == expected_output
+    hash(turn_1)
