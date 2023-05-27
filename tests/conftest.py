@@ -3,6 +3,31 @@ from typing_extensions import get_args
 
 from daidepp.grammar import create_daide_grammar
 from daidepp.grammar.grammar import DAIDELevel
+from daidepp.keywords.press_keywords import AnyDAIDEToken
+from daidepp.visitor import daide_visitor
+
+# Declared outside of fixture for performance
+MAX_DAIDE_LEVEL = get_args(DAIDELevel)[-1]
+ALL_GRAMMAR = create_daide_grammar(level=MAX_DAIDE_LEVEL, string_type="all")
+
+
+@pytest.fixture
+def daide_parser():
+    """Helper function to ensure grammar and visitor construct correct DAIDE objects"""
+
+    def parse_daide(string: str) -> AnyDAIDEToken:
+        """Parses a DAIDE string into `daidepp` objects.
+        :param string: String to parse into DAIDE.
+        :return: Parsed DAIDE object.
+        :raises ValueError: If string is invalid DAIDE.
+        """
+        try:
+            parse_tree = ALL_GRAMMAR.parse(string)
+            return daide_visitor.visit(parse_tree)
+        except Exception as ex:
+            raise ValueError(f"Failed to parse DAIDE string: {string!r}") from ex
+
+    return parse_daide
 
 
 @pytest.fixture(scope="session")
