@@ -65,7 +65,7 @@ class DAIDEVisitor(NodeVisitor):
         return WHT(unit)
 
     def visit_how(self, node, visited_children) -> HOW:
-        _, _, province_power, _ = visited_children
+        _, _, province_power, _ = visited_children[0]
         return HOW(province_power)
 
     def visit_exp(self, node, visited_children) -> EXP:
@@ -139,7 +139,7 @@ class DAIDEVisitor(NodeVisitor):
 
     def visit_why(self, node, visited_children) -> WHY:
         _, _, why_param, _ = visited_children
-        return WHY(why_param)
+        return WHY(why_param[0])
 
     def visit_pob(self, node, visited_children) -> POB:
         _, _, why, _ = visited_children
@@ -287,7 +287,7 @@ class DAIDEVisitor(NodeVisitor):
             _, start_turn, _, _, end_turn, _ = turn
             return FOR(start_turn, end_turn, arrangement)
         else:
-            return FOR(start_turn, None, arrangement)
+            return FOR(turn, None, arrangement)
 
     def visit_xoy(self, node, visited_children) -> XOY:
         _, _, power_x, _, _, power_y, _ = visited_children
@@ -317,11 +317,11 @@ class DAIDEVisitor(NodeVisitor):
             _,
         ) = visited_children
 
-        recv_power = [recv_power]
+        recv_powers = [recv_power]
         for ws_recv_power in ws_recv_powers:
             _, recv_power = ws_recv_power
-            recv_power.append(recv_power)
-        return SND(power, recv_power, message)
+            recv_powers.append(recv_power)
+        return SND(power, recv_powers, message)
 
     def visit_fwd(self, node, visited_children) -> FWD:
         _, _, power, ws_powers, _, _, power_1, _, _, power_2, _ = visited_children
