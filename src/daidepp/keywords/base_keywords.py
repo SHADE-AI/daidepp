@@ -72,6 +72,11 @@ class MTO(_DAIDEObject):
     unit: Unit
     location: Location
 
+    def __post_init__(self):
+        if isinstance(self.location, str):
+            object.__setattr__(self, "location", Location(province=self.location))
+        super().__post_init__()
+
     def __str__(self):
         return f"( {self.unit} ) MTO {self.location}"
 
@@ -81,6 +86,13 @@ class SUP(_DAIDEObject):
     supporting_unit: Unit
     supported_unit: Unit
     province_no_coast: Optional[ProvinceNoCoast] = None
+
+    def __post_init__(self):
+        if isinstance(self.province_no_coast, Location):
+            object.__setattr__(
+                self, "province_no_coast", self.province_no_coast.province
+            )
+        super().__post_init__()
 
     @property
     def unit(self) -> Unit:
@@ -150,6 +162,8 @@ class MoveByCVY(_DAIDEObject):
         self.__post_init__()
 
     def __post_init__(self):
+        if isinstance(self.province, str):
+            object.__setattr__(self, "province", Location(province=self.province))
         super().__post_init__()
         if not self.province_seas:
             raise ValueError(
@@ -172,6 +186,11 @@ class MoveByCVY(_DAIDEObject):
 class RTO(_DAIDEObject):
     unit: Unit
     location: Location
+
+    def __post_init__(self):
+        if isinstance(self.location, str):
+            object.__setattr__(self, "location", Location(province=self.location))
+        super().__post_init__()
 
     def __str__(self):
         return f"( {self.unit} ) RTO {self.location}"
