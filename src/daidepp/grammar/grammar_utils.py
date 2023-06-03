@@ -11,6 +11,7 @@ from daidepp.grammar.grammar import (
     LEVELS,
     TRAIL_TOKEN,
     DAIDELevel,
+    MAX_DAIDE_LEVEL,
     GrammarDict,
 )
 
@@ -247,7 +248,7 @@ def create_grammar_from_press_keywords(
         string_type = "arrangement"
 
     full_grammar = create_daide_grammar(
-        level=DAIDELevel.__args__[-1],
+        level=MAX_DAIDE_LEVEL,
         string_type=string_type,
     )
     current_set = set(LEVEL_0.keys())

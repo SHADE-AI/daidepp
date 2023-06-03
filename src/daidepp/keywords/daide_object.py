@@ -1,12 +1,10 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from typing_extensions import get_args
-
 from daidepp.grammar import create_daide_grammar
-from daidepp.grammar.grammar import DAIDELevel
+from daidepp.grammar.grammar import MAX_DAIDE_LEVEL
 
-_grammar = create_daide_grammar(get_args(DAIDELevel)[-1], string_type="all")
+_grammar = create_daide_grammar(MAX_DAIDE_LEVEL, string_type="all")
 
 
 @dataclass(eq=True, frozen=True)

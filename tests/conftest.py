@@ -2,12 +2,11 @@ import pytest
 from typing_extensions import get_args
 
 from daidepp.grammar import create_daide_grammar
-from daidepp.grammar.grammar import DAIDELevel
+from daidepp.grammar.grammar import DAIDELevel, MAX_DAIDE_LEVEL
 from daidepp.keywords.press_keywords import AnyDAIDEToken
 from daidepp.visitor import daide_visitor
 
 # Declared outside of fixture for performance
-MAX_DAIDE_LEVEL = get_args(DAIDELevel)[-1]
 ALL_GRAMMAR = create_daide_grammar(level=MAX_DAIDE_LEVEL, string_type="all")
 
 
