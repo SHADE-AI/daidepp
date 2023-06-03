@@ -272,7 +272,7 @@ def create_grammar_from_press_keywords(
         member.literal.lower() for member in full_grammar["try_tokens"].members
     ]
     keyword_dependencies_special_keywords = defaultdict(list)
-    for keyword in current_set:
+    for keyword in sorted(current_set):
         # 'message' is only added if press_message or reply is added
         for special_keyword in [
             "arrangement",
