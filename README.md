@@ -23,24 +23,25 @@ Example:
 ```python3
 >>> from daidepp import create_daide_grammar, daide_visitor
 >>> grammar = create_daide_grammar(level=130)
->>> message = 'PRP (AND (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS))) (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS))))'
+>>> message = 'PRP (AND (SLO (ENG)) (SLO (GER)) (SLO (RUS)))'
 >>> parse_tree = grammar.parse(message)
 >>> output = daide_visitor.visit(parse_tree) # object composed of dataclass objects in keywords.py
->>> print(output)
-`PRP ( AND ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ) ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) ) )`
+>>> str(output)
+'PRP ( AND ( SLO ( ENG ) ) ( SLO ( GER ) ) ( SLO ( RUS ) ) )'
 ```
 
 The daide_visitor outputs a dataclass that can be used to access useful information about the message.
 ```python3
->>> grammar = create_daide_grammar(level=130, allow_just_arrangement=True) # allows for messages without PRP
+>>> from daidepp import create_daide_grammar, daide_visitor
+>>> grammar = create_daide_grammar(level=130, string_type="arrangement") # allows for messages without PRP
 >>> parse_tree = grammar.parse('ALY (GER FRA) VSS (TUR ITA)')
 >>> output = daide_visitor.visit(parse_tree)
->>> print(output)
-`ALY ( GER FRA ) VSS ( TUR ITA )`
->>> print(output.aly_power)
-['GER', 'FRA']
->>> print(output.vss_power)
-['TUR','ITA']
+>>> str(output)
+'ALY ( FRA GER ) VSS ( ITA TUR )'
+>>> output.aly_powers
+('FRA', 'GER')
+>>> output.vss_powers
+('ITA', 'TUR')
 ```
 
 If the DAIDE token is not in the grammar or if the message is malformed, the parser will just throw an exception. We're currently working on returning a list of unrecognized tokens instead of just erroring out.
@@ -51,9 +52,9 @@ In addition, DAIDE strings can be constructed using the classes in [`base_keywor
 Example:
 
 ```python3
->>> from daidepp import AND, PRP, PCE
+>>> from daidepp import AND, PCE
 >>> str(AND(PCE("AUS", "ENG"), PCE("AUS", "ENG"), PCE("AUS", "ENG", "FRA")))
-`AND ( PCE ( AUS ENG ) ) ( PCE ( AUS ENG ) ) ( PCE ( AUS ENG FRA ) )`
+'AND ( PCE ( AUS ENG ) ) ( PCE ( AUS ENG FRA ) )'
 ```
 Each keyword class uses different parameters for instantiation, so it is recommended to carefully follow the type hints or checkout [`tests/keywords`](./tests/keywords/), which provides examples for each class. 
 
@@ -63,7 +64,7 @@ Grammar can also be created using a subset of press keywords. The list of press 
 Example:
 ```python3
 >>> from daidepp.grammar.grammar_utils import create_grammar_from_press_keywords
->>> grammar = create_grammar_from_press_keywords(["PRP", "XDO", "ALY_VSS"]
+>>> grammar = create_grammar_from_press_keywords(["PRP", "XDO", "ALY_VSS"])
 >>> grammar.parse("PRP (ALY (ITA TUR) VSS (ENG RUS))")
 >>> grammar.parse("PRP(XDO((ENG FLT EDI) SUP (ENG AMY LVP) MTO CLY))")
 >>> grammar.parse("PRP(PCE (AUS ENG))") # this would fail

@@ -11,6 +11,7 @@ from daidepp.grammar.grammar import (
     LEVELS,
     TRAIL_TOKEN,
     DAIDELevel,
+    MAX_DAIDE_LEVEL,
     GrammarDict,
 )
 
@@ -225,8 +226,7 @@ def create_grammar_from_press_keywords(
     Parameters
     ----------
     keywords : List[PressKeywords]
-        List of press keywords. Although the type hint says List[PressKeywords],
-        this can be a list of string literals or DAIDEObjects (to avoid circular imports).
+        List of press keywords.
     allow_just_arrangement : bool, optional
         if set to True, the parser accepts strings that are only arrangements, in
         addition to press messages. So, for example, the parser could parse, by default False
@@ -246,8 +246,11 @@ def create_grammar_from_press_keywords(
     if allow_just_arrangement and string_type == "message":
         string_type = "arrangement"
 
+    # The input order or any duplicate elements should not affect the generated grammar
+    keywords = sorted(set(keywords))
+
     full_grammar = create_daide_grammar(
-        level=DAIDELevel.__args__[-1],
+        level=MAX_DAIDE_LEVEL,
         string_type=string_type,
     )
     current_set = set(LEVEL_0.keys())
@@ -271,7 +274,7 @@ def create_grammar_from_press_keywords(
         member.literal.lower() for member in full_grammar["try_tokens"].members
     ]
     keyword_dependencies_special_keywords = defaultdict(list)
-    for keyword in current_set:
+    for keyword in sorted(current_set):
         # 'message' is only added if press_message or reply is added
         for special_keyword in [
             "arrangement",

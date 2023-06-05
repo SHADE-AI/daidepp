@@ -5,12 +5,14 @@ For now this grammar assumes NO PDA games
 from __future__ import annotations
 
 from typing import Dict, Tuple
+from typing_extensions import get_args
 
 from typing_extensions import Literal
 
 DAIDELevel = Literal[
     0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160
 ]
+MAX_DAIDE_LEVEL = get_args(DAIDELevel)[-1]
 
 TRAIL_TOKEN = "---"  # any value starting with '---' is meant to be a continuation of that key, not a replacement
 
