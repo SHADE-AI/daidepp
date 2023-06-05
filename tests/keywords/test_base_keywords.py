@@ -139,27 +139,49 @@ def test_CVY(input, expected_output, daide_parser):
     ["input", "expected_output"],
     [
         (
-            (Unit("AUS", "FLT", "ALB"), "BUL", "ADR"),
+            (Unit("AUS", "FLT", "ALB"), Location("BUL"), Location("ADR")),
             "( AUS FLT ALB ) CTO BUL VIA ( ADR )",
         ),
         (
-            (Unit("ENG", "AMY", "ANK"), "CLY", "ADR", "AEG"),
+            (
+                Unit("ENG", "AMY", "ANK"),
+                Location("CLY"),
+                Location("ADR"),
+                Location("AEG"),
+            ),
             "( ENG AMY ANK ) CTO CLY VIA ( ADR AEG )",
         ),
         (
-            (Unit("FRA", "FLT", "APU"), "CON", "ADR", "AEG", "BAL"),
+            (
+                Unit("FRA", "FLT", "APU"),
+                Location("CON"),
+                Location("ADR"),
+                Location("AEG"),
+                Location("BAL"),
+            ),
             "( FRA FLT APU ) CTO CON VIA ( ADR AEG BAL )",
         ),
         (
-            (Unit("AUS", "FLT", "ALB"), Location("BUL"), "ADR"),
+            (Unit("AUS", "FLT", "ALB"), Location("BUL"), Location("ADR")),
             "( AUS FLT ALB ) CTO BUL VIA ( ADR )",
         ),
         (
-            (Unit("ENG", "AMY", "ANK"), Location("CLY"), "ADR", "AEG"),
+            (
+                Unit("ENG", "AMY", "ANK"),
+                Location("CLY"),
+                Location("ADR"),
+                Location("AEG"),
+            ),
             "( ENG AMY ANK ) CTO CLY VIA ( ADR AEG )",
         ),
         (
-            (Unit("FRA", "FLT", "APU"), Location("CON"), "ADR", "AEG", "BAL"),
+            (
+                Unit("FRA", "FLT", "APU"),
+                Location("CON"),
+                Location("ADR"),
+                Location("AEG"),
+                Location("BAL"),
+            ),
             "( FRA FLT APU ) CTO CON VIA ( ADR AEG BAL )",
         ),
     ],

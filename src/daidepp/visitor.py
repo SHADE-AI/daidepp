@@ -390,10 +390,10 @@ class DAIDEVisitor(NodeVisitor):
             _,
         ) = visited_children
 
-        province_seas = [province_sea]
+        province_seas = [Location(province_sea)]
         for ws_province_sea in ws_province_seas:
             _, province_sea = ws_province_sea
-            province_seas.append(province_sea)
+            province_seas.append(Location(province_sea))
         return MoveByCVY(unit, province, *province_seas)
 
     def visit_retreat(self, node, visited_children) -> Retreat:
