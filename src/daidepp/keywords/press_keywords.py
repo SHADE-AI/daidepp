@@ -1,14 +1,29 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
-from daidepp.constants import *
-from daidepp.keywords.base_keywords import *
+from daidepp.constants import Power, TryTokens
+from daidepp.keywords.base_keywords import (
+    BLD,
+    CVY,
+    DSB,
+    HLD,
+    MTO,
+    REM,
+    RTO,
+    SUP,
+    WVE,
+    Command,
+    Location,
+    MoveByCVY,
+    Turn,
+    Unit,
+)
 from daidepp.keywords.daide_object import _DAIDEObject
 
 if TYPE_CHECKING:
-    from typing import Iterable, List, Optional, Tuple, Union
+    from typing import Iterable, List, Optional, Tuple
 
 
 @dataclass(eq=True, frozen=True)
@@ -135,9 +150,9 @@ class DRW(_DAIDEObject):
 
     def __str__(self):
         if self.powers:
-            return f"DRW ( " + " ".join(self.powers) + " )"
+            return "DRW ( " + " ".join(self.powers) + " )"
         else:
-            return f"DRW"
+            return "DRW"
 
 
 @dataclass(eq=True, frozen=True)
@@ -276,7 +291,7 @@ class AND(_DAIDEObject):
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
-        return f"AND " + " ".join(arr_str)
+        return "AND " + " ".join(arr_str)
 
 
 @dataclass(eq=True, frozen=True)
@@ -296,7 +311,7 @@ class ORR(_DAIDEObject):
 
     def __str__(self):
         arr_str = ["( " + str(arr) + " )" for arr in self.arrangements]
-        return f"ORR " + " ".join(arr_str)
+        return "ORR " + " ".join(arr_str)
 
 
 @dataclass(eq=True, frozen=True)
@@ -338,7 +353,7 @@ class SCD(_DAIDEObject):
 
     def __str__(self):
         pas_str = ["( " + str(pas) + " )" for pas in self.power_and_supply_centers]
-        return f"SCD " + " ".join(pas_str)
+        return "SCD " + " ".join(pas_str)
 
 
 @dataclass(eq=True, frozen=True)
@@ -551,7 +566,7 @@ class FWD(_DAIDEObject):
 
     def __str__(self):
         return (
-            f"FWD ( "
+            "FWD ( "
             + " ".join(self.powers)
             + f" ) ( {self.power_1} ) ( {self.power_2} )"
         )
@@ -625,7 +640,7 @@ class ANG(_DAIDEObject):
 @dataclass(eq=True, frozen=True)
 class ROF(_DAIDEObject):
     def __str__(self):
-        return f"ROF"
+        return "ROF"
 
 
 @dataclass(eq=True, frozen=True)
