@@ -4,7 +4,7 @@ from typing import Any
 from parsimonious.nodes import Node, NodeVisitor
 from typing_extensions import get_args
 
-from daidepp.constants import ProvinceNoCoast
+from daidepp.constants import ProvinceCoast, ProvinceNoCoast, ProvinceSea, SupplyCenter
 from daidepp.keywords.base_keywords import *
 from daidepp.keywords.press_keywords import *
 

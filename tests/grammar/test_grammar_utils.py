@@ -2,10 +2,8 @@ from typing import List
 
 import pytest
 
-from daidepp.grammar.grammar_utils import (
-    _find_grammar_key_dependencies,
-    create_grammar_from_press_keywords,
-)
+from daidepp.constants import PressKeywords
+from daidepp.grammar.grammar_utils import create_grammar_from_press_keywords
 from daidepp.keywords import *
 
 

@@ -5,7 +5,7 @@ from typing import Optional, Tuple, Union
 
 from typing_extensions import get_args
 
-from daidepp.constants import *
+from daidepp.constants import Coast, Power, ProvinceNoCoast, Season, UnitType
 from daidepp.keywords.daide_object import _DAIDEObject
 
 _prov_no_coast = [prov for lit in get_args(ProvinceNoCoast) for prov in get_args(lit)]
@@ -153,7 +153,7 @@ class CVY(_DAIDEObject):
 class MoveByCVY(_DAIDEObject):
     unit: Unit
     province: Location
-    province_seas: Tuple[ProvinceSea]
+    province_seas: Tuple[Location]
 
     def __init__(self, unit, province, *province_seas):
         object.__setattr__(self, "unit", unit)
@@ -173,7 +173,7 @@ class MoveByCVY(_DAIDEObject):
     def __str__(self):
         return (
             f"( {self.unit} ) CTO {self.province} VIA ( "
-            + " ".join(self.province_seas)
+            + " ".join(map(lambda prov_sea: str(prov_sea), self.province_seas))
             + " )"
         )
 
