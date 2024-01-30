@@ -10,7 +10,7 @@ from typing_extensions import get_args
 from typing_extensions import Literal
 
 DAIDELevel = Literal[
-    0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160
+    0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170
 ]
 MAX_DAIDE_LEVEL = get_args(DAIDELevel)[-1]
 
@@ -210,6 +210,15 @@ LEVEL_160: GrammarDict = {
     "try_tokens": f'{TRAIL_TOKEN}"ULB" / "UUB"',
 }
 
+# Protocol Start
+LEVEL_170: GrammarDict = {
+    "int": 'ws*~"\d+"',
+    "ptc": '"PTC" int lpar power (ws power)* rpar',
+    "sub_arrangement": f"{TRAIL_TOKEN}ptc",
+    "arrangement": f"{TRAIL_TOKEN}ptc",
+    "try_tokens": f'{TRAIL_TOKEN}"PTC"',
+}
+
 LEVELS: Tuple[GrammarDict, ...] = (
     LEVEL_0,
     LEVEL_10,
@@ -228,6 +237,7 @@ LEVELS: Tuple[GrammarDict, ...] = (
     LEVEL_140,
     LEVEL_150,
     LEVEL_160,
+    LEVEL_170,
 )
 
 GrammarDict = Dict[str, str]

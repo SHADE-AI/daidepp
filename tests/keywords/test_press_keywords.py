@@ -870,3 +870,16 @@ def test_UUB(input, expected_output, daide_parser):
     assert str(uub) == expected_output
     assert uub == daide_parser(expected_output)
     hash(uub)
+
+
+@pytest.mark.parametrize(
+    ["input", "expected_output"],
+    [
+        ((1, ["ENG", "GER"]), "PTC 1 ( ENG GER )"),
+        ((234, ["RUS", "GER", "FRA"]), "PTC 234 ( FRA GER RUS )"),
+    ],
+)
+def test_PTC(input, expected_output):
+    ptc = PTC(*input)
+    assert str(ptc) == expected_output
+    hash(ptc)
