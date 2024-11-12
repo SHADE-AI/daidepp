@@ -3,7 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, Tuple, Union
 
-from typing_extensions import get_args
+try:
+    from typing import get_args
+except ImportError:
+    from typing_extensions import get_args
 
 from daidepp.constants import *
 from daidepp.keywords.daide_object import _DAIDEObject

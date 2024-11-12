@@ -1,5 +1,9 @@
 import pytest
-from typing_extensions import get_args
+
+try:
+    from typing import get_args
+except ImportError:
+    from typing_extensions import get_args
 
 from daidepp.grammar import create_daide_grammar
 from daidepp.grammar.grammar import DAIDELevel, MAX_DAIDE_LEVEL
