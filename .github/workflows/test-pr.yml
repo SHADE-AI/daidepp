@@ -3,20 +3,43 @@ name: test-pr
 on:
   pull_request:
     branches:
-      - "main"
+      - main
+  push:
+    branches:
+      - main
+      - test-ci**
+  workflow_dispatch: # Enable workflow to be run manually
+
+# Disable all access to the GitHub API by default
+# This default can be overridden for individual workflows and jobs
+# Documentation: https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#permissions
+permissions: {}
+
+# Cancel the currently running CI job if you push a change while CI is running
+# Documentation: https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # Needed for Python 3.7
+    name: Run tests
+    env:
+      PYTHON_VERSION: 3.7.17
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Set Up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.7"
+          python-version: ${{ env.PYTHON_VERSION }}
       - name: Install daidepp
         run: |
+          pip install -U pip
           pip install -e .[dev]
       - name: Test
         run: |

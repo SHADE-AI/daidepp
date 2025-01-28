@@ -3,7 +3,11 @@ from collections import OrderedDict, defaultdict
 from typing import Dict, List, Optional, Set, Tuple, Union
 
 from parsimonious.grammar import Grammar
-from typing_extensions import Literal
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 from daidepp.constants import PressKeywords
 from daidepp.grammar.grammar import (

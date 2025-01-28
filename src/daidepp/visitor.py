@@ -2,7 +2,11 @@ import logging
 from typing import Any
 
 from parsimonious.nodes import Node, NodeVisitor
-from typing_extensions import get_args
+
+try:
+    from typing import get_args
+except ImportError:
+    from typing_extensions import get_args
 
 from daidepp.constants import ProvinceNoCoast
 from daidepp.keywords.base_keywords import *

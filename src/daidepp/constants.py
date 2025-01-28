@@ -1,4 +1,7 @@
-from typing_extensions import Literal
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 Power = Literal["AUS", "ENG", "FRA", "GER", "ITA", "RUS", "TUR"]
 UnitType = Literal["AMY", "FLT"]
