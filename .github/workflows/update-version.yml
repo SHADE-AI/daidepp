@@ -6,10 +6,10 @@ on:
 
 jobs:
   update_version:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # Needed for Python 3.7
     steps:
-      - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2.11.1
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3.0.2
         id: filter
         with:
           filters: |
