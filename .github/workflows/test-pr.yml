@@ -43,4 +43,4 @@ jobs:
           pip install -e .[dev]
       - name: Test
         run: |
-          pytest
+          python -X dev -bb -m pytest
