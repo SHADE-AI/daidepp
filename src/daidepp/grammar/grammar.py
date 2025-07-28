@@ -43,11 +43,11 @@ LEVEL_0: GrammarDict = {
     "prov_landlock": '"BOH" / "BUD" / "BUR" / "MOS" / "MUN" / "GAL" / "PAR" / "RUH" / "SER" / "SIL" / "TYR" / "UKR" / "VIE" / "WAR" ',
     "prov_sea": '"ADR" / "AEG" / "BAL" / "BAR" / "BLA" / "GOB" / "EAS" / "ECH" / "HEL" / "ION" / "IRI" / "GOL" / "MAO" / "NAO" / "NTH" / "NWG" / "SKA" / "TYS" / "WES"',
     "supply_center": '"ANK" / "BEL" / "BER" / "BRE" / "BUD" / "BUL" / "CON" / "DEN" / "EDI" / "GRE" / "HOL" / "KIE" / "LON" / "LVP" / "MAR" / "MOS" / "MUN" / "NAP" / "NWY" / "PAR" / "POR" / "ROM" / "RUM" / "SER" / "SEV" / "SMY" / "SPA" / "STP" / "SWE" / "TRI" / "TUN" / "VEN" / "VIE" / "WAR"',
-    "turn": 'season ws ~"\d{4}"',
+    "turn": r'season ws ~r"\d{4}"',
     "season": '"SPR" / "SUM" / "FAL" / "AUT" / "WIN"',
-    "lpar": '~"\s*\(\s*"',
-    "rpar": '~"\s*\)\s*"',
-    "ws": '~"\s+"',
+    "lpar": r'~r"\s*\(\s*"',
+    "rpar": r'~r"\s*\)\s*"',
+    "ws": r'~r"\s+"',
 }
 
 # Peace and Alliances
@@ -102,7 +102,7 @@ LEVEL_40: GrammarDict = {
 
 # Nested Multipart Arrangements
 LEVEL_50: GrammarDict = {
-    "cho": '"CHO" lpar (~"\d+ \d+") rpar (lpar arrangement rpar)+',
+    "cho": r'"CHO" lpar (~r"\d+ \d+") rpar (lpar arrangement rpar)+',
     "sub_arrangement": f"{TRAIL_TOKEN}and / orr / cho",
     "arrangement": f"{TRAIL_TOKEN}cho",
     "try_tokens": f'{TRAIL_TOKEN}"CHO"',  # This isn't included in the original daide spec but I think they just forgot it.
@@ -204,7 +204,7 @@ LEVEL_150: GrammarDict = {
 
 # Utilities
 LEVEL_160: GrammarDict = {
-    "float": 'ws*~"[-+]?((\d*\.\d+)|(\d+\.?))([Ee][+-]?\d+)?"',
+    "float": r'ws*~r"[-+]?((\d*\.\d+)|(\d+\.?))([Ee][+-]?\d+)?"',
     "ulb": '"ULB" lpar power float rpar',
     "uub": '"UUB" lpar power float rpar',
     "sub_arrangement": f"{TRAIL_TOKEN}ulb / uub",
